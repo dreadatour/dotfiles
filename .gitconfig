@@ -1,0 +1,15 @@
+[user]
+	name = Vladimir Rudnyh
+	email = rudnyh@corp.mail.ru
+[color]
+	ui = true
+[core]
+	quotepath = false
+[push]
+	default = upstream
+[difftool "Kaleidoscope"]
+	cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
+[difftool]
+	prompt = false
+[diff]
+	tool = Kaleidoscope

@@ -1,0 +1,18 @@
+[submodule "vim-ack"]
+	path = .vim/bundle/ack.vim
+	url = https://github.com/mileszs/ack.vim.git
+[submodule "vim-nerdtree"]
+	path = .vim/bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "vim-tagbar"]
+	path = .vim/bundle/tagbar
+	url = https://github.com/majutsushi/tagbar.git
+[submodule "vim-fugitive"]
+	path = .vim/bundle/vim-fugitive
+	url = git://github.com/tpope/vim-fugitive.git
+[submodule "vim-git-branch-info"]
+	path = .vim/bundle/vim-git-branch-info
+	url = git://github.com/taq/vim-git-branch-info.git
+[submodule "vim-surround"]
+	path = .vim/bundle/vim-surround
+	url = git://github.com/tpope/vim-surround.git

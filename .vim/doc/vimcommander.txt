@@ -1,0 +1,127 @@
+*vimcommander.txt*   total-commander-like file-manager for vim.      #version#
+
+
+                        VIMCOMMANDER REFERENCE MANUAL~
+
+
+Total-commander-like two-panel file explorer for vim.
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License.  See
+    http://www.gnu.org/copyleft/gpl.txt
+
+This manual corresponds to vimcommander version $VERSION.
+
+==============================================================================
+CONTENT                                                *vimcommander-contents* 
+
+    Installation                       : |vimcommander-install|
+    Intro                              : |vimcommander|
+    Keys                               : |vimcommander-keys|
+    Todo list                          : |vimcommander-todo|
+    Links                              : |vimcommander-links|
+
+==============================================================================
+1. VimCommander Installation                            *vimcommander-install*
+
+    In order to install the plugin, place the vimcommander.vim file into a plugin
+    directory in your runtime path (please see |add-global-plugin| and
+    |'runtimepath'|).
+
+    A key-map should also be made. Put in your |.vimrc| something like: >
+        noremap <silent> <F11> :cal VimCommanderToggle()<CR>
+<
+
+==============================================================================
+2. VimCommander Intro                                           *vimcommander*
+
+    This is VimCommander, a two-panel file-manager for vim.
+
+    Upon entrance, the two panels are presented. Operations are performed by
+    default from one panel to the other.
+
+    File selection is implemented also, see |vimcommander-keys| for the
+    keyboard shortcuts.
+
+    See also |vimcommander-links| for more information on this kind of
+    file-manager.
+
+2.1 List of Features:                                  *vimcommander-features*
+---------------------
+    
+    - Two panels side-by-side;
+    - File operations work only on unix;
+    - File selection;
+    - Remembers settings;
+    - Directory history.
+
+==============================================================================
+3. VimCommander Options                                    *vimcommander-opts*
+
+    This are the options that can be set from the user's .vimrc, just use: >
+        let g:<option>=<value>
+<
+    to set the option <option> to the value <value>
+
+    Options available:
+
+    - vimcommander_shallcd: if VimCommander should change vim's working
+    directory as the directory of the current panel changes. Set to 1 to
+    enable this behavior, 0 disables. Default: 0.
+
+==============================================================================
+4. VimCommander Keys                                       *vimcommander-keys*
+
+    Most of VimCommander's key-bindings are similar to the other
+    commanders':
+
+    - TAB       = Go to the other panel.
+    - F3        = View file under cursor.
+    - F4        = Edit file under cursor.
+    - F5        = Copy file.
+    - F6        = Move/rename file.
+    - F7        = Create directory.
+    - F8/DEL    = Remove file.
+    - F10       = Quit VimCommander.
+    - C-R       = Refresh panels.
+	- Backspace = Go to parent directory.
+    - C-U       = Exchange panels.
+    - C-Left    = Put directory under cursor on other panel, or grab
+                  other panel's dir.
+    - C-Right   = Same.
+    - \H        = Show hidden files (toggle).
+    - INS       = Select file under cursor.
+    - "+"       = Select file by pattern.
+    - "-"       = De-select file by pattern.
+    - S-F4      = Edit new file.
+    - C-t       = Previous directory.
+    - C-y       = Next directory.
+
+    C-* stands for CTRL+*. S-* stands for SHIFT+*.
+    As some terminals do not support SHIFT/CTRL+non-letter-keys, a <leader>
+    version has usually been provided.
+    So, <leader>Right and C-Right are the same.
+    Same for M-keys, including letters.
+
+==============================================================================
+5. VimCommander Todo                                       *vimcommander-todo*
+
+    - Command-line.
+    - Options for some of the behaviors.
+    - Directory bookmarks.
+    - Make selection by pattern faster.
+
+==============================================================================
+6. VimCommander Links                                     *vimcommander-links*
+
+    http://www.vim.org/scripts/script.php?script_id=808
+        Home page of VimCommander.
+    http://www.softpanorama.org/OFM
+        Page dedicated to the commander-like file-managers - called OFM's by
+        the author.
+    http://www.ghisler.com
+        The best commander-like around.
+
+==============================================================================
+vim: ft=help
+
