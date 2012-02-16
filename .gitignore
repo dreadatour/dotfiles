@@ -6,6 +6,8 @@
 !/.gitconfig
 !/.gvimrc
 !/.inputrc
+!/.zshenv
+!/.zshrc
 !/.vimrc
 !/.vim/
 /.vim/.netrwhist
