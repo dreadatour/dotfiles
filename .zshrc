@@ -28,33 +28,40 @@ setopt PROMPT_SUBST  # '$' expansion in prompts
 
 # show git info in prompt
 function ps1_git_status {
-	pushd . >/dev/null
+	# check git is installed
+	GIT_BIN=$(which git 2>/dev/null)
+	[[ -z $GIT_BIN ]] && return
+
+	# check we are in git repo
+	CUR_DIR=`pwd`
 	while [ ! -d .git ] && [ ! `pwd` = "/" ]; do cd ..; done
-	if [ -d .git ]; then
-		GIT_BIN=$(which git 2>/dev/null)
-		[[ -z $GIT_BIN ]] && return
+	[[ ! -d .git ]] && cd $CUR_DIR && return
 
-		GIT_STATUS=$($GIT_BIN status 2>/dev/null)
-		[[ -z $GIT_STATUS ]] && return
+	# dotfiles in git fix: show git status only in home dir
+	[[ `pwd` == $HOME ]] && [[ $CUR_DIR != `pwd` ]] && cd $CUR_DIR && return
 
-		GIT_BRANCH="$(git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
-		if [[ "$GIT_BRANCH" == *'(no branch)'* ]]; then
-			GIT_BRANCH='%{%F{red}%}no branch%{%f%}'
-		else
-			GIT_BRANCH="%{%F{blue}%}${GIT_BRANCH}%{%f%}"
-		fi
+	# get git status
+	GIT_STATUS=$($GIT_BIN status 2>/dev/null)
+	[[ -z $GIT_STATUS ]] && cd $CUR_DIR && return
 
-		GIT_STATE=''
-		if [[ "$GIT_STATUS" != *'working directory clean'* ]]; then
-			GIT_STATE=':'
-			[[ "$GIT_STATUS" == *'Changes to be committed:'* ]] && GIT_STATE=$GIT_STATE"%{%F{green}%}I%{%f%}"
-			[[ "$GIT_STATUS" == *'Changes not staged for commit:'* ]] && GIT_STATE=$GIT_STATE"%{%F{red}%}M%{%f%}"
-			[[ "$GIT_STATUS" == *'Untracked files:'* ]] && GIT_STATE=$GIT_STATE"%{%F{yellow}%}U%{%f%}"
-		fi
-
-		echo -ne " (${GIT_BRANCH}${GIT_STATE})"
+	# get git branch
+	GIT_BRANCH="$(git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
+	if [[ "$GIT_BRANCH" == *'(no branch)'* ]]; then
+		GIT_BRANCH='%{%F{red}%}no branch%{%f%}'
+	else
+		GIT_BRANCH="%{%F{blue}%}${GIT_BRANCH}%{%f%}"
 	fi
-	popd >/dev/null
+
+	# get git state
+	GIT_STATE=''
+	if [[ "$GIT_STATUS" != *'working directory clean'* ]]; then
+		GIT_STATE=':'
+		[[ "$GIT_STATUS" == *'Changes to be committed:'* ]] && GIT_STATE=$GIT_STATE"%{%F{green}%}I%{%f%}"
+		[[ "$GIT_STATUS" == *'Changes not staged for commit:'* ]] && GIT_STATE=$GIT_STATE"%{%F{red}%}M%{%f%}"
+		[[ "$GIT_STATUS" == *'Untracked files:'* ]] && GIT_STATE=$GIT_STATE"%{%F{yellow}%}U%{%f%}"
+	fi
+
+	echo -ne " (${GIT_BRANCH}${GIT_STATE})"
 }
 
 case `id -u` in
