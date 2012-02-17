@@ -15,9 +15,10 @@ setopt HIST_REDUCE_BLANKS      # trim multiple insgnificant blanks in history
 #== Base settings =============================================================
 autoload -U colors && colors  # enable colors names
 setopt EMACS                  # emacs shortcuts (same as 'bindkey -e')
-setopt AUTO_CD                # directory as command does cd
 setopt NO_BEEP                # do not beep on errors
 setopt COMPLETE_ALIASES       # completion uses unexpanded aliases
+# this is not for me:
+#setopt AUTO_CD                # directory as command does cd
 #setopt CORRECT_ALL            # correct spelling of all arguments
 
 
