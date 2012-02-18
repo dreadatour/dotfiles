@@ -1,5 +1,7 @@
 " turn off toolbar
 set guioptions-=T
+" turn off scrolls (right and left)
+set guioptions-=rL
 
 " set 'desert' colorscheme
 colorscheme desert256
