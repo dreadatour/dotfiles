@@ -6,7 +6,7 @@
 [core]
 	quotepath = false
 [push]
-	default = upstream
+	default = tracking
 [difftool "Kaleidoscope"]
 	cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
 [difftool]
