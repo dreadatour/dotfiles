@@ -57,6 +57,7 @@ function ps1_git_status {
 	if [[ "$GIT_STATUS" != *'working directory clean'* ]]; then
 		GIT_STATE=':'
 		[[ "$GIT_STATUS" == *'Changes to be committed:'* ]] && GIT_STATE=$GIT_STATE"%{%F{green}%}I%{%f%}"
+		[[ "$GIT_STATUS" == *'Changed but not updated:'* ]] && GIT_STATE=$GIT_STATE"%{%F{red}%}M%{%f%}"  # for old git
 		[[ "$GIT_STATUS" == *'Changes not staged for commit:'* ]] && GIT_STATE=$GIT_STATE"%{%F{red}%}M%{%f%}"
 		[[ "$GIT_STATUS" == *'Untracked files:'* ]] && GIT_STATE=$GIT_STATE"%{%F{yellow}%}U%{%f%}"
 	fi
