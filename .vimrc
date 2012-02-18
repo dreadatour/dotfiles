@@ -30,6 +30,9 @@ set scrolloff=3     " lines count around cursos
 " Tagbar width
 let g:tagbar_width = 31
 
+" Set NERDTree ignore list
+let NERDTreeIgnore=['\.pyc$']
+
 " Turn on syntax highlighting
 if !exists("syntax_on")
     syntax on
