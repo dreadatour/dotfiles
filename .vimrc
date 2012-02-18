@@ -24,6 +24,9 @@ set laststatus=2    " status line is always visible
 set winminheight=0  " minimum window height
 set scrolloff=3     " lines count around cursos
 
+" Chars for fill statuslines and vertical separators.
+set fillchars=vert:\ ,fold:-
+
 " Chars for showing inwisible symbols
 "set listchars=tab:>>,eol:$,trail:.
 
