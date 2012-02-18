@@ -139,9 +139,16 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/s
 
 #== Aliases ===================================================================
 # ls aliases
-alias ls='ls -G'
-alias ll='ls -l'
-alias la='ls -lA'
+alias ls='ls -G --color=auto'
+alias ll='ls -l --color=auto'
+alias la='ls -lA --color=auto'
+
+# grep aliases
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+alias tree='tree -AC --dirsfirst'
 
 # pwd and cd aliases
 alias .='pwd'
