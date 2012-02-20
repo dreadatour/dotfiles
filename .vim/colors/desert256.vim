@@ -289,7 +289,6 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
     "Error
     call <SID>X("Todo", "ff4500", "eeee00", "")
 
-"	call <SID>X("User1", "9fd7fe", "c2bfa5", "")
 	call <SID>X("User1", "666666", "c2bfa5", "")
 
     " delete functions {{{

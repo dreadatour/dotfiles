@@ -17,9 +17,12 @@ set cursorline      " show cursor line
 set nowrap          " turn off line wrap
 
 let g:git_branch_status_nogit=""          " the message when there is no Git repository on the current dir
-hi User1 guifg=#9fd7fe guibg=#c2bfa5
 
-set statusline=%<%f\ %m%r\ %1*%{GitBranchInfoTokens()[0]}%*\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P
+if has("gui_running")
+	set statusline=%<%f\ %m%r\ %1*%{GitBranchInfoTokens()[0]}%*\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P
+else
+	set statusline=%<%f\ %m%r\ %{GitBranchInfoTokens()[0]}\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P
+endif
 set laststatus=2    " status line is always visible
 set winminheight=0  " minimum window height
 set scrolloff=3     " lines count around cursos
