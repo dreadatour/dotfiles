@@ -78,6 +78,7 @@ map <leader>es :sp %%
 map <leader>ev :vsp %%
 map <leader>et :tabe %%
 
+map <leader>e :FufFile<cr>
 map <leader>f :NERDTreeToggle<cr>
 map <leader>t :TagbarToggle<cr>
 
