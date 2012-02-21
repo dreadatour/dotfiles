@@ -23,6 +23,14 @@ if has("gui_running")
 else
 	set statusline=%<%f\ %m%r\ %{GitBranchInfoTokens()[0]}\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P
 endif
+" active statusline
+let g:Active_statusline=&g:statusline
+" inactive statusline
+let g:NCstatusline = "%<%f"
+" set statusline
+au WinEnter * let &l:statusline = g:Active_statusline
+au WinLeave * let &l:statusline = g:NCstatusline
+
 set laststatus=2    " status line is always visible
 set winminheight=0  " minimum window height
 set scrolloff=3     " lines count around cursos
