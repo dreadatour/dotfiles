@@ -19,9 +19,3 @@
 [submodule "vim-python-mode"]
 	path = .vim/bundle/python-mode
 	url = git://github.com/klen/python-mode.git
-[submodule "vim-l9"]
-	path = .vim/bundle/vim-l9
-	url = git://github.com/clones/vim-l9.git
-[submodule "vim-fuzzy-finder"]
-	path = .vim/bundle/FuzzyFinder
-	url = git://github.com/vim-scripts/FuzzyFinder.git
