@@ -29,42 +29,45 @@ setopt PROMPT_CR     # prompt always at start of line
 setopt PROMPT_SUBST  # '$' expansion in prompts
 
 # show git info in prompt
-function ps1_git_status {
+function __prompt_git_status {
 	# check git is installed
 	GIT_BIN=$(which git 2>/dev/null)
 	[[ -z $GIT_BIN ]] && return
 
 	# check we are in git repo
-	CUR_DIR=`pwd`
-	while [ ! -d .git ] && [ ! `pwd` = "/" ]; do cd ..; done
-	[[ ! -d .git ]] && cd $CUR_DIR && return
+	CUR_DIR=$(pwd)
+	while [ ! -d .git ] && [ ! $(pwd) = "/" ]; do cd ..; done
+	[[ ! -d .git ]] && return
 
 	# dotfiles in git fix: show git status only in home dir
-	[[ `pwd` == $HOME ]] && [[ $CUR_DIR != `pwd` ]] && cd $CUR_DIR && return
-
-	# get git status
-	GIT_STATUS=$($GIT_BIN status 2>/dev/null)
-	[[ -z $GIT_STATUS ]] && cd $CUR_DIR && return
+	[[ $(pwd) == $HOME ]] && [[ $CUR_DIR != $(pwd) ]] && return
 
 	# get git branch
-	GIT_BRANCH="$(git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
-	if [[ "$GIT_BRANCH" == *'(no branch)'* ]]; then
-		GIT_BRANCH='%{%F{red}%}no branch%{%f%}'
-	else
-		GIT_BRANCH="%{%F{blue}%}${GIT_BRANCH}%{%f%}"
-	fi
+	GIT_BRANCH=$($GIT_BIN symbolic-ref HEAD 2>/dev/null)
+	[[ -z $GIT_BRANCH ]] && return
+	GIT_BRANCH=${GIT_BRANCH#refs/heads/}
+
+	# get git status
+	GIT_STATUS=$($GIT_BIN status --porcelain 2>/dev/null)
 
 	# get git state
-	GIT_STATE=''
-	if [[ "$GIT_STATUS" != *'working directory clean'* ]]; then
-		GIT_STATE=':'
-		[[ "$GIT_STATUS" == *'Changes to be committed:'* ]] && GIT_STATE=$GIT_STATE"%{%F{green}%}I%{%f%}"
-		[[ "$GIT_STATUS" == *'Changed but not updated:'* ]] && GIT_STATE=$GIT_STATE"%{%F{red}%}M%{%f%}"  # for old git
-		[[ "$GIT_STATUS" == *'Changes not staged for commit:'* ]] && GIT_STATE=$GIT_STATE"%{%F{red}%}M%{%f%}"
-		[[ "$GIT_STATUS" == *'Untracked files:'* ]] && GIT_STATE=$GIT_STATE"%{%F{yellow}%}U%{%f%}"
+	if [[ -z $GIT_STATUS ]]; then
+		echo -ne "%{%F{green}%}${GIT_BRANCH}%{%f%}"
+	else
+		echo -ne "%{%F{red}%}${GIT_BRANCH}%{%f%}"
 	fi
+}
 
-	echo -ne " (${GIT_BRANCH}${GIT_STATE})"
+function __prompt_virtualenv {
+	[ ! -z "$VIRTUAL_ENV" ] && echo -ne "%{%F{blue}%}${VIRTUAL_ENV#$WORKON_HOME}%{%f%}"
+}
+
+function __prompt_right {
+	PROMPT_GIT=$(__prompt_git_status)
+	PROMPT_VENV=$(__prompt_virtualenv)
+	[ -z $PROMPT_GIT ] && [ -z $PROMPT_VENV ] && return
+	[ ! -z $PROMPT_GIT ] && [ ! -z $PROMPT_VENV ] && echo -ne "${PROMPT_GIT} | ${PROMPT_VENV}" && return
+	echo -ne "${PROMPT_GIT}${PROMPT_VENV}"
 }
 
 case `id -u` in
@@ -72,7 +75,8 @@ case `id -u` in
 	*) PROMPT_USER_COLOR="%{%F{green}%}";;  # set color for regular user in prompt
 esac
 # set prompt
-export PROMPT="${PROMPT_USER_COLOR}%n%{%f%}@%{%F{yellow}%}%m%{%f%}:%~\$(ps1_git_status) "
+export PROMPT="${PROMPT_USER_COLOR}%n%{%f%}@%{%F{yellow}%}%m%{%f%}:%{%F{white}%}%~%{%f%} "
+export RPROMPT="\$(__prompt_right)"
 unset PROMPT_USER_COLOR
 
 
@@ -90,6 +94,7 @@ set TERM xterm-256color; export TERM
 # setup python virtualenv
 export PROJECT_HOME=~/work/
 export WORKON_HOME=~/work/.venv/
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 [ -f /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
 
 # set permissions for files: 0644, for directories: 0755
