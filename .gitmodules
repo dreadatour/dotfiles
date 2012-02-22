@@ -19,3 +19,6 @@
 [submodule "vim-python-mode"]
 	path = .vim/bundle/python-mode
 	url = git://github.com/klen/python-mode.git
+[submodule "vim-command-t"]
+	path = .vim/bundle/Command-T
+	url = git://github.com/dreadatour/Command-T.git
