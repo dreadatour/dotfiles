@@ -1,4 +1,6 @@
 # Zsh Reference Card: http://www.bash2zsh.com/zsh_refcard/refcard.pdf
+export LC_ALL=ru_RU.UTF-8
+export LANG=ru_RU.UTF-8
 
 #== Respect your history, dude! ===============================================
 HISTFILE=~/.histfile           # history file location
