@@ -95,7 +95,8 @@ nmap <silent> <leader>i :set ignorecase!<CR>:call ShowIgnoreCase()<CR>
 " Toggle 'set number'
 nmap <silent> <leader>u :set number!<CR>:call ShowNumber()<CR>
 " Toggle 'set hls'
-nmap <silent> <leader>h :set hls!<CR>:call ShowHighlightSearch()<CR>
+nmap <silent> <leader>h :nohlsearch<CR>
+nmap <silent> <leader>H :set hls!<CR>:call ShowHighlightSearch()<CR>
 
 menu GoTo.mpop       :lcd ~/work/mpop/<CR>
 menu GoTo.emailru    :lcd ~/work/e.mail.ru/<CR>
