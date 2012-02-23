@@ -1,6 +1,8 @@
 " Add all plugins in ~/.vim/bundle/ to runtimepath (vim-pathogen)
+filetype off
 call pathogen#infect()
 call pathogen#helptags()
+filetype plugin indent on
 
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
