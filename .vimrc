@@ -18,6 +18,7 @@ set number          " show line numbers
 set cursorline      " show cursor line
 set nowrap          " turn off line wrap
 set mouse=a         " scroll with mouse
+set gdefault        " always global regex
 
 let g:git_branch_status_nogit=""          " the message when there is no Git repository on the current dir
 
