@@ -37,6 +37,10 @@ nmap <D-Up> <C-W>k<C-W>_
 imap <D-Down> <Esc><C-W>j<C-W>_a
 nmap <D-Down> <C-W>j<C-W>_
 
+" Open new split buffer and maximize it
+imap <D-s> <Esc>:split<CR><C-W>_a
+nmap <D-s> :split<CR><C-W>_
+
 " Tabs switching
 map <D-1> 1gt
 map <D-2> 2gt

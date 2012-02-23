@@ -51,6 +51,13 @@ let g:tagbar_width = 31
 " Set ignore list
 :set wildignore+=.git,*.o,*.pyc
 
+" Disable pylint checking every save
+let g:pymode_lint_write = 0
+" Disable auto open cwindow if errors be finded
+let g:pymode_lint_cwindow = 0
+" Set default pymode python indent options
+let g:pymode_options_indent = 0
+
 " Turn on syntax highlighting
 if !exists("syntax_on")
     syntax on
