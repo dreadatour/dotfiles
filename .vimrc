@@ -71,6 +71,9 @@ set wcm=<Tab>
 set encoding=utf-8              " Default file encoding
 set fileencodings=utf8,cp1251   " If file is not UTF, try CP1251 encoding
 
+" more efficiency
+nnoremap ; :
+
 " Current file directory expand (http://vimcasts.org/episodes/the-edit-command/)
 let mapleader=','
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
