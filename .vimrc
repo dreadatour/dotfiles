@@ -15,6 +15,7 @@ set hlsearch        " highlight searching results
 set number          " show line numbers
 set cursorline      " show cursor line
 set nowrap          " turn off line wrap
+set mouse=a         " scroll with mouse
 
 let g:git_branch_status_nogit=""          " the message when there is no Git repository on the current dir
 
@@ -44,8 +45,8 @@ set fillchars=vert:\ ,fold:-
 " Tagbar width
 let g:tagbar_width = 31
 
-" Set NERDTree ignore list
-let NERDTreeIgnore=['\.pyc$']
+" Set ignore list
+:set wildignore+=.git,*.o,*.pyc
 
 " Turn on syntax highlighting
 if !exists("syntax_on")
