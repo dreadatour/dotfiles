@@ -56,7 +56,7 @@ let g:pymode_lint_write = 0
 " Disable auto open cwindow if errors be finded
 let g:pymode_lint_cwindow = 0
 " Set default pymode python indent options
-let g:pymode_options_indent = 0
+"let g:pymode_options_indent = 0
 
 " Turn on syntax highlighting
 if !exists("syntax_on")
