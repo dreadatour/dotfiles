@@ -5,6 +5,7 @@
 	ui = true
 [core]
 	quotepath = false
+	editor = vim
 [push]
 	default = tracking
 [difftool "Kaleidoscope"]
