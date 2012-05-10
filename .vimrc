@@ -48,7 +48,7 @@ set fillchars=vert:\ ,fold:-
 let g:tagbar_width = 31
 
 " Set ignore list
-:set wildignore+=.git,*.o,*.pyc
+:set wildignore+=.git,*.o,*.pyc,.DS_Store
 
 " Disable pylint checking every save
 let g:pymode_lint_write = 0
