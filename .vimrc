@@ -22,11 +22,7 @@ set gdefault    " always global regex
 let g:git_branch_status_nogit=''  " the message when there is no Git repository on the current dir
 
 " Setup statusline
-if has("gui_running")
-	set statusline=%<%f\ %m%r\ %1*%{GitBranchInfoTokens()[0]}%*\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P
-else
-	set statusline=%<%f\ %m%r\ %{GitBranchInfoTokens()[0]}\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P
-endif
+set statusline=%<%f\ %m%r\ %{GitBranchInfoTokens()[0]}\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P
 let g:Active_statusline=&g:statusline  " active statusline
 let g:NCstatusline = '%<%f'            " inactive statusline
 

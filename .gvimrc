@@ -3,12 +3,14 @@ set guioptions-=T
 " turn off scrolls (right and left)
 set guioptions-=rL
 
-" set 'desert' colorscheme
-colorscheme desert256
+" set colorscheme
+syntax enable
+set background=dark
+colorscheme solarized
 source ~/.vim/plugin/mark.vim
 
 " set font and fontsize
-set guifont=Consolas:h14
+set guifont=Menlo:h14
 
 " Chars for showing inwisible symbols
 set listchars=tab:▸\ ,eol:¬,trail:·,extends:»
