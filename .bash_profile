@@ -34,7 +34,7 @@ shopt -s cmdhist
 
 # show git info in prompt
 function ps1_git_status {
-	local branch_color=$'\e[01;34m'
+	local branch_color=$'\e[01;36m'
 	local index_color=$'\e[01;32m'
 	local modified_color=$'\e[01;31m'
 	local untracked_color=$'\e[01;33m'
