@@ -31,17 +31,25 @@ nmap <D-Left> :tabp<CR>
 imap <D-Right> <Esc>:tabn<CR>a
 nmap <D-Right> :tabn<CR>
 
-" Go to previous window and maximize it
-imap <D-Up> <Esc><C-W>k<C-W>_a
-nmap <D-Up> <C-W>k<C-W>_
+"" Go to previous window and maximize it
+"imap <D-Up> <Esc><C-W>k<C-W>_a
+"nmap <D-Up> <C-W>k<C-W>_
+
+"" Go to next window and maximize it
+"imap <D-Down> <Esc><C-W>j<C-W>_a
+"nmap <D-Down> <C-W>j<C-W>_
+
+" Go to previous buffer
+imap <D-Up> <Esc>:bp!<CR>a
+nmap <D-Up> :bp!<CR>
 
 " Go to next window and maximize it
-imap <D-Down> <Esc><C-W>j<C-W>_a
-nmap <D-Down> <C-W>j<C-W>_
+imap <D-Down> <Esc>:bn!<CR>a
+nmap <D-Down> :bn!<CR>
 
-" Open new split buffer and maximize it
-imap <D-s> <Esc>:split<CR><C-W>_a
-nmap <D-s> :split<CR><C-W>_
+"" Open new split buffer and maximize it
+"imap <D-s> <Esc>:split<CR><C-W>_a
+"nmap <D-s> :split<CR><C-W>_
 
 " Tabs switching
 map <D-1> 1gt
