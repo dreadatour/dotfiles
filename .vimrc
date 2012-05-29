@@ -116,6 +116,8 @@ map <leader>et :tabe %%
 map <leader>f :NERDTreeToggle<cr>
 map <leader>t :TagbarToggle<cr>
 
+let g:miniBufExplMapCTabSwitchBufs = 1
+
 " Toggle 'set list' (http://vimcasts.org/episodes/show-invisibles/)
 nmap <silent> <leader>l :set list!<CR>:call ShowList()<CR>
 " Toggle 'set wrap'
