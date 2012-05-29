@@ -215,6 +215,30 @@ function SetLocalOptions(fname)
 endfunction
 au BufNewFile,BufRead * call SetLocalOptions(bufname("%"))
 
+""http://stackoverflow.com/questions/2308278/how-to-have-a-different-buffer-list-for-each-tabs-in-vim
+"let g:TabExplorer = {}
+"
+"func! StoreBufTab()
+"    if !has_key(g:TabExplorer, tabpagenr())
+"        let  g:TabExplorer[tabpagenr()] = []
+"    endif
+"
+"    if index(g:TabExplorer[tabpagenr()], bufname("%")) == -1 && bufname("%") != ""
+"        call add (g:TabExplorer[tabpagenr()],bufname("%"))
+"    endif
+"endfunc
+"
+"func! DisplayTabExplorer()
+"    4split
+"    enew
+"    call append(".",g:TabExplorer[tabpagenr()])
+"endfunc
+"
+"au BufEnter * call StoreBufTab()
+"
+"command! TabExplorer call DisplayTabExplorer()
+"
+
 "" Aвтозавершение слов по tab
 "function InsertTabWrapper()
 " let col = col('.') - 1
