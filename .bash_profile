@@ -8,89 +8,130 @@ PATH=$HOME/.bin:$PATH
 PATH=/usr/local/bin:$PATH
 PATH=/usr/local/sbin:$PATH
 PATH=/usr/local/mysql/bin:$PATH
-PATH=/usr/local/Cellar/gettext/0.18.1.1/bin:$PATH
 
-# don't put duplicate lines in the history. See bash(1) for more options
+# don't put duplicate lines in the history
 export HISTCONTROL=ignoreboth,erasedups
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+# set history length
 HISTFILESIZE=1000000000
 HISTSIZE=1000000
 
+# append to the history file, don't overwrite it
+shopt -s histappend
 # check the window size after each command and, if necessary, update the values of LINES and COLUMNS.
 shopt -s checkwinsize
-
 # correct minor errors in the spelling of a directory component in a cd command
 shopt -s cdspell
-
 # save all lines of a multiple-line command in the same history entry (allows easy re-editing of multi-line commands)
 shopt -s cmdhist
 
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+# get git status
+GIT_BRANCH=''
+GIT_DIRTY=''
+function parse_git_status {
+	# clear git variables
+	GIT_BRANCH=''
+	GIT_DIRTY=''
 
-# show git info in prompt
-function ps1_git_status {
-	local branch_color=$'\e[01;36m'
-	local index_color=$'\e[01;32m'
-	local modified_color=$'\e[01;31m'
-	local untracked_color=$'\e[01;33m'
-	local no_color=$'\e[0m'
+	# exit if no git found in system
+	local GIT_BIN=$(which git 2>/dev/null)
+	[[ -z ${GIT_BIN} ]] && return
 
-	[[ -z $(which git 2>/dev/null) ]] && return
+	# check we are in git repo
+	local CUR_DIR=${PWD}
+	while [ ! -d ${CUR_DIR}/.git ] && [ ! ${CUR_DIR} = "/" ]; do CUR_DIR=${CUR_DIR%/*}; done
+	[[ ! -d ${CUR_DIR}/.git ]] && return
 
-	local GIT_STATUS=$(/usr/bin/git status 2>/dev/null)
-	[[ -z $GIT_STATUS ]] && return
+	# 'git repo for dotfiles' fix: show git status only in home dir and other git repos
+	[[ ${CUR_DIR} == ${HOME} ]] && [[ ${PWD} != ${HOME} ]] && return
 
-	local GIT_BRANCH="$(git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
-	if [[ "$GIT_BRANCH" == *'(no branch)'* ]]; then
-		GIT_BRANCH='no branch'
-	fi
+	# get git branch
+	GIT_BRANCH=$($GIT_BIN symbolic-ref HEAD 2>/dev/null)
+	[[ -z $GIT_BRANCH ]] && return
+	GIT_BRANCH=${GIT_BRANCH#refs/heads/}
 
-	local GIT_STATE=''
-	if [[ "$GIT_STATUS" != *'working directory clean'* ]]; then
-		GIT_STATE=':'
-		if [[ "$GIT_STATUS" == *'Changes to be committed:'* ]]; then
-			GIT_STATE=$GIT_STATE"${index_color}I${no_color}"
-		fi
-		if [[ "$GIT_STATUS" == *'Changes not staged for commit:'* ]]; then
-			GIT_STATE=$GIT_STATE"${modified_color}M${no_color}"
-		fi
-		if [[ "$GIT_STATUS" == *'Untracked files:'* ]]; then
-			GIT_STATE=$GIT_STATE"${untracked_color}U${no_color}"
-		fi
-	fi
-
-	echo -ne " (${branch_color}${GIT_BRANCH}${no_color}${GIT_STATE})"
+	# get git status
+	local GIT_STATUS=$($GIT_BIN status --porcelain 2>/dev/null)
+	[[ -n ${GIT_STATUS} ]] && GIT_DIRTY=1
 }
 
-# setup prompt: colorized or not
-if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# set colors
-	case `id -u` in
-		0)  ucolor='\[\e[01;31m\]';;
-		*)  ucolor='\[\e[01;32m\]';;
-	esac
-	hcolor='\[\e[01;33m\]'
-	ncolor='\[\e[0m\]'
+function prompt_command {
+	if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+		local TERMWIDTH=${COLUMNS}
 
-	# set new color prompt
-	PS1="${ucolor}\u${ncolor}@${hcolor}\h${ncolor}:\w\$(ps1_git_status)\n\$ "
-else
-	# set new b/w prompt
-	PS1='\u@\h:\w\$ '
-fi
+		# username and hostname
+		local USERNAME=$(whoami)
+		local HOSTNAME=$(hostname)
 
-# set title
-PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOST}:${PWD/#$HOME/~}"; echo -ne "\007"'
+		# current directory
+		if [ ${HOME} == ${PWD} ]; then
+			local PWDNAME="~"
+		elif [ ${HOME} ==  ${PWD:0:${#HOME}} ]; then
+			local PWDNAME="~${PWD:${#HOME}}"
+		else
+			local PWDNAME=${PWD}
+		fi
+
+		# build git status for prompt
+		parse_git_status
+		local PS1_GIT=''
+		[[ ! -z ${GIT_BRANCH} ]] && PS1_GIT=" (git: ${GIT_BRANCH})"
+
+		# build python venv status for prompt
+		local PS1_VENV=''
+		[ ! -z ${VIRTUAL_ENV} ] && PS1_VENV=" (venv: ${VIRTUAL_ENV#$WORKON_HOME})"
+
+		# calculate fillsize
+		local promptsize=$(echo -n "${USERNAME}@${HOSTNAME}:${PWDNAME}${PS1_GIT}${PS1_VENV} " | wc -c | tr -d " ")
+		local fillsize=$((${TERMWIDTH}-${promptsize}))
+
+		# set colors
+		local color_red=$(/usr/bin/tput setaf 1)
+		local color_green=$(/usr/bin/tput setaf 2)
+		local color_off=$(/usr/bin/tput sgr0)
+		case `id -u` in
+			0) local ucolor=${color_red} ;;
+			*) local ucolor=${color_green} ;;
+		esac
+
+		local FILL=$(/usr/bin/tput setaf 8)
+		while [ "${fillsize}" -gt "0" ]; do
+			FILL="${FILL}-"
+			fillsize=$((${fillsize}-1))
+		done
+		FILL="${FILL}${color_off}"
+
+		# colorize git status
+		if [ ! -z ${GIT_BRANCH} ]; then
+			if [ -z ${GIT_DIRTY} ]; then
+				PS1_GIT=" (git: $(/usr/bin/tput setaf 2)${GIT_BRANCH}${color_off})"
+			else
+				PS1_GIT=" (git: $(/usr/bin/tput setaf 1)${GIT_BRANCH}${color_off})"
+			fi
+		fi
+
+		# colorize venv status
+		[ ! -z ${VIRTUAL_ENV} ] && PS1_VENV=" (venv: $(/usr/bin/tput setaf 6)${VIRTUAL_ENV#$WORKON_HOME}${color_off})"
+
+		# set new color prompt
+		PS1="${ucolor}${USERNAME}${color_off}@$(/usr/bin/tput setaf 3)${HOSTNAME}${color_off}:$(/usr/bin/tput setaf 7)${PWDNAME}${color_off}${PS1_GIT}${PS1_VENV} ${FILL}\n➜ "
+	fi
+
+	# set title
+	echo -ne "\033]0;${USERNAME}@${HOSTNAME}:${PWD/#$HOME/~}"; echo -ne "\007"
+}
+
+# set prompt command (title update and color prompt)
+PROMPT_COMMAND=prompt_command
+# set new b/w prompt (will be overwritten in 'prompt_command' later for color prompt)
+PS1='\u@\h:\w$(ps1_git_status)\$ '
 
 # python virtualenv
-export PROJECT_HOME=~/work/
-export WORKON_HOME=~/work/.venv/
-source /usr/local/bin/virtualenvwrapper.sh
+if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
+	export PROJECT_HOME=~/work/
+	export WORKON_HOME=~/work/.venv/
+	export VIRTUAL_ENV_DISABLE_PROMPT=1
+	source /usr/local/bin/virtualenvwrapper.sh
+fi
 
 # grep colorize
 export GREP_OPTIONS="--color=auto"
