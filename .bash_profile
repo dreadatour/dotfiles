@@ -24,25 +24,43 @@ shopt -s cdspell
 # save all lines of a multiple-line command in the same history entry (allows easy re-editing of multi-line commands)
 shopt -s cmdhist
 
+# setup color variables
+color_is_on=
+color_red=
+color_green=
+color_yellow=
+color_blue=
+color_white=
+color_gray=
+color_off=
+if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	color_is_on=true
+	color_red=$(/usr/bin/tput setaf 1)
+	color_green=$(/usr/bin/tput setaf 2)
+	color_yellow=$(/usr/bin/tput setaf 3)
+	color_blue=$(/usr/bin/tput setaf 6)
+	color_white=$(/usr/bin/tput setaf 7)
+	color_gray=$(/usr/bin/tput setaf 8)
+	color_off=$(/usr/bin/tput sgr0)
+fi
+
 # get git status
-GIT_BRANCH=''
-GIT_DIRTY=''
 function parse_git_status {
 	# clear git variables
-	GIT_BRANCH=''
-	GIT_DIRTY=''
+	GIT_BRANCH=
+	GIT_DIRTY=
 
 	# exit if no git found in system
 	local GIT_BIN=$(which git 2>/dev/null)
-	[[ -z ${GIT_BIN} ]] && return
+	[[ -z $GIT_BIN ]] && return
 
 	# check we are in git repo
-	local CUR_DIR=${PWD}
-	while [ ! -d ${CUR_DIR}/.git ] && [ ! ${CUR_DIR} = "/" ]; do CUR_DIR=${CUR_DIR%/*}; done
+	local CUR_DIR=$PWD
+	while [ ! -d ${CUR_DIR}/.git ] && [ ! $CUR_DIR = "/" ]; do CUR_DIR=${CUR_DIR%/*}; done
 	[[ ! -d ${CUR_DIR}/.git ]] && return
 
 	# 'git repo for dotfiles' fix: show git status only in home dir and other git repos
-	[[ ${CUR_DIR} == ${HOME} ]] && [[ ${PWD} != ${HOME} ]] && return
+	[[ $CUR_DIR == $HOME ]] && [[ $PWD != $HOME ]] && return
 
 	# get git branch
 	GIT_BRANCH=$($GIT_BIN symbolic-ref HEAD 2>/dev/null)
@@ -51,79 +69,71 @@ function parse_git_status {
 
 	# get git status
 	local GIT_STATUS=$($GIT_BIN status --porcelain 2>/dev/null)
-	[[ -n ${GIT_STATUS} ]] && GIT_DIRTY=1
+	[[ -n $GIT_STATUS ]] && GIT_DIRTY=1
 }
 
 function prompt_command {
-	if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-		local TERMWIDTH=${COLUMNS}
+	local PS1_GIT=
+	local PS1_VENV=
 
-		# username and hostname
-		local USERNAME=$(whoami)
-		local HOSTNAME=$(hostname)
+	# beautify working firectory name
+	if [ ${HOME} == ${PWD} ]; then
+		local PWDNAME="~"
+	elif [ ${HOME} ==  ${PWD:0:${#HOME}} ]; then
+		local PWDNAME="~${PWD:${#HOME}}"
+	else
+		local PWDNAME=${PWD}
+	fi
 
-		# current directory
-		if [ ${HOME} == ${PWD} ]; then
-			local PWDNAME="~"
-		elif [ ${HOME} ==  ${PWD:0:${#HOME}} ]; then
-			local PWDNAME="~${PWD:${#HOME}}"
-		else
-			local PWDNAME=${PWD}
-		fi
+	# parse git status and get git variables
+	parse_git_status
 
-		# build git status for prompt
-		parse_git_status
-		local PS1_GIT=''
-		[[ ! -z ${GIT_BRANCH} ]] && PS1_GIT=" (git: ${GIT_BRANCH})"
+	# build b/w prompt for git and vertial env
+	[[ ! -z $GIT_BRANCH ]] && PS1_GIT=" (git: ${GIT_BRANCH})"
+	[[ ! -z $VIRTUAL_ENV ]] && PS1_VENV=" (venv: ${VIRTUAL_ENV#$WORKON_HOME})"
 
-		# build python venv status for prompt
-		local PS1_VENV=''
-		[ ! -z ${VIRTUAL_ENV} ] && PS1_VENV=" (venv: ${VIRTUAL_ENV#$WORKON_HOME})"
+	# calculate fillsize
+	local fillsize=$(($COLUMNS-$(printf "${USER}@${HOSTNAME}:${PWDNAME}${PS1_GIT}${PS1_VENV} " | wc -c | tr -d " ")))
 
-		# calculate fillsize
-		local promptsize=$(echo -n "${USERNAME}@${HOSTNAME}:${PWDNAME}${PS1_GIT}${PS1_VENV} " | wc -c | tr -d " ")
-		local fillsize=$((${TERMWIDTH}-${promptsize}))
+	local FILL=$color_gray
+	while [ $fillsize -gt 0 ]; do
+		FILL="${FILL}-"
+		fillsize=$(($fillsize-1))
+	done
+	FILL="${FILL}${color_off}"
 
-		# set colors
-		local color_red=$(/usr/bin/tput setaf 1)
-		local color_green=$(/usr/bin/tput setaf 2)
-		local color_off=$(/usr/bin/tput sgr0)
+	local color_user=
+	if $color_is_on; then
+		# set user color
 		case `id -u` in
-			0) local ucolor=${color_red} ;;
-			*) local ucolor=${color_green} ;;
+			0) color_user=$color_red ;;
+			*) color_user=$color_green ;;
 		esac
 
-		local FILL=$(/usr/bin/tput setaf 8)
-		while [ "${fillsize}" -gt "0" ]; do
-			FILL="${FILL}-"
-			fillsize=$((${fillsize}-1))
-		done
-		FILL="${FILL}${color_off}"
-
-		# colorize git status
-		if [ ! -z ${GIT_BRANCH} ]; then
-			if [ -z ${GIT_DIRTY} ]; then
-				PS1_GIT=" (git: $(/usr/bin/tput setaf 2)${GIT_BRANCH}${color_off})"
+		# build git status for prompt
+		if [ ! -z $GIT_BRANCH ]; then
+			if [ -z $GIT_DIRTY ]; then
+				PS1_GIT=" (git: ${color_green}${GIT_BRANCH}${color_off})"
 			else
-				PS1_GIT=" (git: $(/usr/bin/tput setaf 1)${GIT_BRANCH}${color_off})"
+				PS1_GIT=" (git: ${color_red}${GIT_BRANCH}${color_off})"
 			fi
 		fi
 
-		# colorize venv status
-		[ ! -z ${VIRTUAL_ENV} ] && PS1_VENV=" (venv: $(/usr/bin/tput setaf 6)${VIRTUAL_ENV#$WORKON_HOME}${color_off})"
-
-		# set new color prompt
-		PS1="${ucolor}${USERNAME}${color_off}@$(/usr/bin/tput setaf 3)${HOSTNAME}${color_off}:$(/usr/bin/tput setaf 7)${PWDNAME}${color_off}${PS1_GIT}${PS1_VENV} ${FILL}\n➜ "
-
-		# get cursor position and add new line if we're not in first column
-		echo -en "\E[6n" && read -sdR CURPOS
-		CURPOS=${CURPOS#*[}
-		CURPOS=${CURPOS/*;/}
-		[[ $CURPOS -gt 1 ]] && echo "$(/usr/bin/tput setab 1)$(/usr/bin/tput setaf 7)¬${color_off}"
+		# build python venv status for prompt
+		[[ ! -z $VIRTUAL_ENV ]] && PS1_VENV=" (venv: ${color_blue}${VIRTUAL_ENV#$WORKON_HOME}${color_off})"
 	fi
 
+	# set new color prompt
+	PS1="${color_user}${USER}${color_off}@${color_yellow}${HOSTNAME}${color_off}:${color_white}${PWDNAME}${color_off}${PS1_GIT}${PS1_VENV} ${FILL}\n➜ "
+
+	# get cursor position and add new line if we're not in first column
+	echo -en "\E[6n" && read -sdR CURPOS
+	CURPOS=${CURPOS#*[}
+	CURPOS=${CURPOS/*;/}
+	[[ $CURPOS -gt 1 ]] && echo "$(/usr/bin/tput setab 1)$(/usr/bin/tput setaf 7)¬${color_off}"
+
 	# set title
-	echo -ne "\033]0;${USERNAME}@${HOSTNAME}:${PWD/#$HOME/~}"; echo -ne "\007"
+	echo -ne "\033]0;${USER}@${HOSTNAME}:${PWDNAME}"; echo -ne "\007"
 }
 
 # set prompt command (title update and color prompt)
