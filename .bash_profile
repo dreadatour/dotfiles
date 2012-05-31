@@ -114,6 +114,12 @@ function prompt_command {
 
 		# set new color prompt
 		PS1="${ucolor}${USERNAME}${color_off}@$(/usr/bin/tput setaf 3)${HOSTNAME}${color_off}:$(/usr/bin/tput setaf 7)${PWDNAME}${color_off}${PS1_GIT}${PS1_VENV} ${FILL}\n➜ "
+
+		# get cursor position and add new line if we're not in first column
+		echo -en "\E[6n" && read -sdR CURPOS
+		CURPOS=${CURPOS#*[}
+		CURPOS=${CURPOS/*;/}
+		[[ $CURPOS -gt 1 ]] && echo "$(/usr/bin/tput setab 1)$(/usr/bin/tput setaf 7)¬${color_off}"
 	fi
 
 	# set title
