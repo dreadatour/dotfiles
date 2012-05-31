@@ -129,7 +129,7 @@ function prompt_command {
 # set prompt command (title update and color prompt)
 PROMPT_COMMAND=prompt_command
 # set new b/w prompt (will be overwritten in 'prompt_command' later for color prompt)
-PS1='\u@\h:\w$(ps1_git_status)\$ '
+PS1='\u@\h:\w\$ '
 
 # python virtualenv
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
