@@ -32,6 +32,7 @@ color_yellow=
 color_blue=
 color_white=
 color_gray=
+color_bg_red=
 color_off=
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
 	color_is_on=true
@@ -41,6 +42,7 @@ if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
 	color_blue=$(/usr/bin/tput setaf 6)
 	color_white=$(/usr/bin/tput setaf 7)
 	color_gray=$(/usr/bin/tput setaf 8)
+	color_bg_red=$(/usr/bin/tput setab 1)
 	color_off=$(/usr/bin/tput sgr0)
 fi
 
@@ -127,10 +129,13 @@ function prompt_command {
 	PS1="${color_user}${USER}${color_off}@${color_yellow}${HOSTNAME}${color_off}:${color_white}${PWDNAME}${color_off}${PS1_GIT}${PS1_VENV} ${FILL}\n➜ "
 
 	# get cursor position and add new line if we're not in first column
-	echo -en "\E[6n" && read -sdR CURPOS
-	CURPOS=${CURPOS#*[}
-	CURPOS=${CURPOS/*;/}
-	[[ $CURPOS -gt 1 ]] && echo "$(/usr/bin/tput setab 1)$(/usr/bin/tput setaf 7)↵${color_off}"
+	# cool'n'dirty trick (http://stackoverflow.com/a/2575525/1164595)
+	exec < /dev/tty
+	oldstty=$(stty -g)
+	stty raw -echo min 0
+	echo -en "\033[6n" > /dev/tty && read -sdR CURPOS
+	stty $oldstty
+	[[ ${CURPOS##*;} -gt 1 ]] && echo "${color_bg_red}${color_white}↵${color_off}"
 
 	# set title
 	echo -ne "\033]0;${USER}@${HOSTNAME}:${PWDNAME}"; echo -ne "\007"
