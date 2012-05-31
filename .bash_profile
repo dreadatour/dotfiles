@@ -130,7 +130,7 @@ function prompt_command {
 	echo -en "\E[6n" && read -sdR CURPOS
 	CURPOS=${CURPOS#*[}
 	CURPOS=${CURPOS/*;/}
-	[[ $CURPOS -gt 1 ]] && echo "$(/usr/bin/tput setab 1)$(/usr/bin/tput setaf 7)¬${color_off}"
+	[[ $CURPOS -gt 1 ]] && echo "$(/usr/bin/tput setab 1)$(/usr/bin/tput setaf 7)↵${color_off}"
 
 	# set title
 	echo -ne "\033]0;${USER}@${HOSTNAME}:${PWDNAME}"; echo -ne "\007"
