@@ -36,14 +36,15 @@ color_bg_red=
 color_off=
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
 	color_is_on=true
-	color_red=$(/usr/bin/tput setaf 1)
-	color_green=$(/usr/bin/tput setaf 2)
-	color_yellow=$(/usr/bin/tput setaf 3)
-	color_blue=$(/usr/bin/tput setaf 6)
-	color_white=$(/usr/bin/tput setaf 7)
-	color_gray=$(/usr/bin/tput setaf 8)
-	color_bg_red=$(/usr/bin/tput setab 1)
-	color_off=$(/usr/bin/tput sgr0)
+	color_red="\[$(/usr/bin/tput setaf 1)\]"
+	color_green="\[$(/usr/bin/tput setaf 2)\]"
+	color_yellow="\[$(/usr/bin/tput setaf 3)\]"
+	color_blue="\[$(/usr/bin/tput setaf 6)\]"
+	color_white="\[$(/usr/bin/tput setaf 7)\]"
+	color_gray="\[$(/usr/bin/tput setaf 8)\]"
+	color_off="\[$(/usr/bin/tput sgr0)\]"
+	color_error="$(/usr/bin/tput setab 1)$(/usr/bin/tput setaf 7)"
+	color_error_off="$(/usr/bin/tput sgr0)"
 fi
 
 # get git status
@@ -77,14 +78,13 @@ function parse_git_status {
 function prompt_command {
 	local PS1_GIT=
 	local PS1_VENV=
+	local PWDNAME=$PWD
 
 	# beautify working firectory name
-	if [ ${HOME} == ${PWD} ]; then
-		local PWDNAME="~"
-	elif [ ${HOME} ==  ${PWD:0:${#HOME}} ]; then
-		local PWDNAME="~${PWD:${#HOME}}"
-	else
-		local PWDNAME=${PWD}
+	if [ $HOME == $PWD ]; then
+		PWDNAME="~"
+	elif [ $HOME ==  ${PWD:0:${#HOME}} ]; then
+		PWDNAME="~${PWD:${#HOME}}"
 	fi
 
 	# parse git status and get git variables
@@ -98,10 +98,7 @@ function prompt_command {
 	local fillsize=$(($COLUMNS-$(printf "${USER}@${HOSTNAME}:${PWDNAME}${PS1_GIT}${PS1_VENV} " | wc -c | tr -d " ")))
 
 	local FILL=$color_gray
-	while [ $fillsize -gt 0 ]; do
-		FILL="${FILL}-"
-		fillsize=$(($fillsize-1))
-	done
+	while [ $fillsize -gt 0 ]; do FILL="${FILL}─"; fillsize=$(($fillsize-1)); done
 	FILL="${FILL}${color_off}"
 
 	local color_user=
@@ -135,7 +132,7 @@ function prompt_command {
 	stty raw -echo min 0
 	echo -en "\033[6n" > /dev/tty && read -sdR CURPOS
 	stty $OLDSTTY
-	[[ ${CURPOS##*;} -gt 1 ]] && echo "${color_bg_red}${color_white}↵${color_off}"
+	[[ ${CURPOS##*;} -gt 1 ]] && echo "${color_error}↵${color_error_off}"
 
 	# set title
 	echo -ne "\033]0;${USER}@${HOSTNAME}:${PWDNAME}"; echo -ne "\007"
