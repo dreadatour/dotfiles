@@ -131,10 +131,10 @@ function prompt_command {
 	# get cursor position and add new line if we're not in first column
 	# cool'n'dirty trick (http://stackoverflow.com/a/2575525/1164595)
 	exec < /dev/tty
-	oldstty=$(stty -g)
+	local OLDSTTY=$(stty -g)
 	stty raw -echo min 0
 	echo -en "\033[6n" > /dev/tty && read -sdR CURPOS
-	stty $oldstty
+	stty $OLDSTTY
 	[[ ${CURPOS##*;} -gt 1 ]] && echo "${color_bg_red}${color_white}↵${color_off}"
 
 	# set title
