@@ -59,7 +59,7 @@ function parse_git_status {
 
 	# check we are in git repo
 	local CUR_DIR=$PWD
-	while [ ! -d ${CUR_DIR}/.git ] && [ ! $CUR_DIR = "/" ]; do CUR_DIR=${CUR_DIR%/*}; done
+	while [[ ! -d ${CUR_DIR}/.git ]] && [[ ! $CUR_DIR = "/" ]]; do CUR_DIR=${CUR_DIR%/*}; done
 	[[ ! -d ${CUR_DIR}/.git ]] && return
 
 	# 'git repo for dotfiles' fix: show git status only in home dir and other git repos
@@ -81,9 +81,9 @@ function prompt_command {
 	local PWDNAME=$PWD
 
 	# beautify working firectory name
-	if [ $HOME == $PWD ]; then
+	if [[ $HOME == $PWD ]]; then
 		PWDNAME="~"
-	elif [ $HOME ==  ${PWD:0:${#HOME}} ]; then
+	elif [[ $HOME == ${PWD:0:${#HOME}} ]]; then
 		PWDNAME="~${PWD:${#HOME}}"
 	fi
 
@@ -98,7 +98,7 @@ function prompt_command {
 	local fillsize=$(($COLUMNS-$(printf "${USER}@${HOSTNAME}:${PWDNAME}${PS1_GIT}${PS1_VENV} " | wc -c | tr -d " ")))
 
 	local FILL=$color_gray
-	while [ $fillsize -gt 0 ]; do FILL="${FILL}─"; fillsize=$(($fillsize-1)); done
+	while [[ $fillsize -gt 0 ]]; do FILL="${FILL}─"; fillsize=$(($fillsize-1)); done
 	FILL="${FILL}${color_off}"
 
 	local color_user=
@@ -110,8 +110,8 @@ function prompt_command {
 		esac
 
 		# build git status for prompt
-		if [ ! -z $GIT_BRANCH ]; then
-			if [ -z $GIT_DIRTY ]; then
+		if [[ ! -z $GIT_BRANCH ]]; then
+			if [[ -z $GIT_DIRTY ]]; then
 				PS1_GIT=" (git: ${color_green}${GIT_BRANCH}${color_off})"
 			else
 				PS1_GIT=" (git: ${color_red}${GIT_BRANCH}${color_off})"
