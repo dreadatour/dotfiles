@@ -34,6 +34,7 @@ color_white=
 color_gray=
 color_bg_red=
 color_off=
+color_user=
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
 	color_is_on=true
 	color_red="\[$(/usr/bin/tput setaf 1)\]"
@@ -43,8 +44,15 @@ if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
 	color_white="\[$(/usr/bin/tput setaf 7)\]"
 	color_gray="\[$(/usr/bin/tput setaf 8)\]"
 	color_off="\[$(/usr/bin/tput sgr0)\]"
+
 	color_error="$(/usr/bin/tput setab 1)$(/usr/bin/tput setaf 7)"
 	color_error_off="$(/usr/bin/tput sgr0)"
+
+	# set user color
+	case `id -u` in
+		0) color_user=$color_red ;;
+		*) color_user=$color_green ;;
+	esac
 fi
 
 # get git status
@@ -80,7 +88,7 @@ function prompt_command {
 	local PS1_VENV=
 	local PWDNAME=$PWD
 
-	# beautify working firectory name
+	# beautify working directory name
 	if [[ $HOME == $PWD ]]; then
 		PWDNAME="~"
 	elif [[ $HOME == ${PWD:0:${#HOME}} ]]; then
@@ -90,25 +98,27 @@ function prompt_command {
 	# parse git status and get git variables
 	parse_git_status
 
-	# build b/w prompt for git and vertial env
+	# build b/w prompt for git and virtual env
 	[[ ! -z $GIT_BRANCH ]] && PS1_GIT=" (git: ${GIT_BRANCH})"
 	[[ ! -z $VIRTUAL_ENV ]] && PS1_VENV=" (venv: ${VIRTUAL_ENV#$WORKON_HOME})"
 
-	# calculate fillsize
-	local fillsize=$(($COLUMNS-$(printf "${USER}@${HOSTNAME}:${PWDNAME}${PS1_GIT}${PS1_VENV} " | wc -c | tr -d " ")))
+	# calculate prompt length
+	local PS1_length=$((${#USER}+${#HOSTNAME}+${#PWDNAME}+${#PS1_GIT}+${#PS1_VENV}+3))
+	local FILL=
 
-	local FILL=$color_gray
-	while [[ $fillsize -gt 0 ]]; do FILL="${FILL}─"; fillsize=$(($fillsize-1)); done
-	FILL="${FILL}${color_off}"
+	# if length is greater, than terminal width
+	if [[ $PS1_length -gt $COLUMNS ]]; then
+		# strip working directory name
+		PWDNAME="...${PWDNAME:$(($PS1_length-$COLUMNS+3))}"
+	else
+		# else calculate fillsize
+		local fillsize=$(($COLUMNS-$PS1_length))
+		FILL=$color_gray
+		while [[ $fillsize -gt 0 ]]; do FILL="${FILL}─"; fillsize=$(($fillsize-1)); done
+		FILL="${FILL}${color_off}"
+	fi
 
-	local color_user=
 	if $color_is_on; then
-		# set user color
-		case `id -u` in
-			0) color_user=$color_red ;;
-			*) color_user=$color_green ;;
-		esac
-
 		# build git status for prompt
 		if [[ ! -z $GIT_BRANCH ]]; then
 			if [[ -z $GIT_DIRTY ]]; then
