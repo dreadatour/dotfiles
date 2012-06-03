@@ -8,8 +8,10 @@ set nocompatible
 filetype off
 
 " add all plugins in ~/.vim/bundle/ to runtimepath (vim-pathogen)
-call pathogen#infect()
-call pathogen#helptags()
+if filereadable("~/.vim/autoload/pathogen.vim")
+	call pathogen#infect()
+	call pathogen#helptags()
+endif
 
 " turn on syntax highlighting
 if !exists("syntax_on")
