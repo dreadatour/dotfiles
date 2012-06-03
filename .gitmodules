@@ -4,9 +4,13 @@
 	ignore = untracked
 [submodule "vim-ctrlp"]
 	path = .vim/bundle/ctrlp
-	url = https://github.com/kien/ctrlp.vim.git
+	url = git://github.com/kien/ctrlp.vim.git
 	ignore = untracked
 [submodule "vim-git-branch-info"]
 	path = .vim/bundle/vim-git-branch-info
 	url = git://github.com/taq/vim-git-branch-info.git
+	ignore = untracked
+[submodule "vim-nerdtree"]
+	path = .vim/bundle/nerdtree
+	url = git://github.com/scrooloose/nerdtree.git
 	ignore = untracked
