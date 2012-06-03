@@ -8,7 +8,7 @@ set nocompatible
 filetype off
 
 " add all plugins in ~/.vim/bundle/ to runtimepath (vim-pathogen)
-if filereadable("~/.vim/autoload/pathogen.vim")
+if filereadable($HOME."/.vim/autoload/pathogen.vim")
 	call pathogen#infect()
 	call pathogen#helptags()
 endif
@@ -71,7 +71,7 @@ if has("gui_running")
 	try
 		colorscheme solarized
 		" reload 'mark' plugin after colorscheme changed
-		if filereadable("~/.vim/plugin/mark.vim")
+		if filereadable($HOME."/.vim/plugin/mark.vim")
 			source ~/.vim/plugin/mark.vim
 		endif
 	catch /^Vim\%((\a\+)\)\=:E185/
