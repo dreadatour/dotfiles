@@ -225,3 +225,10 @@ au BufNewFile,BufRead * call SetLocalOptions(bufname("%"))
 "       http://stackoverflow.com/questions/2308278/how-to-have-a-different-buffer-list-for-each-tabs-in-vim
 " TODO: neocomplcache is a good plugin for auto-completion
 "       https://github.com/Shougo/neocomplcache
+" TODO: add more vim plugins:
+"       https://github.com/mileszs/ack.vim
+"       https://github.com/majutsushi/tagbar
+"       https://github.com/tpope/vim-fugitive
+"       https://github.com/tpope/vim-surround
+"       https://github.com/klen/python-mode
+"       https://github.com/fholgado/minibufexpl.vim
