@@ -76,7 +76,7 @@ function prompt_command {
 	if [[ ! -z $PS1_GIT_BIN ]]; then
 		# check we are in git repo
 		local CUR_DIR=$PWD
-		while [[ ! -d "${CUR_DIR}/.git" ]] && [[ ! "${CUR_DIR}" == "/" ]] && [[! "${CUR_DIR}" == "~" ]] && [[! "${CUR_DIR}" == "" ]]; do CUR_DIR=${CUR_DIR%/*}; done
+		while [[ ! -d "${CUR_DIR}/.git" ]] && [[ ! "${CUR_DIR}" == "/" ]] && [[ ! "${CUR_DIR}" == "~" ]] && [[ ! "${CUR_DIR}" == "" ]]; do CUR_DIR=${CUR_DIR%/*}; done
 		if [[ -d "${CUR_DIR}/.git" ]]; then
 			# 'git repo for dotfiles' fix: show git status only in home dir and other git repos
 			if [[ "${CUR_DIR}" != "${HOME}" ]] || [[ "${PWD}" == "${HOME}" ]]; then
