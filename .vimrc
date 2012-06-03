@@ -89,17 +89,10 @@ endif
 
 
 """" Statusline setup """""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if exists("*GitBranchInfoTokens")
-	set statusline=%<%f\ %m%r\ %{GitBranchInfoTokens()[0]}\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P
-else
-	set statusline=%<%f\ %m%r\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P
-endif
 " active statusline
-let g:Active_statusline=&g:statusline
-au WinEnter * let &l:statusline = g:Active_statusline
+au WinEnter * if exists("*GitBranchInfoTokens") | let &l:statusline = "%<%f\ %m%r\ %{GitBranchInfoTokens()[0]}\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P" | else | let &l:statusline = "%<%f\ %m%r\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P" | endif
 " inactive statusline
-let g:NCstatusline = '%<%f'
-au WinLeave * let &l:statusline = g:NCstatusline
+au WinLeave * let &l:statusline = '%<%f'
 
 
 """" Keys remapping """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -131,47 +124,27 @@ let mapleader=','
 
 " Show list status
 function! ShowList()
-	if &l:list
-		echon 'list = ON'
-	else
-		echon 'list = OFF'
-	endif
+	if &l:list | echon 'list = ON' | else | echon 'list = OFF' | endif
 endfunction
 
 " Show wrap status
 function! ShowWrap()
-	if &l:wrap
-		echon 'wrap = ON'
-	else
-		echon 'wrap = OFF'
-	endif
+	if &l:wrap | echon 'wrap = ON' | else | echon 'wrap = OFF' | endif
 endfunction
 
 " Show ignore case status
 function! ShowIgnoreCase()
-	if &l:ignorecase
-		echon 'search ignorecase = ON'
-	else
-		echon 'search ignorecase = OFF'
-	endif
+	if &l:ignorecase | echon 'search ignorecase = ON' | else | echon 'search ignorecase = OFF' | endif
 endfunction
 
 " Show number status
 function! ShowNumber()
-	if &l:number
-		echon 'number = ON'
-	else
-		echon 'number = OFF'
-	endif
+	if &l:number | echon 'number = ON' | else | echon 'number = OFF' | endif
 endfunction
 
 " Show highlight search status
 function! ShowHighlightSearch()
-	if &l:hls
-		echon 'search highlight = ON'
-	else
-		echon 'search highlight = OFF'
-	endif
+	if &l:hls | echon 'search highlight = ON' | else | echon 'search highlight = OFF' | endif
 endfunction
 
 " toggle 'set list' (http://vimcasts.org/episodes/show-invisibles/)
@@ -250,3 +223,5 @@ au BufNewFile,BufRead * call SetLocalOptions(bufname("%"))
 """" ToDo list """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " TODO: different buffer list for each tabs
 "       http://stackoverflow.com/questions/2308278/how-to-have-a-different-buffer-list-for-each-tabs-in-vim
+" TODO: neocomplcache is a good plugin for auto-completion
+"       https://github.com/Shougo/neocomplcache

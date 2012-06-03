@@ -6,3 +6,7 @@
 	path = .vim/bundle/ctrlp
 	url = https://github.com/kien/ctrlp.vim.git
 	ignore = untracked
+[submodule "vim-git-branch-info"]
+	path = .vim/bundle/vim-git-branch-info
+	url = git://github.com/taq/vim-git-branch-info.git
+	ignore = untracked
