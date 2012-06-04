@@ -6,7 +6,7 @@ let g:pep8_loaded = 1
 command Pep8 call <SID>Pep8()
 
 if !hasmapto(':Pep8<CR>')
-	silent! nnoremap <unique> <silent> <Leader>p :Pep8<CR>
+	silent! nnoremap <unique> <silent> <Leader>p :Pep<CR>
 endif
 
 function s:Pep8()
@@ -23,16 +23,12 @@ function s:Pep8()
 	silent! grep! %
 	let &grepformat = l:grepformat_save
 	let &grepprg = l:grepprogram_save
-	let l:mod_total = 0
-	let l:win_count = 1
-	" Determine correct window height
-	windo let l:win_count = l:win_count + 1
-	if l:win_count <= 2 | let l:win_count = 4 | endif
-	windo let l:mod_total = l:mod_total + winheight(0)/l:win_count |
-		\ execute 'resize +'.l:mod_total
 	" Open cwindow
-	execute 'belowright copen '.l:mod_total
+	execute 'belowright copen'
+	" Resize window - from 4 to 10 lines
+	exe max([min([line("$"), 10]), 4]) . "wincmd _"
 	nnoremap <buffer> <silent> c :cclose<CR>
+	nnoremap <buffer> <silent> q :cclose<CR>
 	set nolazyredraw
 	redraw!
 	let tlist=getqflist()
