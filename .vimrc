@@ -90,9 +90,18 @@ endif
 
 """" Statusline setup """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " active statusline
-au WinEnter * if exists("*GitBranchInfoTokens") | let &l:statusline = "%<%f\ %m%r\ %{GitBranchInfoTokens()[0]}\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P" | else | let &l:statusline = "%<%f\ %m%r\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P" | endif
+function! SetActiveStatusLine()
+	if exists("*GitBranchInfoTokens")
+		let &l:statusline = "%<%f\ %m%r\ %{GitBranchInfoTokens()[0]}\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P"
+	else
+		let &l:statusline = "%<%f\ %m%r\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P"
+	endif
+endfunction
+autocmd BufEnter * call SetActiveStatusLine()
+autocmd WinEnter * call SetActiveStatusLine()
+
 " inactive statusline
-au WinLeave * let &l:statusline = '%<%f'
+autocmd WinLeave * let &l:statusline = '%<%f'
 
 
 """" Keys remapping """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
