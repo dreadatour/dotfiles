@@ -191,9 +191,6 @@ function InsertTabWrapper()
 endfunction
 imap <tab> <c-r>=InsertTabWrapper()<CR>
 
-" setup autocomplete sources: current buffer + dictionary + other buffers + tags
-set complete=".kbt"
-
 " taglist settings
 let g:tagbar_ctags_bin='/usr/local/Cellar/ctags/5.8/bin/ctags'
 let g:tagbar_autoclose=1
