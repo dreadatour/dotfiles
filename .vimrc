@@ -90,15 +90,18 @@ endif
 
 """" Statusline setup """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " active statusline
-function! SetActiveStatusLine()
-	if exists("*GitBranchInfoTokens")
-		let &l:statusline = "%<%f\ %m%r\ %{GitBranchInfoTokens()[0]}\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P"
-	else
-		let &l:statusline = "%<%f\ %m%r\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P"
+function! SwitchToBuffer()
+	if &buftype != 'quickfix' && &buftype != 'nofile'
+		if exists("*GitBranchInfoTokens")
+			let &l:statusline = "%<%f\ %m%r\ %{GitBranchInfoTokens()[0]}\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P"
+		else
+			let &l:statusline = "%<%f\ %m%r\%=\ %Y\ \|\ %{&fenc==\"\"?&enc:&fenc}\ \|\ %{&ff}\ \|\ %l,%v\ %P"
+		endif
+		wincmd _
 	endif
 endfunction
-autocmd BufEnter * call SetActiveStatusLine()
-autocmd WinEnter * call SetActiveStatusLine()
+autocmd BufEnter * call SwitchToBuffer()
+autocmd WinEnter * call SwitchToBuffer()
 
 " inactive statusline
 autocmd WinLeave * let &l:statusline = '%<%f'
