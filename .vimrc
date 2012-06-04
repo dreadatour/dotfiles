@@ -108,7 +108,7 @@ autocmd WinLeave * let &l:statusline = '%<%f'
 nnoremap ; :
 
 " current file directory expand (http://vimcasts.org/episodes/the-edit-command/)
-cnoremap %% <C-R>=expand('%:h').'/'<cr>
+cnoremap %% <C-R>=expand('%:h').'/'<CR>
 map <leader>ew :e %%
 map <leader>es :sp %%
 map <leader>ev :vsp %%
@@ -119,8 +119,8 @@ imap <C-e> <C-o>A
 imap <C-a> <C-o>I
 
 " Ctrl+Tab switch buffers, Ctrl+Shift+Tab switch buffers back
-map <C-tab> :bnext<cr>
-map <C-S-tab> :bprevious<cr>
+map <C-tab> :bnext<CR>
+map <C-S-tab> :bprevious<CR>
 
 " these settings are only for gvim
 if has("gui_running")
@@ -135,46 +135,27 @@ endif
 """" Leader key workaround """"""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader=','
 
-" Show list status
-function! ShowList()
-	if &l:list | echon 'list = ON' | else | echon 'list = OFF' | endif
-endfunction
-
-" Show wrap status
-function! ShowWrap()
-	if &l:wrap | echon 'wrap = ON' | else | echon 'wrap = OFF' | endif
-endfunction
-
-" Show ignore case status
-function! ShowIgnoreCase()
-	if &l:ignorecase | echon 'search ignorecase = ON' | else | echon 'search ignorecase = OFF' | endif
-endfunction
-
-" Show number status
-function! ShowNumber()
-	if &l:number | echon 'number = ON' | else | echon 'number = OFF' | endif
-endfunction
-
-" Show highlight search status
-function! ShowHighlightSearch()
-	if &l:hls | echon 'search highlight = ON' | else | echon 'search highlight = OFF' | endif
+" print setting state
+function! EchoSetting(name)
+	exec 'let l:state = &'.a:name
+	echon l:state ? a:name.' = ON' : a:name.' = OFF'
 endfunction
 
 " toggle 'set list' (http://vimcasts.org/episodes/show-invisibles/)
-nmap <silent> <leader>l :set list!<CR>:call ShowList()<CR>
+nmap <silent> <leader>l :set list!<CR>:call EchoSetting('list')<CR>
 
 " toggle 'set wrap'
-nmap <silent> <leader>w :set wrap!<CR>:call ShowWrap()<CR>
+nmap <silent> <leader>w :set wrap!<CR>:call EchoSetting('wrap')<CR>
 
 " toggle 'set ignorecase'
-nmap <silent> <leader>i :set ignorecase!<CR>:call ShowIgnoreCase()<CR>
+nmap <silent> <leader>i :set ignorecase!<CR>:call EchoSetting('ignorecase')<CR>
 
 " toggle 'set number'
-nmap <silent> <leader>u :set number!<CR>:call ShowNumber()<CR>
+nmap <silent> <leader>u :set number!<CR>:call EchoSetting('number')<CR>
 
 " toggle 'set hls'
-nmap <silent> <leader>H :set hls!<CR>:call ShowHighlightSearch()<CR>
-nmap <silent> <leader>h :nohlsearch<CR>  " FIXME
+nmap <silent> <leader>H :set hlsearch!<CR>:call EchoSetting('hlsearch')<CR>
+nmap <silent> <leader>h :nohlsearch<CR>
 
 " setup plugins call with leader key
 map <leader>f :NERDTreeToggle<CR>
@@ -208,7 +189,7 @@ function InsertTabWrapper()
 		return "\<c-p>"
 	endif
 endfunction
-imap <tab> <c-r>=InsertTabWrapper()<cr>
+imap <tab> <c-r>=InsertTabWrapper()<CR>
 
 " setup autocomplete sources: current buffer + dictionary + other buffers + tags
 set complete=".kbt"
