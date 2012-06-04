@@ -109,6 +109,10 @@ map <leader>et :tabe %%
 imap <C-e> <C-o>A
 imap <C-a> <C-o>I
 
+" Ctrl+Tab switch buffers, Ctrl+Shift+Tab switch buffers back
+map <C-tab> :bnext<cr>
+map <C-S-tab> :bprevious<cr>
+
 " these settings are only for gvim
 if has("gui_running")
 	" easy indentation
