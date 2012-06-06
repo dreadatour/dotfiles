@@ -14,3 +14,7 @@
 	path = .vim/bundle/nerdtree
 	url = git://github.com/scrooloose/nerdtree.git
 	ignore = untracked
+[submodule "vim-tagbar"]
+	path = .vim/bundle/tagbar
+	url = git://github.com/majutsushi/tagbar.git
+	ignore = untracked
