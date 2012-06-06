@@ -161,6 +161,9 @@ fi
 # Update python path
 [[ -d "/usr/local/lib/python2.7/site-packages" ]] && export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
 
+# Postgres won't work without this
+export PGHOST=/tmp
+
 # grep colorize
 export GREP_OPTIONS="--color=auto"
 
