@@ -158,6 +158,9 @@ if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 	source /usr/local/bin/virtualenvwrapper.sh
 fi
 
+# Update python path
+[[ -d "/usr/local/lib/python2.7/site-packages" ]] && export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
+
 # grep colorize
 export GREP_OPTIONS="--color=auto"
 
