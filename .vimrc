@@ -173,6 +173,12 @@ let g:NERDTreeMinimalUI = 1
 
 " tagbar width
 let g:tagbar_width = 31
+" ctags binary
+let g:tagbar_ctags_bin = '/usr/local/Cellar/ctags/5.8/bin/ctags'
+" autoclose tagbar on tag select
+let g:tagbar_autoclose = 0
+" tagbar minimal interface
+let g:tagbar_compact = 1
 
 " the message when there is no Git repository on the current dir
 let g:git_branch_status_nogit = ''
@@ -187,6 +193,9 @@ let g:pymode_lint_cwindow = 0
 
 
 """" Autocomplete settings """"""""""""""""""""""""""""""""""""""""""""""""""""
+" tags file
+set tags=./tags;/
+
 " autocomplete with <Tab> key
 function InsertTabWrapper()
 	let col = col('.') - 1
@@ -197,10 +206,6 @@ function InsertTabWrapper()
 	endif
 endfunction
 imap <tab> <c-r>=InsertTabWrapper()<CR>
-
-" taglist settings
-let g:tagbar_ctags_bin='/usr/local/Cellar/ctags/5.8/bin/ctags'
-let g:tagbar_autoclose=1
 
 
 """" Load local vim settings (current directory only) """""""""""""""""""""""""
