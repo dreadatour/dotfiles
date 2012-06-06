@@ -32,6 +32,7 @@ set nowrap           " turn off line wrap
 set gdefault         " always global regex
 set nobackup         " do not create backup files
 set noswapfile       " do not create swap files
+set nofoldenable     " turn off folding
 set wildmenu         " turn on wildmenu
 set wcm=<Tab>        " wildmenu navigation key
 set laststatus=2     " status line is always visible
@@ -167,11 +168,14 @@ map <leader>c :VimCommanderToggle<CR>
 
 
 """" Plugins personal settings """"""""""""""""""""""""""""""""""""""""""""""""
+" NerdTree minimal interface
+let g:NERDTreeMinimalUI = 1
+
 " tagbar width
 let g:tagbar_width = 31
 
 " the message when there is no Git repository on the current dir
-let g:git_branch_status_nogit=''
+let g:git_branch_status_nogit = ''
 
 " switch buffers with Ctrl+Tab (minibufexplorer feature) (FIXME)
 let g:miniBufExplMapCTabSwitchBufs = 1
