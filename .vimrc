@@ -60,33 +60,8 @@ set wildignore+=.git,*.o,*.pyc,.DS_Store
 " chars for fill statuslines and vertical separators
 set fillchars=vert:\ ,fold:-
 
-" these settings are only for gvim
-if has("gui_running")
-	set guioptions-=T   " turn off toolbar
-	set guioptions-=rL  " turn off scrolls (both right and left)
-
-	" font setup
-	set guifont=Menlo:h14
-
-	" try to setup colorsheme
-	try
-		colorscheme solarized
-		" reload 'mark' plugin after colorscheme changed
-		if filereadable($HOME."/.vim/plugin/mark.vim")
-			source ~/.vim/plugin/mark.vim
-		endif
-	catch /^Vim\%((\a\+)\)\=:E185/
-		" pass
-	endtry
-
-	" chars for showing inwisible symbols
-	set listchars=tab:▸\ ,eol:¬,trail:·,extends:»
-	" set list ON by default
-	set list
-else
-	" chars for showing inwisible symbols
-	set listchars=tab:>>,eol:$,trail:.
-endif
+" chars for showing inwisible symbols
+set listchars=tab:>>,eol:$,trail:.
 
 
 """" Statusline setup """""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -125,23 +100,6 @@ imap <C-a> <C-o>I
 " Ctrl+Tab switch buffers, Ctrl+Shift+Tab switch buffers back
 map <C-tab> :bnext<CR>
 map <C-S-tab> :bprevious<CR>
-
-" these settings are only for gvim
-if has("gui_running")
-	" easy indentation
-	nmap <D-[> <<
-	nmap <D-]> >>
-	vmap <D-[> <gv
-	vmap <D-]> >gv
-
-	" go to previous window
-	imap <D-Up> <Esc><C-W>ka
-	nmap <D-Up> <C-W>k
-
-	" go to next window
-	imap <D-Down> <Esc><C-W>ja
-	nmap <D-Down> <C-W>j
-endif
 
 
 """" Leader key workaround """"""""""""""""""""""""""""""""""""""""""""""""""""
@@ -238,7 +196,6 @@ au BufNewFile,BufRead * call SetLocalOptions(bufname("%"))
 "       https://github.com/Shougo/neocomplcache
 " TODO: add more vim plugins:
 "       https://github.com/mileszs/ack.vim
-"       https://github.com/majutsushi/tagbar
 "       https://github.com/tpope/vim-fugitive
 "       https://github.com/tpope/vim-surround
 "       https://github.com/klen/python-mode
