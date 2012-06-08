@@ -10,7 +10,7 @@ PATH=/usr/local/sbin:$PATH
 PATH=/usr/local/mysql/bin:$PATH
 
 # don't put duplicate lines in the history
-export HISTCONTROL=ignoreboth,erasedups
+export HISTCONTROL=ignoreboth:erasedups
 # set history length
 HISTFILESIZE=1000000000
 HISTSIZE=1000000
