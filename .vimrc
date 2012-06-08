@@ -133,6 +133,14 @@ if has("gui_running")
 	nmap <D-]> >>
 	vmap <D-[> <gv
 	vmap <D-]> >gv
+
+	" go to previous window
+	imap <D-Up> <Esc><C-W>ka
+	nmap <D-Up> <C-W>k
+
+	" go to next window
+	imap <D-Down> <Esc><C-W>ja
+	nmap <D-Down> <C-W>j
 endif
 
 
