@@ -160,6 +160,11 @@ let g:pymode_lint_cwindow = 0
 " enable indent guide colors
 if has("gui_running")
 	let g:indent_guides_enable_on_vim_startup = 1
+	let g:indent_guides_auto_colors = 0
+	autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#00323F
+	autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#003545
+	"autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#073642
+	"autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#19404A
 endif
 
 
