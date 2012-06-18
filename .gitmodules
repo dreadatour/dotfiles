@@ -18,3 +18,7 @@
 	path = .vim/bundle/tagbar
 	url = git://github.com/majutsushi/tagbar.git
 	ignore = untracked
+[submodule "vim-indent-guides"]
+	path = .vim/bundle/vim-indent-guides
+	url = git://github.com/nathanaelkane/vim-indent-guides.git
+	ignore = untracked

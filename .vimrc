@@ -157,6 +157,9 @@ let g:pymode_lint_write = 0
 " disable auto open cwindow if errors be finded
 let g:pymode_lint_cwindow = 0
 
+" enable indent guide colors
+let g:indent_guides_enable_on_vim_startup = 1
+
 
 """" Autocomplete settings """"""""""""""""""""""""""""""""""""""""""""""""""""
 " tags file
@@ -176,15 +179,15 @@ imap <tab> <c-r>=InsertTabWrapper()<CR>
 
 """" Load local vim settings (current directory only) """""""""""""""""""""""""
 function SetLocalOptions(fname)
-    let dirname = fnamemodify(a:fname, ":p:h")
-    while "/" != dirname
-        let lvimrc  = dirname . "/.lvimrc"
-        if filereadable(lvimrc)
-            execute "source " . lvimrc
-            break
-        endif
-        let dirname = fnamemodify(dirname, ":p:h:h")
-    endwhile
+	let dirname = fnamemodify(a:fname, ":p:h")
+	while "/" != dirname
+		let lvimrc  = dirname . "/.lvimrc"
+		if filereadable(lvimrc)
+			execute "source " . lvimrc
+			break
+		endif
+		let dirname = fnamemodify(dirname, ":p:h:h")
+	endwhile
 endfunction
 au BufNewFile,BufRead * call SetLocalOptions(bufname("%"))
 
