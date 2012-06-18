@@ -158,7 +158,9 @@ let g:pymode_lint_write = 0
 let g:pymode_lint_cwindow = 0
 
 " enable indent guide colors
-let g:indent_guides_enable_on_vim_startup = 1
+if has("gui_running")
+	let g:indent_guides_enable_on_vim_startup = 1
+endif
 
 
 """" Autocomplete settings """"""""""""""""""""""""""""""""""""""""""""""""""""

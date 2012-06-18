@@ -1,4 +1,4 @@
-" vim GUI settings
+"""" GUI settings """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set guioptions-=T   " turn off toolbar
 set guioptions-=rL  " turn off scrolls (both right and left)
 
@@ -21,6 +21,8 @@ set listchars=tab:▸\ ,eol:¬,trail:·,extends:»
 " set list ON by default
 set list
 
+
+"""" Keys remapping """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " easy indentation
 nmap <D-[> <<
 nmap <D-]> >>
