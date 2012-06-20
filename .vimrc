@@ -180,8 +180,6 @@ if has("gui_running")
 	let g:indent_guides_auto_colors = 0
 	autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#00323F
 	autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#003545
-	"autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#073642
-	"autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#19404A
 endif
 
 
