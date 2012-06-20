@@ -64,6 +64,23 @@ set fillchars=vert:\ ,fold:-
 set listchars=tab:>>,eol:$,trail:.
 
 
+"""" Color sheme """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:solarized_termcolors = 256
+let g:solarized_termtrans = 1
+let g:solarized_visibility = "low"
+
+" try to setup colorsheme
+try
+	colorscheme solarized
+	" reload 'mark' plugin after colorscheme changed
+	if filereadable($HOME."/.vim/plugin/mark.vim")
+		source ~/.vim/plugin/mark.vim
+	endif
+catch /^Vim\%((\a\+)\)\=:E185/
+	" pass
+endtry
+
+
 """" Statusline setup """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " active statusline
 function! SwitchToBuffer()

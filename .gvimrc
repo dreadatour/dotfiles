@@ -5,17 +5,6 @@ set guioptions-=rL  " turn off scrolls (both right and left)
 " font setup
 set guifont=Menlo:h14
 
-" try to setup colorsheme
-try
-	colorscheme solarized
-	" reload 'mark' plugin after colorscheme changed
-	if filereadable($HOME."/.vim/plugin/mark.vim")
-		source ~/.vim/plugin/mark.vim
-	endif
-catch /^Vim\%((\a\+)\)\=:E185/
-	" pass
-endtry
-
 " chars for showing inwisible symbols
 set listchars=tab:▸\ ,eol:¬,trail:·,extends:»
 " set list ON by default
