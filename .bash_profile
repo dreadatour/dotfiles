@@ -168,8 +168,10 @@ export PGHOST=/tmp
 export GREP_OPTIONS="--color=auto"
 
 # bash completion
-if [ -f `brew --prefix`/etc/bash_completion ]; then
-	. `brew --prefix`/etc/bash_completion
+if [ -f /usr/local/bin/brew ]; then
+	if [ -f `/usr/local/bin/brew --prefix`/etc/bash_completion ]; then
+		. `/usr/local/bin/brew --prefix`/etc/bash_completion
+	fi
 fi
 
 # bash aliases
