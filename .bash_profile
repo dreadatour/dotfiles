@@ -58,6 +58,12 @@ fi
 # some kind of optimization - check if git installed only on config load
 PS1_GIT_BIN=$(which git 2>/dev/null)
 
+if [ -f ~/.hostname ]; then
+	LOCAL_HOSTNAME=`cat ~/.hostname`
+else
+	LOCAL_HOSTNAME=$HOSTNAME
+fi
+
 function prompt_command {
 	local PS1_GIT=
 	local PS1_VENV=
@@ -98,7 +104,7 @@ function prompt_command {
 	[[ ! -z $VIRTUAL_ENV ]] && PS1_VENV=" (venv: ${VIRTUAL_ENV#$WORKON_HOME})"
 
 	# calculate prompt length
-	local PS1_length=$((${#USER}+${#HOSTNAME}+${#PWDNAME}+${#PS1_GIT}+${#PS1_VENV}+3))
+	local PS1_length=$((${#USER}+${#LOCAL_HOSTNAME}+${#PWDNAME}+${#PS1_GIT}+${#PS1_VENV}+3))
 	local FILL=
 
 	# if length is greater, than terminal width
@@ -128,7 +134,7 @@ function prompt_command {
 	fi
 
 	# set new color prompt
-	PS1="${color_user}${USER}${color_off}@${color_yellow}${HOSTNAME}${color_off}:${color_white}${PWDNAME}${color_off}${PS1_GIT}${PS1_VENV} ${FILL}\n➜ "
+	PS1="${color_user}${USER}${color_off}@${color_yellow}${LOCAL_HOSTNAME}${color_off}:${color_white}${PWDNAME}${color_off}${PS1_GIT}${PS1_VENV} ${FILL}\n➜ "
 
 	# get cursor position and add new line if we're not in first column
 	# cool'n'dirty trick (http://stackoverflow.com/a/2575525/1164595)
@@ -142,13 +148,13 @@ function prompt_command {
 	[[ ${CURPOS##*;} -gt 1 ]] && echo "${color_error}↵${color_error_off}"
 
 	# set title
-	echo -ne "\033]0;${USER}@${HOSTNAME}:${PWDNAME}"; echo -ne "\007"
+	echo -ne "\033]0;${USER}@${LOCAL_HOSTNAME}:${PWDNAME}"; echo -ne "\007"
 }
 
 # set prompt command (title update and color prompt)
 PROMPT_COMMAND=prompt_command
 # set new b/w prompt (will be overwritten in 'prompt_command' later for color prompt)
-PS1='\u@\h:\w\$ '
+PS1='\u@${LOCAL_HOSTNAME}:\w\$ '
 
 # python virtualenv
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
