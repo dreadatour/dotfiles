@@ -20,5 +20,5 @@
 	ignore = untracked
 [submodule "vim-colors-solarized"]
 	path = .vim/bundle/vim-colors-solarized
-	url = git@github.com:dreadatour/vim-colors-solarized.git
+	url = git://github.com/dreadatour/vim-colors-solarized.git
 	ignore = untracked
