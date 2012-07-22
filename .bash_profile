@@ -165,7 +165,8 @@ if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 fi
 
 # Update python path
-[[ -d "/usr/local/lib/python2.7/site-packages" ]] && export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
+# XXX: this is necessary only for local machine
+#[[ -d "/usr/local/lib/python2.7/site-packages" ]] && export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
 
 # Postgres won't work without this
 export PGHOST=/tmp
