@@ -3,6 +3,11 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
+# unset this because of nasty OS X bug with annoying message:
+# "dyld: DYLD_ environment variables being ignored because main executable (/usr/bin/sudo) is setuid or setgid"
+# this is not correct, but Apple is too lazy to fix this
+unset DYLD_LIBRARY_PATH
+
 # add local bin path
 PATH=$HOME/.bin:$PATH
 PATH=/usr/local/bin:$PATH
