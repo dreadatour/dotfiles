@@ -13,6 +13,7 @@ PATH=$HOME/.bin:$PATH
 PATH=/usr/local/bin:$PATH
 PATH=/usr/local/sbin:$PATH
 [ -d /usr/local/mysql/bin ] && PATH=/usr/local/mysql/bin:$PATH
+[ -d /usr/local/share/npm/bin ] && PATH=/usr/local/share/npm/bin:$PATH
 
 # don't put duplicate lines in the history
 export HISTCONTROL=ignoreboth:erasedups
