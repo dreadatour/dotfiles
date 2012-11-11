@@ -22,3 +22,7 @@
 	path = .vim/bundle/vim-colors-solarized
 	url = git://github.com/dreadatour/vim-colors-solarized.git
 	ignore = untracked
+[submodule "zsh-git-prompt"]
+	path = .zsh/git-prompt
+	url = git://github.com/olivierverdier/zsh-git-prompt.git
+	ignore = untracked
