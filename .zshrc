@@ -1,37 +1,48 @@
+# Autoload screen if we aren't in it.
+# http://stackoverflow.com/a/171564/1164595
+# if [[ $STY = '' ]] then screen -xR; fi
+
 # Zsh Reference Card: http://www.bash2zsh.com/zsh_refcard/refcard.pdf
 export LC_ALL=ru_RU.UTF-8
 export LANG=ru_RU.UTF-8
 
 #== Respect your history, dude! ===============================================
-HISTFILE=~/.histfile           # history file location
-HISTSIZE=1000000               # number of history lines kept internally
-SAVEHIST=1000000               # max number of history lines saved
-setopt APPEND_HISTORY          # history appends to existing file
-setopt HIST_EXPIRE_DUPS_FIRST  # duplicate history entries lost first
-setopt HIST_FIND_NO_DUPS       # history search finds once only
-setopt HIST_IGNORE_ALL_DUPS    # remove all earlier duplicate lines
-setopt HIST_IGNORE_SPACE       # don’t store lines starting with space
-setopt HIST_REDUCE_BLANKS      # trim multiple insgnificant blanks in history
+HISTFILE=~/.histfile            # history file location
+HISTSIZE=1000000                # number of history lines kept internally
+SAVEHIST=1000000                # max number of history lines saved
+setopt APPEND_HISTORY           # history appends to existing file
+setopt HIST_EXPIRE_DUPS_FIRST   # duplicate history entries lost first
+setopt HIST_FIND_NO_DUPS        # history search finds once only
+setopt HIST_IGNORE_ALL_DUPS     # remove all earlier duplicate lines
+setopt HIST_IGNORE_SPACE        # don’t store lines starting with space
+setopt HIST_REDUCE_BLANKS       # trim multiple insgnificant blanks in history
+setopt EXTENDED_HISTORY         # save the time and how long a command ran
+setopt HIST_IGNORE_SPACE        # lines which begin with a space don't go into the history
+setopt HIST_NO_STORE            # not to store history or fc commands
 
 
 #== Base settings =============================================================
-autoload -U colors && colors  # enable colors names
-setopt EMACS                  # emacs shortcuts (same as 'bindkey -e')
-setopt NO_BEEP                # do not beep on errors
-setopt COMPLETE_ALIASES       # completion uses unexpanded aliases
+autoload -U colors && colors    # enable colors names
+setopt EMACS                    # emacs shortcuts (same as 'bindkey -e')
+setopt NO_BEEP                  # do not beep on errors
+setopt COMPLETE_ALIASES         # completion uses unexpanded aliases
+setopt MULTIOS                  # allows multiple input and output redirections
+setopt RM_STAR_WAIT             # 10 second wait if you do something that will delete everything
+setopt IGNORE_EOF               # forces the user to type exit or logout, instead of just pressing ^D
+setopt NO_FLOW_CONTROL          # disable stupid annoying keys
 
 # Options for `cd` & `pushd` commands
-setopt AUTO_PUSHD             # this makes cd=pushd
-setopt PUSHD_TO_HOME          # blank pushd goes to home
+setopt AUTO_PUSHD               # this makes cd=pushd
+setopt PUSHD_TO_HOME            # blank pushd goes to home
 
 # this is not for me:
-#setopt AUTO_CD                # directory as command does cd
-#setopt CORRECT_ALL            # correct spelling of all arguments
+#setopt AUTO_CD                 # directory as command does cd
+#setopt CORRECT_ALL             # correct spelling of all arguments
 
 
 #== Prompt settings ===========================================================
-setopt PROMPT_CR     # prompt always at start of line
-setopt PROMPT_SUBST  # '$' expansion in prompts
+setopt PROMPT_CR                # prompt always at start of line
+setopt PROMPT_SUBST             # '$' expansion in prompts
 
 # include zsh-git-prompt
 # https://github.com/olivierverdier/zsh-git-prompt
@@ -87,6 +98,10 @@ set TERM xterm-256color; export TERM
 [ -d /usr/local/mysql/bin ] && PATH=/usr/local/mysql/bin:$PATH
 [ -d /usr/local/share/npm/bin ] && PATH=/usr/local/share/npm/bin:$PATH
 [ -d /usr/local/Cellar/gettext/0.18.1.1/bin ] && PATH=/usr/local/Cellar/gettext/0.18.1.1/bin:$PATH
+
+# set editor, pager & other stuff
+export EDITOR="vi"
+export PAGER="most"
 
 # setup python virtualenv
 export PROJECT_HOME=~/work/
