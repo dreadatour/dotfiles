@@ -51,28 +51,28 @@ source ~/.zsh/git-prompt/zshrc.sh
 ZSH_THEME_GIT_PROMPT_PREFIX="(git:"
 ZSH_THEME_GIT_PROMPT_SUFFIX=")"
 ZSH_THEME_GIT_PROMPT_SEPARATOR="|"
-ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg_bold[magenta]%}"
-ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[red]%}●"
+ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg[cyan]%}"
+ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[green]%}+"
 ZSH_THEME_GIT_PROMPT_CONFLICTS="%{$fg[red]%}✖"
-ZSH_THEME_GIT_PROMPT_CHANGED="%{$fg[blue]%}✚"
+ZSH_THEME_GIT_PROMPT_CHANGED="%{$fg[red]%}±"
 ZSH_THEME_GIT_PROMPT_REMOTE=""
-ZSH_THEME_GIT_PROMPT_UNTRACKED="…"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[yellow]%}…"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[green]%}✔"
 # force update git vars
 update_current_git_vars
 
 # prompt for virtualenv
 function __prompt_virtualenv {
-    [ ! -z "$VIRTUAL_ENV" ] && echo -ne "%{%F{blue}%}${VIRTUAL_ENV#$WORKON_HOME}%{%f%}"
+    [ ! -z "$VIRTUAL_ENV" ] && echo -ne "(venv:%{$fg[cyan]%}${VIRTUAL_ENV#$WORKON_HOME}%{%f%})"
 }
 
 # right prompt
-function __prompt_right {
+function __prompt_misc {
     PROMPT_GIT=$(git_super_status)
     PROMPT_VENV=$(__prompt_virtualenv)
     [ -z $PROMPT_GIT ] && [ -z $PROMPT_VENV ] && return
-    [ ! -z $PROMPT_GIT ] && [ ! -z $PROMPT_VENV ] && echo -ne "${PROMPT_GIT} | ${PROMPT_VENV}" && return
-    echo -ne "${PROMPT_GIT}${PROMPT_VENV}"
+    [ ! -z $PROMPT_GIT ] && [ ! -z $PROMPT_VENV ] && echo -ne " ${PROMPT_GIT} ${PROMPT_VENV} " && return
+    echo -ne " ${PROMPT_GIT}${PROMPT_VENV} "
 }
 
 # set prompt color for user
@@ -82,9 +82,8 @@ case `id -u` in
 esac
 
 # set prompt
-export PROMPT="${PROMPT_USER_COLOR}%n%{%f%}@%{%F{yellow}%}%m%{%f%}:%{%F{white}%}%~%{%f%} "
-export RPROMPT="\$(__prompt_right)"
-unset PROMPT_USER_COLOR
+export PROMPT=$'\${PROMPT_USER_COLOR}%n%{%f%}@%{%F{yellow}%}%m%{%f%}:%{%F{white}%}%~%{%f%}\$(__prompt_misc)\n➜ '
+export RPROMPT='----'
 
 
 #== Setup system variables ====================================================
@@ -101,7 +100,7 @@ set TERM xterm-256color; export TERM
 
 # set editor, pager & other stuff
 export EDITOR="vi"
-export PAGER="most"
+[[ -x $(whence -p most) ]] && export PAGER=$(whence -p most)
 
 # setup python virtualenv
 export PROJECT_HOME=~/work/
