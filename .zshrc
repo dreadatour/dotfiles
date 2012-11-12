@@ -71,8 +71,8 @@ function __prompt_misc {
     PROMPT_GIT=$(git_super_status)
     PROMPT_VENV=$(__prompt_virtualenv)
     [ -z $PROMPT_GIT ] && [ -z $PROMPT_VENV ] && return
-    [ ! -z $PROMPT_GIT ] && [ ! -z $PROMPT_VENV ] && echo -ne " ${PROMPT_GIT} ${PROMPT_VENV} " && return
-    echo -ne " ${PROMPT_GIT}${PROMPT_VENV} "
+    [ ! -z $PROMPT_GIT ] && [ ! -z $PROMPT_VENV ] && echo -ne " ${PROMPT_VENV} ${PROMPT_GIT} " && return
+    echo -ne " ${PROMPT_VENV}${PROMPT_GIT} "
 }
 
 # set prompt color for user
