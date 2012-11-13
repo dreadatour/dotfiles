@@ -100,7 +100,7 @@ set TERM xterm-256color; export TERM
 
 # set editor, pager & other stuff
 export EDITOR="vi"
-[[ -x $(whence -p most) ]] && export PAGER=$(whence -p most)
+export PAGER=less
 
 # setup python virtualenv
 export PROJECT_HOME=~/work/
