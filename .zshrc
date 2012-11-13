@@ -141,14 +141,10 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 # list of directories to get commands from for sudo
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
 
-# predictive typing using history search and auto-completion
-# http://peadrop.com/blog/2007/04/07/welcome-to-mr-crystal-ball/
-# TODO: check this is usable in future (disabled until checked)
-#autoload -U predict-on
-#zle -N predict-on
-#bindkey '^Z'   predict-on
-#bindkey '^X^Z' predict-off
-#zstyle ':predict' verbose true
+# show menu but don't select first completion
+zstyle ':completion:*' menu select=1
+setopt auto_menu
+unsetopt menu_complete
 
 
 #== Aliases ===================================================================
