@@ -22,6 +22,9 @@ setopt HIST_NO_STORE            # not to store history or fc commands
 
 
 #== Base settings =============================================================
+autoload -U select-word-style
+select-word-style bash          # word characters are alphanumeric characters only
+
 autoload -U colors && colors    # enable colors names
 setopt EMACS                    # emacs shortcuts (same as 'bindkey -e')
 setopt NO_BEEP                  # do not beep on errors
