@@ -1,0 +1,9 @@
+#!/bin/bash
+
+columns=$(($(tput cols) - 8))
+line=$(printf '%0.1s' "-"{1..500})
+printf "\e[01;31m---- 8< ${line:0:${columns}}\e[0m\n"
+
+
+
+#(( TERMWIDTH = ${COLUMNS} - 1 ))

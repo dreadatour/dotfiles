@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# color variables
+if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	color_ok="$(/usr/bin/tput setaf 7)"
+	color_error="$(/usr/bin/tput setaf 1)"
+	color_off="$(/usr/bin/tput sgr0)"
+else
+	color_ok=''
+	color_error=''
+	color_off=''
+fi
+
+echo "==== ${color_ok}git fetch origin${color_off} ====" && git fetch -p origin && echo "==== ${color_ok}git pull${color_off} ====" && git pull
+
