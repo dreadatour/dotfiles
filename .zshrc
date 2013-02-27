@@ -194,6 +194,10 @@ alias .='pwd'
 alias ..='cd ..'
 alias ...='cd ../..'
 
+function cdl {
+	cd $1 && ls -lA
+}
+
 # exit
 alias :q='exit'
 
