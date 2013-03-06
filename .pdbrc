@@ -1,0 +1,16 @@
+# Print a dictionary, sorted. %1 is the dict, %2 is the prefix for the names.
+alias p_ for k in sorted(%1.keys()): print "%s%-15s= %-80.80s" % ("%2",k,repr(%1[k]))
+
+# Print the instance variables of a thing.
+alias pi p_ %1.__dict__ %1.
+
+# Print the instance variables of self.
+alias ps pi self
+
+# Print the locals.
+alias pl p_ locals() local:
+
+# Next and list, and step and list.
+alias nl n;;l
+alias sl s;;l
+
