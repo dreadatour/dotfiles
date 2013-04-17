@@ -39,7 +39,7 @@ setopt NO_BEEP                  # do not beep on errors
 setopt COMPLETE_ALIASES         # completion uses unexpanded aliases
 setopt MULTIOS                  # allows multiple input and output redirections
 setopt RM_STAR_WAIT             # 10 second wait if you do something that will delete everything
-setopt IGNORE_EOF               # forces the user to type exit or logout, instead of just pressing ^D
+#setopt IGNORE_EOF               # forces the user to type exit or logout, instead of just pressing ^D
 setopt NO_FLOW_CONTROL          # disable stupid annoying keys
 
 # Options for `cd` & `pushd` commands
