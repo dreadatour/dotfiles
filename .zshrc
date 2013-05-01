@@ -7,11 +7,11 @@ export LC_ALL=ru_RU.UTF-8
 export LANG=ru_RU.UTF-8
 
 # unset this because of nasty OS X bug with annoying message:
-# "dyld: DYLD_ environment variables being ignored because main executable (/usr/bin/sudo) is setuid or setgid"                                                          
+# "dyld: DYLD_ environment variables being ignored because main executable (/usr/bin/sudo) is setuid or setgid"
 # this is not correct, but Apple is too lazy to fix this
 unset DYLD_LIBRARY_PATH
 
-# Postgres won't work without this                                                                                                                                       
+# Postgres won't work without this
 export PGHOST=/tmp
 
 #== Respect your history, dude! ===============================================
@@ -95,6 +95,9 @@ esac
 # set prompt
 export PROMPT=$'\${PROMPT_USER_COLOR}%n%{%f%}@%{%F{yellow}%}%m%{%f%}:%{%F{white}%}%~%{%f%}\$(__prompt_misc)\n➜ '
 export RPROMPT='----'
+
+# python
+export PYTHONDONTWRITEBYTECODE=1
 
 
 #== Setup system variables ====================================================
