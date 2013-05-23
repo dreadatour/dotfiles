@@ -97,7 +97,7 @@ export PROMPT=$'\${PROMPT_USER_COLOR}%n%{%f%}@%{%F{yellow}%}%m%{%f%}:%{%F{white}
 export RPROMPT='----'
 
 # python
-export PYTHONDONTWRITEBYTECODE=1
+#export PYTHONDONTWRITEBYTECODE=1
 
 
 #== Setup system variables ====================================================
