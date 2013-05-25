@@ -74,7 +74,7 @@ update_current_git_vars
 
 # prompt for virtualenv
 function __prompt_virtualenv {
-    [ ! -z "$VIRTUAL_ENV" ] && echo -ne "(venv :%{$fg[cyan]%}${VIRTUAL_ENV#$WORKON_HOME}%{%f%})"
+    [ ! -z "$VIRTUAL_ENV" ] && echo -ne "(venv: %{$fg[cyan]%}${VIRTUAL_ENV#$WORKON_HOME}%{%f%})"
 }
 
 # right prompt
