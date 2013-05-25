@@ -59,7 +59,7 @@ setopt PROMPT_SUBST             # '$' expansion in prompts
 # https://github.com/olivierverdier/zsh-git-prompt
 source ~/.zsh/git-prompt/zshrc.sh
 # override zsh-git-prompt colors
-ZSH_THEME_GIT_PROMPT_PREFIX="(git:"
+ZSH_THEME_GIT_PROMPT_PREFIX="(git: "
 ZSH_THEME_GIT_PROMPT_SUFFIX=")"
 ZSH_THEME_GIT_PROMPT_SEPARATOR="|"
 ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg[cyan]%}"
@@ -74,7 +74,7 @@ update_current_git_vars
 
 # prompt for virtualenv
 function __prompt_virtualenv {
-    [ ! -z "$VIRTUAL_ENV" ] && echo -ne "(venv:%{$fg[cyan]%}${VIRTUAL_ENV#$WORKON_HOME}%{%f%})"
+    [ ! -z "$VIRTUAL_ENV" ] && echo -ne "(venv :%{$fg[cyan]%}${VIRTUAL_ENV#$WORKON_HOME}%{%f%})"
 }
 
 # right prompt
