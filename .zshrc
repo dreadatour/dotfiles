@@ -59,22 +59,22 @@ setopt PROMPT_SUBST             # '$' expansion in prompts
 # https://github.com/olivierverdier/zsh-git-prompt
 source ~/.zsh/git-prompt/zshrc.sh
 # override zsh-git-prompt colors
-ZSH_THEME_GIT_PROMPT_PREFIX="(git: "
-ZSH_THEME_GIT_PROMPT_SUFFIX=")"
-ZSH_THEME_GIT_PROMPT_SEPARATOR="|"
-ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg[cyan]%}"
-ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[green]%}+"
-ZSH_THEME_GIT_PROMPT_CONFLICTS="%{$fg[red]%}✖"
-ZSH_THEME_GIT_PROMPT_CHANGED="%{$fg[red]%}±"
-ZSH_THEME_GIT_PROMPT_REMOTE=""
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[yellow]%}…"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[green]%}✔"
+ZSH_THEME_GIT_PROMPT_PREFIX="%K{black}[git: "
+ZSH_THEME_GIT_PROMPT_SUFFIX="%K{black}]"
+ZSH_THEME_GIT_PROMPT_SEPARATOR="%K{black}|"
+ZSH_THEME_GIT_PROMPT_BRANCH="%K{black}%{$fg[cyan]%}"
+ZSH_THEME_GIT_PROMPT_STAGED="%K{black}%{$fg[green]%}+"
+ZSH_THEME_GIT_PROMPT_CONFLICTS="%K{black}%{$fg[red]%}✖"
+ZSH_THEME_GIT_PROMPT_CHANGED="%K{black}%{$fg[red]%}±"
+ZSH_THEME_GIT_PROMPT_REMOTE="%K{black}"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%K{black}%{$fg[yellow]%}…"
+ZSH_THEME_GIT_PROMPT_CLEAN="%K{black}%{$fg_bold[green]%}✔"
 # force update git vars
 update_current_git_vars
 
 # prompt for virtualenv
 function __prompt_virtualenv {
-    [ ! -z "$VIRTUAL_ENV" ] && echo -ne "(venv: %{$fg[cyan]%}${VIRTUAL_ENV#$WORKON_HOME}%{%f%})"
+    [ ! -z "$VIRTUAL_ENV" ] && echo -ne "[venv: %{$fg[cyan]%}${VIRTUAL_ENV#$WORKON_HOME}%{%f%}]"
 }
 
 # right prompt
@@ -93,8 +93,7 @@ case `id -u` in
 esac
 
 # set prompt
-export PROMPT=$'\${PROMPT_USER_COLOR}%n%{%f%}@%{%F{yellow}%}%m%{%f%}:%{%F{white}%}%~%{%f%}\$(__prompt_misc)\n➜ '
-export RPROMPT='----'
+export PROMPT=$'%K{black}\${PROMPT_USER_COLOR}%n%{%f%}@%{%F{yellow}%}%m%{%f%}:%{%F{white}%}%~%{%f%}\$(__prompt_misc)%{%k%}%{%F{black}%}⮀%{%f%}\n%{%F{white}%}➜%{%f%} '
 
 # python
 #export PYTHONDONTWRITEBYTECODE=1
@@ -198,7 +197,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 
 function cdl {
-	cd $1 && ls -lA
+    cd $1 && ls -lA
 }
 
 # exit
