@@ -55,8 +55,42 @@ setopt PUSHD_TO_HOME            # blank pushd goes to home
 setopt PROMPT_CR                # prompt always at start of line
 setopt PROMPT_SUBST             # '$' expansion in prompts
 
-# include zsh-git-prompt
-# https://github.com/olivierverdier/zsh-git-prompt
+# save start time to variable before command execution
+start_time=$SECONDS
+function prompt_timer_preexec {
+    start_time=$SECONDS
+}
+
+# check elapsed time after command execution
+function prompt_timer_precmd {
+    local timer_result=$(($SECONDS-$start_time))
+    if [[ $timer_result -gt 10 ]]; then
+        if [[ $timer_result -ge 3600 ]]; then
+            let "timer_hours = $timer_result / 3600"
+            let "remainder = $timer_result % 3600"
+            let "timer_minutes = $remainder / 60"
+            let "timer_seconds = $remainder % 60"
+            print -P "%F{red}⚑ elapsed time: ${timer_hours}h${timer_minutes}m${timer_seconds}s"
+        elif [[ $timer_result -ge 60 ]]; then
+            let "timer_minutes = $timer_result / 60"
+            let "timer_seconds = $timer_result % 60"
+            print -P "%F{yellow}⚑ elapsed time: ${timer_minutes}m${timer_seconds}s"
+        else
+            print -P "%F{green}⚑ elapsed time: ${timer_result}s"
+        fi
+    fi
+    start_time=$SECONDS
+}
+
+# load required functions
+autoload -Uz add-zsh-hook
+
+# add hook for calling git-info before each command
+add-zsh-hook preexec prompt_timer_preexec
+add-zsh-hook precmd prompt_timer_precmd
+
+# TODO: colorize prompt with segments (http://www.paradox.gd/posts/9-my-new-zsh-prompt)
+# include zsh-git-prompt (https://github.com/olivierverdier/zsh-git-prompt)
 source ~/.zsh/git-prompt/zshrc.sh
 # override zsh-git-prompt colors
 ZSH_THEME_GIT_PROMPT_PREFIX="%K{black}[git: "
