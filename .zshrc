@@ -93,7 +93,7 @@ case `id -u` in
 esac
 
 # set prompt
-export PROMPT=$'%K{black}\${PROMPT_USER_COLOR}%n%{%f%}@%{%F{yellow}%}%m%{%f%}:%{%F{white}%}%~%{%f%}\$(__prompt_misc)%{%k%}%{%F{black}%}⮀%{%f%}\n%{%F{white}%}➜%{%f%} '
+export PROMPT=$'%{%f%b%k%}%K{black}\${PROMPT_USER_COLOR}%n%{%f%}@%{%F{yellow}%}%m%{%f%}:%{%F{white}%}%~%{%f%}\$(__prompt_misc)%{%k%}%{%F{black}%}⮀%{%f%}\n%{%F{white}%}➜%{%f%} '
 
 # python
 #export PYTHONDONTWRITEBYTECODE=1
