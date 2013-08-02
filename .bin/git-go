@@ -7,11 +7,11 @@ is_remote=0
 
 # color variables
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	color_ok="$(/usr/bin/tput setaf 7)"
+	color="$(/usr/bin/tput setaf 3)"
 	color_error="$(/usr/bin/tput setaf 1)"
 	color_off="$(/usr/bin/tput sgr0)"
 else
-	color_ok=''
+	color=''
 	color_error=''
 	color_off=''
 fi
@@ -20,7 +20,7 @@ fi
 [ -z $branch ] && echo -e "${color_error}Need branch name${color_off}" && exit 1
 
 # check git status
-echo "==== ${color_ok}git status${color_off} ===="
+echo "==== ${color}git status${color_off} ===="
 git status
 if [ $? -ne 128 ]
 then
@@ -30,7 +30,7 @@ then
 	fi
 
 	# fetch changes from origin
-	echo && echo "==== ${color_ok}git fetch origin${color_off} ===="
+	echo && echo "==== ${color}git fetch origin${color_off} ===="
 	git fetch -p origin
 
 	# check if local branch is exists
@@ -48,7 +48,7 @@ then
 		if [ $is_remote -eq 1 ]
 		then
 			# pull changes from remote branch
-			echo && echo "==== ${color_ok}git pull origin ${branch}${color_off} ===="
+			echo && echo "==== ${color}git pull origin ${branch}${color_off} ===="
 			git pull origin $branch
 		else
 			echo && echo "Remote branch '${branch}' is not exists"
@@ -59,12 +59,12 @@ then
 		then
 			echo "Branch '${branch}' is found in local repository"
 			# checkout in branch
-			echo && echo "==== ${color_ok}git checkout ${branch}${color_off} ===="
+			echo && echo "==== ${color}git checkout ${branch}${color_off} ===="
 			git checkout $branch
 			if [ $is_remote -eq 1 ]
 			then
 				# pull changes from remote branch
-				echo && echo "==== ${color_ok}git pull origin ${branch}${color_off} ===="
+				echo && echo "==== ${color}git pull origin ${branch}${color_off} ===="
 				git pull origin $branch
 			else
 				echo && echo "Remote branch '${branch}' is not exists"
@@ -75,10 +75,10 @@ then
 			then
 				echo "Branch '${branch}' is found in remote repository"
 				# create new local branch
-				echo && echo "==== ${color_ok}git checkout -b ${branch} origin/${branch}${color_off} ===="
+				echo && echo "==== ${color}git checkout -b ${branch} origin/${branch}${color_off} ===="
 				git checkout -b $branch origin/$branch
 				# pull changes from remote branch
-				echo && echo "==== ${color_ok}git pull origin ${branch}${color_off} ===="
+				echo && echo "==== ${color}git pull origin ${branch}${color_off} ===="
 				git pull origin $branch
 			else
 				# branch is not found

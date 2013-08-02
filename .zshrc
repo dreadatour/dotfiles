@@ -1,23 +1,43 @@
-# Autoload screen if we aren't in it.
-# http://stackoverflow.com/a/171564/1164595
-# if [[ $STY = '' ]] then screen -xR; fi
+# README (zsh reference card): http://www.bash2zsh.com/zsh_refcard/refcard.pdf
 
-# Zsh Reference Card: http://www.bash2zsh.com/zsh_refcard/refcard.pdf
-export LC_ALL=ru_RU.UTF-8
-export LANG=ru_RU.UTF-8
+###############################################################################
+# Set zsh options
+###############################################################################
 
-# unset this because of nasty OS X bug with annoying message:
-# "dyld: DYLD_ environment variables being ignored because main executable (/usr/bin/sudo) is setuid or setgid"
-# this is not correct, but Apple is too lazy to fix this
-unset DYLD_LIBRARY_PATH
+autoload -U colors && colors    # initialize colors
 
-# Postgres won't work without this
-export PGHOST=/tmp
+autoload -U select-word-style
+select-word-style bash          # word characters are alphanumeric characters only
 
-#== Respect your history, dude! ===============================================
-HISTFILE=~/.histfile            # history file location
-HISTSIZE=1000000                # number of history lines kept internally
-SAVEHIST=1000000                # max number of history lines saved
+autoload -U add-zsh-hook        # we will use zsh hooks in config later
+
+#== Base ======================================================================
+setopt EMACS                    # emacs shortcuts (same as 'bindkey -e')
+setopt NO_BEEP                  # do not beep on errors
+setopt MULTIOS                  # allows multiple input and output redirections
+setopt RM_STAR_WAIT             # 10 second wait if you do something that will delete everything
+setopt NO_FLOW_CONTROL          # disable stupid annoying keys
+setopt INTERACTIVE_COMMENTS     # allow comments even in interactive shells
+#setopt IGNORE_EOF               # forces the user to type exit or logout, instead of just pressing ^D
+
+#== Commands cd & pushd =======================================================
+setopt AUTO_PUSHD               # this makes cd=pushd
+setopt PUSHD_TO_HOME            # blank pushd goes to home
+#setopt AUTO_CD                 # directory as command does cd
+
+#== Completion ================================================================
+setopt COMPLETE_ALIASES         # completion uses unexpanded aliases
+#setopt CORRECT_ALL             # correct spelling of all arguments
+
+# TODO: check this
+setopt COMPLETE_IN_WORD         # allow completion from within a word/phrase
+setopt ALWAYS_TO_END            # when completing from the middle of a word, move the cursor to the end of the word
+
+#== Prompt ====================================================================
+setopt PROMPT_CR                # prompt always at start of line
+setopt PROMPT_SUBST             # enable parameter expansion, command substitution, and arithmetic expansion in the prompt
+
+#== History ===================================================================
 setopt APPEND_HISTORY           # history appends to existing file
 setopt HIST_EXPIRE_DUPS_FIRST   # duplicate history entries lost first
 setopt HIST_FIND_NO_DUPS        # history search finds once only
@@ -28,114 +48,32 @@ setopt EXTENDED_HISTORY         # save the time and how long a command ran
 setopt HIST_IGNORE_SPACE        # lines which begin with a space don't go into the history
 setopt HIST_NO_STORE            # not to store history or fc commands
 
-
-#== Base settings =============================================================
-autoload -U select-word-style
-select-word-style bash          # word characters are alphanumeric characters only
-
-autoload -U colors && colors    # enable colors names
-setopt EMACS                    # emacs shortcuts (same as 'bindkey -e')
-setopt NO_BEEP                  # do not beep on errors
-setopt COMPLETE_ALIASES         # completion uses unexpanded aliases
-setopt MULTIOS                  # allows multiple input and output redirections
-setopt RM_STAR_WAIT             # 10 second wait if you do something that will delete everything
-#setopt IGNORE_EOF               # forces the user to type exit or logout, instead of just pressing ^D
-setopt NO_FLOW_CONTROL          # disable stupid annoying keys
-
-# Options for `cd` & `pushd` commands
-setopt AUTO_PUSHD               # this makes cd=pushd
-setopt PUSHD_TO_HOME            # blank pushd goes to home
-
-# this is not for me:
-#setopt AUTO_CD                 # directory as command does cd
-#setopt CORRECT_ALL             # correct spelling of all arguments
+HISTFILE=~/.histfile    # history file location
+HISTSIZE=1000000        # number of history lines kept internally
+SAVEHIST=1000000        # max number of history lines saved
 
 
-#== Prompt settings ===========================================================
-setopt PROMPT_CR                # prompt always at start of line
-setopt PROMPT_SUBST             # '$' expansion in prompts
+###############################################################################
+# Exports
+###############################################################################
 
-# save start time to variable before command execution
-start_time=$SECONDS
-function prompt_timer_preexec {
-    start_time=$SECONDS
-}
+set TERM xterm-256color; export TERM    # let the system know how cool we are
 
-# check elapsed time after command execution
-function prompt_timer_precmd {
-    local timer_result=$(($SECONDS-$start_time))
-    if [[ $timer_result -gt 10 ]]; then
-        if [[ $timer_result -ge 3600 ]]; then
-            let "timer_hours = $timer_result / 3600"
-            let "remainder = $timer_result % 3600"
-            let "timer_minutes = $remainder / 60"
-            let "timer_seconds = $remainder % 60"
-            print -P "%F{red}⚑ elapsed time: ${timer_hours}h${timer_minutes}m${timer_seconds}s"
-        elif [[ $timer_result -ge 60 ]]; then
-            let "timer_minutes = $timer_result / 60"
-            let "timer_seconds = $timer_result % 60"
-            print -P "%F{yellow}⚑ elapsed time: ${timer_minutes}m${timer_seconds}s"
-        else
-            print -P "%F{green}⚑ elapsed time: ${timer_result}s"
-        fi
-    fi
-    start_time=$SECONDS
-}
+export LC_ALL=ru_RU.UTF-8               # utf-8 only
+export LANG=ru_RU.UTF-8                 # it's 21st century now
+export LC_COLLATE=C                     # CTAGS Sorting in VIM/Emacs is better behaved with this in place
 
-# load required functions
-autoload -Uz add-zsh-hook
+umask 0022                              # set permissions for files: 0644, for directories: 0755
 
-# add hook for calling git-info before each command
-add-zsh-hook preexec prompt_timer_preexec
-add-zsh-hook precmd prompt_timer_precmd
+export EDITOR="vim"                     # default editor
+export PAGER=less                       # default pager
 
-# TODO: colorize prompt with segments (http://www.paradox.gd/posts/9-my-new-zsh-prompt)
-# include zsh-git-prompt (https://github.com/olivierverdier/zsh-git-prompt)
-source ~/.zsh/git-prompt/zshrc.sh
-# override zsh-git-prompt colors
-ZSH_THEME_GIT_PROMPT_PREFIX="%K{black}[git: "
-ZSH_THEME_GIT_PROMPT_SUFFIX="%K{black}]"
-ZSH_THEME_GIT_PROMPT_SEPARATOR="%K{black}|"
-ZSH_THEME_GIT_PROMPT_BRANCH="%K{black}%{$fg[cyan]%}"
-ZSH_THEME_GIT_PROMPT_STAGED="%K{black}%{$fg[green]%}+"
-ZSH_THEME_GIT_PROMPT_CONFLICTS="%K{black}%{$fg[red]%}✖"
-ZSH_THEME_GIT_PROMPT_CHANGED="%K{black}%{$fg[red]%}±"
-ZSH_THEME_GIT_PROMPT_REMOTE="%K{black}"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%K{black}%{$fg[yellow]%}…"
-ZSH_THEME_GIT_PROMPT_CLEAN="%K{black}%{$fg_bold[green]%}✔"
-# force update git vars
-update_current_git_vars
+export PGHOST=/tmp                      # postgres won't work without this
 
-# prompt for virtualenv
-function __prompt_virtualenv {
-    [ ! -z "$VIRTUAL_ENV" ] && echo -ne "[venv: %{$fg[cyan]%}${VIRTUAL_ENV#$WORKON_HOME}%{%f%}]"
-}
-
-# right prompt
-function __prompt_misc {
-    PROMPT_GIT=$(git_super_status)
-    PROMPT_VENV=$(__prompt_virtualenv)
-    [ -z $PROMPT_GIT ] && [ -z $PROMPT_VENV ] && return
-    [ ! -z $PROMPT_GIT ] && [ ! -z $PROMPT_VENV ] && echo -ne " ${PROMPT_VENV} ${PROMPT_GIT} " && return
-    echo -ne " ${PROMPT_VENV}${PROMPT_GIT} "
-}
-
-# set prompt color for user
-case `id -u` in
-    0) PROMPT_USER_COLOR="%{%F{red}%}";;    # set color for root user in prompt
-    *) PROMPT_USER_COLOR="%{%F{green}%}";;  # set color for regular user in prompt
-esac
-
-# set prompt
-export PROMPT=$'%{%f%b%k%}%K{black}\${PROMPT_USER_COLOR}%n%{%f%}@%{%F{yellow}%}%m%{%f%}:%{%F{white}%}%~%{%f%}\$(__prompt_misc)%{%k%}%{%F{black}%}⮀%{%f%}\n%{%F{white}%}➜%{%f%} '
-
-# python
-#export PYTHONDONTWRITEBYTECODE=1
-
-
-#== Setup system variables ====================================================
-# let the system know how cool we are
-set TERM xterm-256color; export TERM
+# unset this because of nasty OS X bug with annoying message:
+# "dyld: DYLD_ environment variables being ignored because main executable (/usr/bin/sudo) is setuid or setgid"
+# this is not correct, but Apple is too lazy to fix this
+unset DYLD_LIBRARY_PATH
 
 # add some directories to my PATH
 [ -d $HOME/.bin ] && PATH=$HOME/.bin:$PATH
@@ -145,24 +83,168 @@ set TERM xterm-256color; export TERM
 [ -d /usr/local/share/npm/bin ] && PATH=/usr/local/share/npm/bin:$PATH
 [ -d /usr/local/Cellar/gettext/0.18.1.1/bin ] && PATH=/usr/local/Cellar/gettext/0.18.1.1/bin:$PATH
 
-# set editor, pager & other stuff
-export EDITOR="vi"
-export PAGER=less
-
 # setup python virtualenv
 export PROJECT_HOME=~/work/
 export WORKON_HOME=~/work/.venv/
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 [ -f /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
 
-# set permissions for files: 0644, for directories: 0755
-umask 0022
+export CLICOLOR=1
+export LSCOLORS=gxfxcxdxbxegedabagacad
 
-# cycling through the history with the Up/Down keys
-bindkey '\e[A' history-beginning-search-backward
-bindkey '\e[B' history-beginning-search-forward
+# Enable color in grep
+export GREP_OPTIONS='--color=auto'
+export GREP_COLOR='3;33'
 
-#== Completions ===============================================================
+
+###############################################################################
+# Helpful hooks and functions for prompt
+###############################################################################
+
+# save start time to variable before command execution
+function __reset_cmd_start_time {
+    __CMD_START_TIME=$SECONDS
+}
+__reset_cmd_start_time  # reset command start time right now
+
+# check elapsed time after command execution
+ELAPSED_TIME=''
+function __calc_elapsed_time {
+    local timer_result
+    ELAPSED_TIME=''
+
+    timer_result=$(($SECONDS-$__CMD_START_TIME))
+    if [[ $timer_result -gt 10 ]]; then
+        if [[ $timer_result -ge 3600 ]]; then
+            let "timer_hours = $timer_result / 3600"
+            let "remainder = $timer_result % 3600"
+            let "timer_minutes = $remainder / 60"
+            let "timer_seconds = $remainder % 60"
+            ELAPSED_TIME="%F{red}${timer_hours}h${timer_minutes}m${timer_seconds}s%f"
+        elif [[ $timer_result -ge 60 ]]; then
+            let "timer_minutes = $timer_result / 60"
+            let "timer_seconds = $timer_result % 60"
+            ELAPSED_TIME="%F{yellow}${timer_minutes}m${timer_seconds}s%f"
+        elif [[ $timer_result -ge 10 ]]; then
+            ELAPSED_TIME="%F{green}${timer_result}s%f"
+        fi
+    fi
+    __reset_cmd_start_time
+}
+
+EXIT_CODE=''
+function __save_exit_status {
+    if [ "$?" -eq "0" ]; then
+        EXIT_CODE=''
+    else
+        EXIT_CODE="%F{red}$?%f"
+    fi
+}
+
+# setup zsh hooks
+add-zsh-hook preexec __prompt_preexec
+add-zsh-hook precmd __prompt_precmd
+
+# preexec hook
+function __prompt_preexec {
+    __reset_cmd_start_time
+}
+
+# precmd hook
+function __prompt_precmd {
+    __save_exit_status
+    __calc_elapsed_time
+}
+
+
+###############################################################################
+# Prompt
+###############################################################################
+
+# print git status for cwd (if we're in git repo)
+function __prompt_git_status {
+    local cur_dir git_status git_vars
+    local git_branch git_staged git_conflicts git_changed git_untracked git_ahead git_behind
+
+    local cur_dir=$PWD
+    while [[ ! -d "$cur_dir/.git" ]] && [[ ! "$cur_dir" == "/" ]] && [[ ! "$cur_dir" == "~" ]] && [[ ! "$cur_dir" == "" ]]; do cur_dir=${cur_dir%/*}; done
+    if [[ -d "$cur_dir/.git" ]]; then
+        # 'git repo for dotfiles' fix: show git status only in home dir and other git repos
+        if [[ "$cur_dir" != "${HOME}" ]] || [[ "${PWD}" == "${HOME}" ]]; then
+            git_status=`python ~/.zsh/prompt-git-status.py`
+            git_vars=("${(@f)git_status}")
+
+            if [ -n "$git_vars" ]; then
+                git_branch=$git_vars[1]
+                git_staged=$git_vars[3]
+                git_changed=$git_vars[4]
+                git_untracked=$git_vars[5]
+                git_conflicts=$git_vars[6]
+                git_ahead=$git_vars[7]
+                git_behind=$git_vars[8]
+
+                git_status="%F{cyan}$git_branch%f"
+                if [[ "$git_ahead" -ne "0" ]] || [[ "$git_behind" -ne "0" ]]; then
+                    git_status="$git_status "
+                    [ "$git_behind" -ne "0" ] && git_status="$git_status%f↓$git_behind"
+                    [ "$git_ahead" -ne "0" ]  && git_status="$git_status%f↑$git_ahead"
+                fi
+                if [[ "$git_conflicts" -eq "0" ]] && [ "$git_staged" -eq "0" ] && [ "$git_changed" -eq "0" ] && [ "$git_untracked" -eq "0" ]; then
+                    git_status="$git_status %F{green}✔%f"
+                else
+                    [ "$git_conflicts" -ne "0" ]  && git_status="$git_status %F{red}✖$git_conflicts%f"
+                    [ "$git_staged" -ne "0" ]     && git_status="$git_status %F{green}✚$git_staged%f"
+                    [ "$git_changed" -ne "0" ]    && git_status="$git_status %F{blue}*$git_changed%f"
+                    [ "$git_untracked" -ne "0" ]  && git_status="$git_status %F{yellow}…$git_untracked%f"
+                fi
+                echo -ne $git_status
+            fi
+        fi
+    fi
+}
+
+function __build_prompt {
+    local color_bg color_fg divider
+    local prompt_git prompt_venv
+
+    color_bg='7'
+    color_fg='245'
+    divider=" %F{15}║%f "
+
+    # reset colors
+    echo -n "%f%b%k%K{$color_bg}"
+
+    # username and hostname
+    # current working directory
+    echo -n "%(!.%F{red}.%F{green})%n%F{$color_fg}@%F{yellow}%m%F{$color_fg}:%F{0}%~%f"
+
+    # git status
+    prompt_git=$(__prompt_git_status)
+    [ ! -z "$prompt_git" ] && echo -n "$divider%F{$color_fg}git:%f $prompt_git"
+
+    # vitrualenv
+    [ ! -z "$VIRTUAL_ENV" ] && echo -n "$divider%F{$color_fg}venv:%f %F{cyan}${VIRTUAL_ENV#$WORKON_HOME}%f"
+
+    # elapsed time
+    [ ! -z "$ELAPSED_TIME" ] && echo -n "$divider%F{$color_fg}elapsed time:%f $ELAPSED_TIME"
+    ELAPSED_TIME=''
+
+    # exit status
+    [ ! -z "$EXIT_CODE" ] && echo -n "$divider%F{$color_fg}exit code:%f $EXIT_CODE"
+    EXIT_CODE=''
+
+    # newline and command arrow
+    echo -n "%E%f%k\n%F{black}➜%f "
+}
+
+# set prompt
+export PROMPT=$'$(__build_prompt)'
+
+
+###############################################################################
+# Completion
+###############################################################################
+
 # load the completion module
 zstyle :compinstall filename "${ZDOTDIR:-~}/.zshrc"
 autoload -Uz compinit && compinit
@@ -191,15 +273,11 @@ setopt auto_menu
 unsetopt menu_complete
 
 
-#== Aliases ===================================================================
-# turn on colorize if needed
+###############################################################################
+# Aliases
+###############################################################################
+
 if [ "$TERM" != "dumb" ]; then
-    if [ -x /usr/bin/dircolors ]; then
-        eval "`dircolors -b`"
-    else
-        export LS_COLORS='no=00:fi=00:di=00;34:ln=00;36:pi=40;33:so=00;35:do=00;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=00;32:*.tar=00;31:*.tgz=00;31:*.svgz=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.lzma=00;31:*.zip=00;31:*.z=00;31:*.Z=00;31:*.dz=00;31:*.gz=00;31:*.bz2=00;31:*.bz=00;31:*.tbz2=00;31:*.tz=00;31:*.deb=00;31:*.rpm=00;31:*.jar=00;31:*.rar=00;31:*.ace=00;31:*.zoo=00;31:*.cpio=00;31:*.7z=00;31:*.rz=00;31:*.jpg=00;35:*.jpeg=00;35:*.gif=00;35:*.bmp=00;35:*.pbm=00;35:*.pgm=00;35:*.ppm=00;35:*.tga=00;35:*.xbm=00;35:*.xpm=00;35:*.tif=00;35:*.tiff=00;35:*.png=00;35:*.svg=00;35:*.mng=00;35:*.pcx=00;35:*.mov=00;35:*.mpg=00;35:*.mpeg=00;35:*.m2v=00;35:*.mkv=00;35:*.ogm=00;35:*.mp4=00;35:*.m4v=00;35:*.mp4v=00;35:*.vob=00;35:*.qt=00;35:*.nuv=00;35:*.wmv=00;35:*.asf=00;35:*.rm=00;35:*.rmvb=00;35:*.flc=00;35:*.avi=00;35:*.fli=00;35:*.gl=00;35:*.dl=00;35:*.xcf=00;35:*.xwd=00;35:*.yuv=00;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:';
-    fi
-    # fucking standarts (TODO: maybe we need to use `uname` here)
     case $OSTYPE in
         linux*)
             export LS_OPTIONS='--color=auto'
@@ -230,26 +308,24 @@ alias .='pwd'
 alias ..='cd ..'
 alias ...='cd ../..'
 
-function cdl {
-    cd $1 && ls -lA
-}
-
 # exit
 alias :q='exit'
 
-# colorize some stuff
-#GRC=`which grc`
-#if [ "$TERM" != dumb ] && [ -n GRC ]; then
-#    alias colourify="$GRC -es --colour=auto"
-#    alias configure='colourify ./configure'
-#    alias diff='colourify diff'
-#    alias make='colourify make'
-#    alias gcc='colourify gcc'
-#    alias g++='colourify g++'
-#    alias as='colourify as'
-#    alias gas='colourify gas'
-#    alias ld='colourify ld'
-#    alias netstat='colourify netstat'
-#    alias ping='colourify ping'
-#    alias traceroute='colourify /usr/sbin/traceroute'
-#fi
+
+###############################################################################
+# Bind keys
+###############################################################################
+
+# cycling through the history with the Up/Down keys
+bindkey '\e[A' history-beginning-search-backward
+bindkey '\e[B' history-beginning-search-forward
+
+
+###############################################################################
+# Functions
+###############################################################################
+
+# cd & ls
+function cdl {
+    cd $1 && ls -lA
+}
