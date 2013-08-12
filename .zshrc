@@ -27,11 +27,9 @@ setopt PUSHD_TO_HOME            # blank pushd goes to home
 
 #== Completion ================================================================
 setopt COMPLETE_ALIASES         # completion uses unexpanded aliases
-#setopt CORRECT_ALL             # correct spelling of all arguments
-
-# TODO: check this
 setopt COMPLETE_IN_WORD         # allow completion from within a word/phrase
 setopt ALWAYS_TO_END            # when completing from the middle of a word, move the cursor to the end of the word
+#setopt CORRECT_ALL             # correct spelling of all arguments
 
 #== Prompt ====================================================================
 setopt PROMPT_CR                # prompt always at start of line
