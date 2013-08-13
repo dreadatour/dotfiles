@@ -43,6 +43,7 @@ color_off=
 color_user=
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
 	color_is_on=true
+	color_black="\[$(/usr/bin/tput setaf 0)\]"
 	color_red="\[$(/usr/bin/tput setaf 1)\]"
 	color_green="\[$(/usr/bin/tput setaf 2)\]"
 	color_yellow="\[$(/usr/bin/tput setaf 3)\]"
@@ -120,8 +121,8 @@ function prompt_command {
 	else
 		# else calculate fillsize
 		local fillsize=$(($COLUMNS-$PS1_length))
-		FILL=$color_gray
-		while [[ $fillsize -gt 0 ]]; do FILL="${FILL}─"; fillsize=$(($fillsize-1)); done
+		FILL=$color_white
+		while [[ $fillsize -gt 0 ]]; do FILL="${FILL}-"; fillsize=$(($fillsize-1)); done
 		FILL="${FILL}${color_off}"
 	fi
 
@@ -140,7 +141,7 @@ function prompt_command {
 	fi
 
 	# set new color prompt
-	PS1="${color_user}${USER}${color_off}@${color_yellow}${LOCAL_HOSTNAME}${color_off}:${color_white}${PWDNAME}${color_off}${PS1_GIT}${PS1_VENV} ${FILL}\n➜ "
+	PS1="${color_user}${USER}${color_off}@${color_yellow}${LOCAL_HOSTNAME}${color_off}:${color_black}${PWDNAME}${color_off}${PS1_GIT}${PS1_VENV} ${FILL}\n➜ "
 
 	# get cursor position and add new line if we're not in first column
 	# cool'n'dirty trick (http://stackoverflow.com/a/2575525/1164595)
