@@ -90,7 +90,7 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 # pip should only run if there is a virtualenv currently activated
 export PIP_REQUIRE_VIRTUALENV=true
 function syspip {
-    PIP_REQUIRE_VIRTUALENV="" pip "$@"
+    PIP_REQUIRE_VIRTUALENV="" sudo pip "$@"
 }
 
 export CLICOLOR=1
