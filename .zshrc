@@ -86,6 +86,7 @@ export PROJECT_HOME=~/work/
 export WORKON_HOME=~/work/.venv/
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 [ -f /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
+[ -f /usr/local/include/php/arcanist/resources/shell/bash-completion ] && source /usr/local/include/php/arcanist/resources/shell/bash-completion
 
 # pip should only run if there is a virtualenv currently activated
 export PIP_REQUIRE_VIRTUALENV=true
