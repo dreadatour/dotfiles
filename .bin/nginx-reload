@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# color variables
+if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	color_ok="$(/usr/bin/tput setaf 2)"
+	color_fail="$(/usr/bin/tput setaf 1)"
+	color_off="$(/usr/bin/tput sgr0)"
+else
+	color_ok=''
+	color_fail=''
+	color_off=''
+fi
+
+# check proctools
+proctools_check=$(which pkill)
+status=$?
+if [ $status -ne 0 ]; then
+	echo -e "${color_fail}ERROR: pkill is not found${color_off}\nYou need to install proctools first:\n    brew install proctools"
+	exit $status
+fi
+
+# check nginx
+proctools_check=$(which nginx)
+status=$?
+if [ $status -ne 0 ]; then
+	echo -e "${color_fail}ERROR: nginx is not found${color_off}\nYou need to install nginx first:\n    brew install nginx"
+	exit $status
+fi
+
+# check nginx config
+sudo nginx -t
+
+status=$?
+if [ $status -eq 0 ]; then
+	# try to reload nginx
+	sudo pkill -HUP nginx
+	status=$?
+
+	if [ $status -ne 0 ]; then
+		# try to start nginx
+		sudo nginx
+		status=$?
+	fi
+fi
+
+if [ $status -eq 0 ]; then
+	echo "nginx reload: ${color_ok}OK${color_off}"
+else
+	echo "nginx reload: ${color_fail}FAIL${color_off}"
+fi
+
+exit $status
