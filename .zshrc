@@ -337,3 +337,8 @@ bindkey '\e[B' history-beginning-search-forward
 function cdl {
     cd $1 && ls -lA
 }
+
+# mkdir & cd
+function mkdircd () {
+	mkdir -p "$@" && cd $_
+}
