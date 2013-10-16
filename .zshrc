@@ -52,6 +52,42 @@ SAVEHIST=1000000        # max number of history lines saved
 
 
 ###############################################################################
+# Completion
+###############################################################################
+
+# load the completion module
+zstyle :compinstall filename "${ZDOTDIR:-~}/.zshrc"
+autoload -Uz compinit && compinit
+
+# insert next character of first match automatically
+setopt menu_complete  # TODO: check this is usable
+
+# The zsh/complist module offers three extensions to completion
+# listings: the ability to highlight matches in such a list, the ability
+# to scroll through long lists and a different style of menu completion.
+# http://www.cims.nyu.edu/cgi-systems/info2html?(zsh)The%2520zsh%2Fcomplist%2520Module
+zmodload zsh/complist  # TODO: is this important?
+
+# graphical menu for completion list (autoselect first completion on open)
+zstyle ':completion:*' menu yes select
+
+# colorize files completions
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+
+# list of directories to get commands from for sudo
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
+
+# show menu but don't select first completion
+zstyle ':completion:*' menu select=1
+setopt auto_menu
+unsetopt menu_complete
+
+# load additional completions
+[ -f /usr/local/include/php/arcanist/resources/shell/bash-completion ] && source /usr/local/include/php/arcanist/resources/shell/bash-completion
+[ -f /usr/local/share/zsh/site-functions/go ] && source /usr/local/share/zsh/site-functions/go
+
+
+###############################################################################
 # Exports
 ###############################################################################
 
@@ -86,7 +122,6 @@ export PROJECT_HOME=~/work/
 export WORKON_HOME=~/work/.venv/
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 [ -f /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
-[ -f /usr/local/include/php/arcanist/resources/shell/bash-completion ] && source /usr/local/include/php/arcanist/resources/shell/bash-completion
 
 # pip should only run if there is a virtualenv currently activated
 export PIP_REQUIRE_VIRTUALENV=true
@@ -244,38 +279,6 @@ function __build_prompt {
 
 # set prompt
 export PROMPT=$'$(__build_prompt)'
-
-
-###############################################################################
-# Completion
-###############################################################################
-
-# load the completion module
-zstyle :compinstall filename "${ZDOTDIR:-~}/.zshrc"
-autoload -Uz compinit && compinit
-
-# insert next character of first match automatically
-setopt menu_complete  # TODO: check this is usable
-
-# The zsh/complist module offers three extensions to completion
-# listings: the ability to highlight matches in such a list, the ability
-# to scroll through long lists and a different style of menu completion.
-# http://www.cims.nyu.edu/cgi-systems/info2html?(zsh)The%2520zsh%2Fcomplist%2520Module
-zmodload zsh/complist  # TODO: is this important?
-
-# graphical menu for completion list (autoselect first completion on open)
-zstyle ':completion:*' menu yes select
-
-# colorize files completions
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-
-# list of directories to get commands from for sudo
-zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
-
-# show menu but don't select first completion
-zstyle ':completion:*' menu select=1
-setopt auto_menu
-unsetopt menu_complete
 
 
 ###############################################################################
