@@ -339,6 +339,30 @@ function cdl {
 }
 
 # mkdir & cd
-function mkdircd () {
+function mkdircd {
 	mkdir -p "$@" && cd $_
+}
+
+function goenv {
+    export GOPATH="$(pwd)"
+    export GOENV_PATH="$(pwd)"
+    alias gcd="cd $GOPATH"
+
+    # exit from previous goenv
+    type goend >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        goend
+        unset -f goend >/dev/null 2>&1
+    fi
+
+    # create goend() function
+    eval 'goend () {
+        export GOPATH=
+        export GOENV_PATH=
+        unalias gcd  >/dev/null 2>&1
+        unset -f goend >/dev/null 2>&1
+        return 0
+    }'
+
+    return 0
 }
