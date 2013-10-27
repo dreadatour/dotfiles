@@ -342,7 +342,7 @@ function cdl {
 }
 
 # mkdir & cd
-function mkdircd {
+function mkcd {
 	mkdir -p "$@" && cd $_
 }
 
