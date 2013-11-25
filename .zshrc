@@ -346,6 +346,12 @@ function mkcd {
 	mkdir -p "$@" && cd $_
 }
 
+# delete '*.pyc' files
+function delpyc {
+    find . -name '*.pyc' -delete
+}
+
+# golang environment
 function goenv {
     # set $GOPATH
     export GOPATH="$(pwd)"
