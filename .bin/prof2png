@@ -1,0 +1,2 @@
+#!/bin/sh
+find . -name '*.prof' | while read file; do gprof2dot -f pstats "$file" | dot -Tpng -o `basename $file .prof`.png; done
