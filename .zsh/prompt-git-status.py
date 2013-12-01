@@ -36,7 +36,10 @@ def parse_git_branch(line):
     if line == 'HEAD (no branch)':  # detached state
         branch = '#%s' % git_commit()
     elif '...' in line:  # ahead of or behind remote branch
-        branches, ahead_behind = line.split(' ', 1)
+        if ' ' in line:
+            branches, ahead_behind = line.split(' ', 1)
+        else:
+            branches, ahead_behind = line, None
         branch, remote_branch = branches.split('...')
 
         if ahead_behind and ahead_behind[0] == '[' and ahead_behind[-1] == ']':
