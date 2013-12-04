@@ -286,6 +286,16 @@ function __build_prompt {
 # set prompt
 export PROMPT=$'$(__build_prompt)'
 
+# set command line color
+command-line-colored() {
+	region_highlight=("0 $(( $CURSOR + $#RBUFFER )) fg=0")
+}
+self-insert-colored() {
+	zle .self-insert
+	command-line-colored
+}
+zle -N self-insert self-insert-colored
+
 
 ###############################################################################
 # Aliases
