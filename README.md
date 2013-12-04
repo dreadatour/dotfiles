@@ -6,6 +6,12 @@ ZSH
 
 ![ZSH screenshot](http://habrastorage.org/storage3/044/527/ab5/044527ab530dd1ef43b22c43e0bb2c35.png)
 
+Go lang
+-------
+
+`function goenv` at `.zshrc`:
+![Go env](http://habrastorage.org/storage3/197/a48/bc9/197a48bc9988f13deea0eee16cabd0f7.png)
+
 Bash
 ----
 
