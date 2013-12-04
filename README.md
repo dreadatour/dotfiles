@@ -9,7 +9,7 @@ ZSH
 Go lang
 -------
 
-`function goenv` at `.zshrc`:
+See function `goenv` at `.zshrc`:
 ![Go env](http://habrastorage.org/storage3/197/a48/bc9/197a48bc9988f13deea0eee16cabd0f7.png)
 
 Bash
