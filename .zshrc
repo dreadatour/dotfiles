@@ -286,15 +286,25 @@ function __build_prompt {
 # set prompt
 export PROMPT=$'$(__build_prompt)'
 
+
+###############################################################################
+# Command line
+###############################################################################
+
 # set command line color
 command-line-colored() {
 	region_highlight=("0 $(( $CURSOR + $#RBUFFER )) fg=0")
 }
-self-insert-colored() {
-	zle .self-insert
-	command-line-colored
-}
+
+self-insert-colored() { zle .self-insert; command-line-colored }
+magic-space-colored() { zle .magic-space; command-line-colored }
+backward-delete-char-colored() { zle .backward-delete-char; command-line-colored }
+accept-line-colored() { zle .accept-line; command-line-colored }
+
 zle -N self-insert self-insert-colored
+zle -N magic-space magic-space-colored
+zle -N backward-delete-char backward-delete-char-colored
+zle -N accept-line accept-line-colored
 
 
 ###############################################################################
