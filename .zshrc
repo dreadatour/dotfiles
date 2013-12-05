@@ -259,7 +259,7 @@ function __build_prompt {
 
     # username and hostname
     # current working directory
-    echo -n "%(!.%F{red}.%F{green})%n%F{$color_fg}@%F{yellow}%m%F{$color_fg}:%F{0}%~%f"
+    echo -n "%(!.%F{red}.%F{green})%n%F{$color_fg}@%F{yellow}%m%F{$color_fg}:%F{240}%~%f"
 
     # git status
     prompt_git=$(__prompt_git_status)
