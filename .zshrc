@@ -151,10 +151,12 @@ function __reset_cmd_start_time {
 __reset_cmd_start_time  # reset command start time right now
 
 # check elapsed time after command execution
-ELAPSED_TIME=''
+ELAPSED_TIME=
 function __calc_elapsed_time {
     local timer_result
-    ELAPSED_TIME=''
+    ELAPSED_TIME=
+
+    [[ -z $__PREVIOUS_COMMAND_LINE ]] && return
 
     timer_result=$(($SECONDS-$__CMD_START_TIME))
     if [[ $timer_result -gt 10 ]]; then
@@ -175,7 +177,16 @@ function __calc_elapsed_time {
     __reset_cmd_start_time
 }
 
-EXIT_CODE=''
+__PREVIOUS_COMMAND_LINE=
+function save-previous-command-line {
+    __PREVIOUS_COMMAND_LINE=$BUFFER
+    zle accept-line
+}
+zle -N save-previous-command-line
+bindkey '^M' save-previous-command-line
+
+
+EXIT_CODE=
 function __save_exit_status {
     if [ "$?" -eq "0" ]; then
         EXIT_CODE=''
@@ -293,7 +304,7 @@ export PROMPT=$'$(__build_prompt)'
 
 # set command line color
 command-line-colored() {
-	region_highlight=("0 $(( $CURSOR + $#RBUFFER )) fg=0")
+    region_highlight=("0 $(( $CURSOR + $#RBUFFER )) fg=0")
 }
 
 self-insert-colored() { zle .self-insert; command-line-colored }
@@ -371,7 +382,7 @@ function cdl {
 
 # mkdir & cd
 function mkcd {
-	mkdir -p "$@" && cd $_
+    mkdir -p "$@" && cd $_
 }
 
 # delete '*.pyc' files
