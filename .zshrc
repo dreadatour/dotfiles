@@ -121,10 +121,10 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 # pip should only run if there is a virtualenv currently activated
 export PIP_REQUIRE_VIRTUALENV=true
 function syspip {
-    PIP_REQUIRE_VIRTUALENV='' sudo pip "$@"
+    PIP_REQUIRE_VIRTUALENV= sudo pip "$@"
 }
 function syspip3 {
-    PIP_REQUIRE_VIRTUALENV='' sudo pip3 "$@"
+    PIP_REQUIRE_VIRTUALENV= sudo pip3 "$@"
 }
 
 export CLICOLOR=1
@@ -280,11 +280,11 @@ function __build_prompt {
 
     # elapsed time
     [ ! -z "$ELAPSED_TIME" ] && echo -n "$divider%F{$color_fg}elapsed time:%f $ELAPSED_TIME"
-    ELAPSED_TIME=''
+    ELAPSED_TIME=
 
     # exit status
     [ ! -z "$EXIT_CODE" ] && echo -n "$divider%F{$color_fg}exit code:%f $EXIT_CODE"
-    EXIT_CODE=''
+    EXIT_CODE=
 
     # newline and command arrow
     echo -n "%E%f%k\n%F{black}➜%f "
