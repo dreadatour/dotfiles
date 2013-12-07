@@ -1,5 +1,3 @@
-# README (zsh reference card): http://www.bash2zsh.com/zsh_refcard/refcard.pdf
-
 ###############################################################################
 # Set zsh options
 ###############################################################################
@@ -15,15 +13,12 @@ autoload -U add-zsh-hook        # we will use zsh hooks in config later
 setopt EMACS                    # emacs shortcuts (same as 'bindkey -e')
 setopt NO_BEEP                  # do not beep on errors
 setopt MULTIOS                  # allows multiple input and output redirections
-#setopt RM_STAR_WAIT             # 10 second wait if you do something that will delete everything
 setopt NO_FLOW_CONTROL          # disable stupid annoying keys
 setopt INTERACTIVE_COMMENTS     # allow comments even in interactive shells
-#setopt IGNORE_EOF               # forces the user to type exit or logout, instead of just pressing ^D
 
 #== Commands cd & pushd =======================================================
 setopt AUTO_PUSHD               # this makes cd=pushd
 setopt PUSHD_TO_HOME            # blank pushd goes to home
-#setopt AUTO_CD                 # directory as command does cd
 
 #== Completion ================================================================
 setopt COMPLETE_ALIASES         # completion uses unexpanded aliases
