@@ -139,12 +139,6 @@ export GREP_COLOR='3;33'
 # Helpful hooks and functions for prompt
 ###############################################################################
 
-# save start time to variable before command execution
-function __reset_cmd_start_time {
-    __CMD_START_TIME=$SECONDS
-}
-__reset_cmd_start_time  # reset command start time right now
-
 # check elapsed time after command execution
 ELAPSED_TIME=
 function __calc_elapsed_time {
@@ -172,27 +166,28 @@ function __calc_elapsed_time {
     __reset_cmd_start_time
 }
 
+# save start time to variable before command execution
+function __reset_cmd_start_time {
+    __CMD_START_TIME=$SECONDS
+}
+__reset_cmd_start_time  # reset command start time right now
+
+# save previous command line
 __PREVIOUS_COMMAND_LINE=
 function save-previous-command-line {
     __PREVIOUS_COMMAND_LINE=$BUFFER
     zle accept-line
 }
-zle -N save-previous-command-line
-bindkey '^M' save-previous-command-line
 
-
+# save exit status code
 EXIT_CODE=
 function __save_exit_status {
     if [ "$?" -eq "0" ]; then
-        EXIT_CODE=''
+        EXIT_CODE=
     else
         EXIT_CODE="%F{red}$?%f"
     fi
 }
-
-# setup zsh hooks
-add-zsh-hook preexec __prompt_preexec
-add-zsh-hook precmd __prompt_precmd
 
 # preexec hook
 function __prompt_preexec {
@@ -204,6 +199,12 @@ function __prompt_precmd {
     __save_exit_status
     __calc_elapsed_time
 }
+
+# setup zsh hooks
+zle -N save-previous-command-line
+bindkey '^M' save-previous-command-line
+add-zsh-hook preexec __prompt_preexec
+add-zsh-hook precmd __prompt_precmd
 
 
 ###############################################################################
@@ -298,14 +299,14 @@ export PROMPT=$'$(__build_prompt)'
 ###############################################################################
 
 # set command line color
-command-line-colored() {
+function command-line-colored {
     region_highlight=("0 $(( $CURSOR + $#RBUFFER )) fg=0")
 }
 
-self-insert-colored() { zle .self-insert; command-line-colored }
-magic-space-colored() { zle .magic-space; command-line-colored }
-backward-delete-char-colored() { zle .backward-delete-char; command-line-colored }
-accept-line-colored() { zle .accept-line; command-line-colored }
+function self-insert-colored { zle .self-insert; command-line-colored }
+function magic-space-colored { zle .magic-space; command-line-colored }
+function backward-delete-char-colored { zle .backward-delete-char; command-line-colored }
+function accept-line-colored { zle .accept-line; command-line-colored }
 
 zle -N self-insert self-insert-colored
 zle -N magic-space magic-space-colored
