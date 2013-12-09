@@ -99,11 +99,6 @@ export PAGER=less                       # default pager
 
 export PGHOST=/tmp                      # postgres won't work without this
 
-# unset this because of nasty OS X bug with annoying message:
-# "dyld: DYLD_ environment variables being ignored because main executable (/usr/bin/sudo) is setuid or setgid"
-# this is not correct, but Apple is too lazy to fix this
-unset DYLD_LIBRARY_PATH
-
 # add some directories to my PATH
 [ -d $HOME/.bin ] && PATH=$HOME/.bin:$PATH
 [ -d /usr/local/bin ] && PATH=/usr/local/bin:$PATH
