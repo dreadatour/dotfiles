@@ -13,7 +13,7 @@ def git_commit():
     Get git HEAD commit hash.
     """
     git_cmd = ['git', 'rev-parse', '--short', 'HEAD']
-    return Popen(git_cmd, stdout=PIPE).communicate()[0][:-1]
+    return Popen(git_cmd, stdout=PIPE).communicate()[0][:-1].decode('utf-8')
 
 
 def parse_git_branch(line):
@@ -34,7 +34,7 @@ def parse_git_branch(line):
     ahead = behind = 0
 
     if line == 'HEAD (no branch)':  # detached state
-        branch = '#%s' % git_commit()
+        branch = '#' + git_commit()
     elif '...' in line:  # ahead of or behind remote branch
         if ' ' in line:
             branches, ahead_behind = line.split(' ', 1)
@@ -65,6 +65,7 @@ def git_status():
     branch = remote_branch = ''
     staged = changed = untracked = unmerged = ahead = behind = 0
     for line in result.splitlines():
+        line = line.decode('utf-8')
         prefix = line[0:2]
         line = line[3:]
 
