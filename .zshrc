@@ -133,31 +133,53 @@ export GREP_COLOR='3;33'
 # Helpful hooks and functions for prompt
 ###############################################################################
 
+[ -e /usr/local/bin/growlnotify ] && export LONG_CMD_GROWL_NOTIFY_ENABLED=1
+
 # check elapsed time after command execution
 ELAPSED_TIME=
+ELAPSED_TIME_PLAIN=
+ELAPSED_TIME_TOOLONG=
 function __calc_elapsed_time {
     local timer_result
     ELAPSED_TIME=
+    ELAPSED_TIME_PLAIN=
+    ELAPSED_TIME_TOOLONG=
 
     [[ -z $__PREVIOUS_COMMAND_LINE ]] && return
 
     timer_result=$(($SECONDS-$__CMD_START_TIME))
     if [[ $timer_result -gt 10 ]]; then
+        if [[ $timer_result -ge 600 ]]; then
+            ELAPSED_TIME_TOOLONG=1  # 10 min is too long =)
+        fi
         if [[ $timer_result -ge 3600 ]]; then
             let "timer_hours = $timer_result / 3600"
             let "remainder = $timer_result % 3600"
             let "timer_minutes = $remainder / 60"
             let "timer_seconds = $remainder % 60"
-            ELAPSED_TIME="%F{red}${timer_hours}h${timer_minutes}m${timer_seconds}s%f"
+            ELAPSED_TIME_PLAIN="${timer_hours}h ${timer_minutes}m ${timer_seconds}s"
+            ELAPSED_TIME="%F{red}$ELAPSED_TIME_PLAIN%f"
         elif [[ $timer_result -ge 60 ]]; then
             let "timer_minutes = $timer_result / 60"
             let "timer_seconds = $timer_result % 60"
-            ELAPSED_TIME="%F{yellow}${timer_minutes}m${timer_seconds}s%f"
+            ELAPSED_TIME_PLAIN="${timer_minutes}m ${timer_seconds}s"
+            ELAPSED_TIME="%F{yellow}$ELAPSED_TIME_PLAIN%f"
         elif [[ $timer_result -ge 10 ]]; then
-            ELAPSED_TIME="%F{green}${timer_result}s%f"
+            ELAPSED_TIME_PLAIN="${timer_result}s"
+            ELAPSED_TIME="%F{green}$ELAPSED_TIME_PLAIN%f"
         fi
     fi
     __reset_cmd_start_time
+}
+
+# notify user about elapsed time
+function __growl_notify_elapsed_time {
+    local sticky
+
+    if [ $__PREVIOUS_COMMAND_LINE ] && [ $ELAPSED_TIME ]; then
+        [ $ELAPSED_TIME_TOOLONG ] && sticky='-s'
+        echo $__PREVIOUS_COMMAND_LINE | /usr/local/bin/growlnotify $sticky -t "Finished for $ELAPSED_TIME_PLAIN:" -m -
+    fi
 }
 
 # save start time to variable before command execution
@@ -192,6 +214,7 @@ function __prompt_preexec {
 function __prompt_precmd {
     __save_exit_status
     __calc_elapsed_time
+    [ $LONG_CMD_GROWL_NOTIFY_ENABLED ] && __growl_notify_elapsed_time
 }
 
 # setup zsh hooks
