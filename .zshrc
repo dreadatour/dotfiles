@@ -182,6 +182,17 @@ function __growl_notify_elapsed_time {
     fi
 }
 
+# update terminal tab title
+function __update_title {
+    local title=${PWD/${HOME}/\~}
+    echo -ne "\e]2;${title}\a"
+    if [ $#title -gt 26 ]; then
+        echo -ne "\e]1;…${title: -24}\a"
+    else
+        echo -ne "\e]1;${title}\a"
+    fi
+}
+
 # save start time to variable before command execution
 function __reset_cmd_start_time {
     __CMD_START_TIME=$SECONDS
@@ -215,6 +226,7 @@ function __prompt_precmd {
     __save_exit_status
     __calc_elapsed_time
     [ $LONG_CMD_GROWL_NOTIFY_ENABLED ] && __growl_notify_elapsed_time
+    __update_title
 }
 
 # setup zsh hooks
