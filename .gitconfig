@@ -26,3 +26,5 @@
 	show = diff-highlight | less
 	diff = diff-highlight | less
 
+[alias]
+	branches = branch -a
