@@ -27,4 +27,4 @@
 	diff = diff-highlight | less
 
 [alias]
-	branches = branch -a
+	branches = branch -avv
