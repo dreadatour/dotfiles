@@ -415,6 +415,11 @@ function delpyc {
     find . -name '*.pyc' -delete
 }
 
+# OS X Quick Look alias
+function show {
+    qlmanage -p $1
+}
+
 # golang environment
 function goenv {
     # set $GOPATH
