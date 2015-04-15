@@ -420,6 +420,12 @@ function show {
     qlmanage -p $1
 }
 
+# clear scrollback in iTerm 2
+# http://superuser.com/questions/576410/how-can-i-partially-clear-my-terminal-scrollback
+function cls {
+    printf '\e]50;ClearScrollback\a'
+}
+
 # golang environment
 function goenv {
     # set $GOPATH
