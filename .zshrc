@@ -428,6 +428,13 @@ function cls {
 
 # golang environment
 function goenv {
+    # exit from previous goenv
+    type goend >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        goend
+        unset -f goend >/dev/null 2>&1
+    fi
+
     # set $GOPATH
     export GOPATH="$(pwd)"
     # set $GOENV_PATH for prompt
@@ -435,13 +442,6 @@ function goenv {
     [[ "$GOENV_PATH" =~ ^"$HOME"(/|$) ]] && GOENV_PATH="~${GOENV_PATH#$HOME}"
     # create 'gcd' alias to fast cd to go env
     alias gcd="cd $GOPATH"
-
-    # exit from previous goenv
-    type goend >/dev/null 2>&1
-    if [ $? -eq 0 ]; then
-        goend
-        unset -f goend >/dev/null 2>&1
-    fi
 
     # create goend() function
     eval 'goend () {
