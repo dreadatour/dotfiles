@@ -21,10 +21,5 @@
 	prompt = false
 [merge]
 	tool = Kaleidoscope
-[pager]
-	log = diff-highlight | less
-	show = diff-highlight | less
-	diff = diff-highlight | less
-
 [alias]
 	branches = branch -avv
