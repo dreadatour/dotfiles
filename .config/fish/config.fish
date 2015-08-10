@@ -48,3 +48,8 @@ eval (python2.7 -m virtualfish compat_aliases projects)
 # Go settings
 set -gx GOPATH ~/work/go
 set -gx PATH ~/work/go/bin $PATH
+
+# Run local rc if file is exists
+if test -e ~/.fishrc
+    source ~/.fishrc
+end
