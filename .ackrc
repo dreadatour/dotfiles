@@ -1,0 +1,7 @@
+# Always sort the files
+--sort-files
+
+# Ingore files
+--ignore-file=ext:sublime-project
+--ignore-file=ext:sublime-workspace
+
