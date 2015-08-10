@@ -1,3 +1,12 @@
+# Setup locale
+set -gx  LC_ALL ru_RU.UTF-8
+
+# Path settings
+set -gx PATH ~/.bin $PATH
+
+# Setup greeting
+set fish_greeting ''  # turn it off
+
 # Setup colors
 set fish_color_normal             normal           # the default color
 set fish_color_command            000000           # commands
@@ -23,56 +32,10 @@ set fish_pager_color_description  93a1a1           # completion description
 set fish_pager_color_progress     cyan --bold      # progress bar at the bottom left corner
 set fish_pager_color_secondary    cyan             # every second completion
 
-# prompt colors
-set __fish_prompt_color_normal                    9c9c9c -b white
-set __fish_prompt_color_divider                   fdf6e3 -b white
-set __fish_venv_prompt_color                      cyan -b white
-set __fish_venv_prompt_color_done                 9c9c9c -b white
-set __fish_goenv_prompt_color                     cyan -b white
-set __fish_goenv_prompt_color_done                9c9c9c -b white
-
-# git prompt colors
-set __fish_git_prompt_color                       9c9c9c -b white
-set __fish_git_prompt_color_done                  9c9c9c -b white
-set __fish_git_prompt_color_branch                cyan -b white
-set __fish_git_prompt_color_branch_done           $___fish_git_prompt_color
-set __fish_git_prompt_color_branch_detached       red -b white
-set __fish_git_prompt_color_branch_detached_done  $___fish_git_prompt_color
-set __fish_git_prompt_color_cleanstate            green -b white
-set __fish_git_prompt_color_cleanstate_done       $___fish_git_prompt_color
-set __fish_git_prompt_color_stagedstate           blue -b white
-set __fish_git_prompt_color_stagedstate_done      $___fish_git_prompt_color
-set __fish_git_prompt_color_invalidstate          red -b white
-set __fish_git_prompt_color_invalidstate_done     $___fish_git_prompt_color
-set __fish_git_prompt_color_dirtystate            green -b white
-set __fish_git_prompt_color_dirtystate_done       $___fish_git_prompt_color
-set __fish_git_prompt_color_untrackedfiles        yellow -b white
-set __fish_git_prompt_color_untrackedfiles_done   $___fish_git_prompt_color
-set __fish_git_prompt_color_upstream              normal -b white
-set __fish_git_prompt_color_upstream_done         $___fish_git_prompt_color
-
-
-# Setup greeting
-set fish_greeting ''  # turn it off
-
-
-# Bind keys
-bind \e. 'history-token-search-backward'
-
-
 # Vitrualenv wrapper (https://github.com/adambrenecki/virtualfish/)
 set VIRTUALFISH_HOME ~/work/.venv
 eval (python2.7 -m virtualfish compat_aliases projects)
 
-
-# Path settings
-set -gx PATH ~/.bin $PATH
-
-
-# Locale
-set -gx  LC_ALL ru_RU.UTF-8
-
-
-# go settings
+# Go settings
 set -gx GOPATH ~/work/go
 set -gx PATH ~/work/go/bin $PATH
