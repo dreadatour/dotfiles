@@ -62,11 +62,15 @@ bind \e. 'history-token-search-backward'
 
 # Vitrualenv wrapper (https://github.com/adambrenecki/virtualfish/)
 set VIRTUALFISH_HOME ~/work/.venv
-eval (python -m virtualfish compat_aliases projects)
+eval (python2.7 -m virtualfish compat_aliases projects)
 
 
 # Path settings
 set -gx PATH ~/.bin $PATH
+
+
+# Locale
+set -gx  LC_ALL ru_RU.UTF-8
 
 
 # go settings
