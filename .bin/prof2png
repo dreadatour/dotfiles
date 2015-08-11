@@ -1,2 +1,31 @@
-#!/bin/sh
-find . -name '*.prof' | while read file; do gprof2dot -f pstats "$file" | dot -Tpng -o `basename $file .prof`.png; done
+#!/bin/bash
+# Convert python profiler output files to png images
+
+# input directory
+if [ "$#" -eq 0 ]; then
+	PROF_DIR=.  # current directory by default
+else
+	PROF_DIR=$1
+fi
+
+# color variables
+if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	color_done="$(/usr/bin/tput setaf 2)"
+	color_skip="$(/usr/bin/tput setaf 3)"
+	color_off="$(/usr/bin/tput sgr0)"
+else
+	color_done=
+	color_skip=
+	color_off=
+fi
+
+# do convert
+find $PROF_DIR -name '*.prof' | while read prof_file; do
+	output_file=$prof_file.png
+	if [ -e  $output_file ]; then
+		echo "$prof_file - ${color_skip}skipped${color_off}"
+	else
+		gprof2dot -f pstats $prof_file | dot -Tpng -o $output_file
+		echo "$prof_file - ${color_done}converted${color_off}"
+	fi
+done
