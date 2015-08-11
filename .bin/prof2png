@@ -23,9 +23,9 @@ fi
 find $PROF_DIR -name '*.prof' | while read prof_file; do
 	output_file=$prof_file.png
 	if [ -e  $output_file ]; then
-		echo "$prof_file - ${color_skip}skipped${color_off}"
+		echo "$output_file - ${color_skip}exists${color_off}"
 	else
 		gprof2dot -f pstats $prof_file | dot -Tpng -o $output_file
-		echo "$prof_file - ${color_done}converted${color_off}"
+		echo "$output_file - ${color_done}convert${color_off}"
 	fi
 done
