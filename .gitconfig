@@ -6,6 +6,7 @@
 [core]
 	quotepath = false
 	editor = vim
+	excludesfile = /Users/rudnyh/.gitignore_global
 [push]
 	default = tracking
 [difftool "Kaleidoscope"]
@@ -23,3 +24,9 @@
 	tool = Kaleidoscope
 [alias]
 	branches = branch -avv
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true

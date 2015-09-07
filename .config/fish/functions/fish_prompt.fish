@@ -2,6 +2,30 @@
 # https://github.com/powerline/fonts
 
 function fish_prompt --description 'Write out the prompt'
+    # if previous command runs >= 10 seconds and current iTerm session is not active, notify user about completion
+    if test $CMD_DURATION
+        if test $CMD_DURATION -gt 10000  # ms
+            set cmd_status $status
+            set time_seconds (math "$CMD_DURATION / 1000")
+
+            if test $time_seconds -gt 3600
+                set time_hours (math "$time_seconds / 3600")
+                set time_seconds (math "$time_seconds - $time_hours * 3600")
+                set time_minutes (math "$time_seconds / 60")
+                set time_seconds (math "$time_seconds - $time_minutes * 60")
+                set time_str {$time_hours}h {$time_minutes}m {$time_seconds}s
+            else if test $time_seconds -gt 60
+                set time_minutes (math "$time_seconds / 60")
+                set time_seconds (math "$time_seconds - $time_minutes * 60")
+                set time_str {$time_minutes}m {$time_seconds}s
+            else
+                set time_str {$time_seconds}s
+            end
+
+            background-notify "$history[1]" "Finished in $time_str, exit status: $cmd_status"
+        end
+    end
+
     # expand home directory to variable
     set -l realhome ~
 

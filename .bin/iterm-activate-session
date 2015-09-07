@@ -1,0 +1,14 @@
+#!/bin/sh
+# This script is used to activate iTerm2 session by session ID.
+osascript <<OSA
+	tell application "iTerm"
+		repeat with aTab in tabs of windows
+			set aSessions to (sessions of aTab whose id is equal to "$1")
+			if (count of aSessions) is greater than 0 then
+				select aTab
+				select first item of aSessions
+				activate
+			end if
+		end repeat
+	end tell
+OSA
