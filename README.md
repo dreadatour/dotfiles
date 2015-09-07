@@ -4,7 +4,7 @@ My Dotfiles
 Install
 -------
 
-  sh -c "`curl -fsSL https://raw.githubusercontent.com/dreadatour/dotfiles/master/install.sh`"
+    sh -c "`curl -fsSL https://raw.githubusercontent.com/dreadatour/dotfiles/master/install.sh`"
 
 ZSH
 ---
