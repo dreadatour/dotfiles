@@ -454,3 +454,6 @@ function goenv {
 
     return 0
 }
+
+export GOPATH=$HOME/work/go
+export PATH=$PATH:$GOBIN:$GOPATH/bin
