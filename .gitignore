@@ -16,6 +16,9 @@
 !/.zshrc
 !/.zsh/
 
+/.config/
+/.config/fish/fish_history
+/.config/fish/fishd.*
 !/.config/fish/config.fish
 !/.config/fish/functions/bindings.fish
 !/.config/fish/functions/fish_prompt.fish
