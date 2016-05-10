@@ -125,6 +125,10 @@ export LSCOLORS=gxfxcxdxbxegedabagacad
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='3;33'
 
+# Go paths
+export GOPATH=$HOME/work/go
+export PATH=$PATH:$GOBIN:$GOPATH/bin
+
 
 ###############################################################################
 # Helpful hooks and functions for prompt
@@ -231,6 +235,25 @@ zle -N save-previous-command-line
 bindkey '^M' save-previous-command-line
 add-zsh-hook preexec __prompt_preexec
 add-zsh-hook precmd __prompt_precmd
+
+# clear scrollback
+function cls() {
+    clear
+
+    if [[ -n "${TMUX}" ]]; then
+        if [[ -f /usr/local/bin/tmux ]]; then
+            /usr/local/bin/tmux clearhist
+        elif [[ -f /usr/bin/tmux ]]; then
+            /usr/bin/tmux clearhist
+        fi
+    elif [[ "${TERM_PROGRAM}" == "iTerm.app" ]]; then
+        printf '\e]50;ClearScrollback\a'
+    else
+        tput reset
+    fi
+}
+# clear screen and clear scrollback
+bindkey -s '^L' '^qcls\n'
 
 
 ###############################################################################
@@ -420,41 +443,3 @@ function delpyc {
 function show {
     qlmanage -p $1
 }
-
-# clear scrollback in iTerm 2
-# http://superuser.com/questions/576410/how-can-i-partially-clear-my-terminal-scrollback
-function cls {
-    printf '\e]50;ClearScrollback\a'
-}
-
-# golang environment
-function goenv {
-    # exit from previous goenv
-    type goend >/dev/null 2>&1
-    if [ $? -eq 0 ]; then
-        goend
-        unset -f goend >/dev/null 2>&1
-    fi
-
-    # set $GOPATH
-    export GOPATH="$(pwd)"
-    # set $GOENV_PATH for prompt
-    export GOENV_PATH="$(pwd)"
-    [[ "$GOENV_PATH" =~ ^"$HOME"(/|$) ]] && GOENV_PATH="~${GOENV_PATH#$HOME}"
-    # create 'gcd' alias to fast cd to go env
-    alias gcd="cd $GOPATH"
-
-    # create goend() function
-    eval 'goend () {
-        export GOPATH=
-        export GOENV_PATH=
-        unalias gcd  >/dev/null 2>&1
-        unset -f goend >/dev/null 2>&1
-        return 0
-    }'
-
-    return 0
-}
-
-export GOPATH=$HOME/work/go
-export PATH=$PATH:$GOBIN:$GOPATH/bin
