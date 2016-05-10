@@ -102,9 +102,6 @@ export PGHOST=/tmp                      # postgres won't work without this
 [ -d $HOME/.bin ] && PATH=$HOME/.bin:$PATH
 [ -d /usr/local/bin ] && PATH=/usr/local/bin:$PATH
 [ -d /usr/local/sbin ] && PATH=/usr/local/sbin:$PATH
-[ -d /usr/local/mysql/bin ] && PATH=/usr/local/mysql/bin:$PATH
-[ -d /usr/local/share/npm/bin ] && PATH=/usr/local/share/npm/bin:$PATH
-[ -d /usr/local/Cellar/gettext/0.18.1.1/bin ] && PATH=/usr/local/Cellar/gettext/0.18.1.1/bin:$PATH
 
 # setup python virtualenv
 export PROJECT_HOME=~/work/
