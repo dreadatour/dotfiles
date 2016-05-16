@@ -140,15 +140,20 @@ export PATH=$PATH:$GOBIN:$GOPATH/bin
 ELAPSED_TIME=
 ELAPSED_TIME_PLAIN=
 ELAPSED_TIME_TOOLONG=
+ELAPSED_TIME_NEED_BELL=
 function __calc_elapsed_time {
     local timer_result
     ELAPSED_TIME=
     ELAPSED_TIME_PLAIN=
     ELAPSED_TIME_TOOLONG=
+    ELAPSED_TIME_NEED_BELL=
 
     [[ -z $__PREVIOUS_COMMAND_LINE ]] && return
 
     timer_result=$(($SECONDS-$__CMD_START_TIME))
+    if [[ $timer_result -ge 1 ]]; then
+        ELAPSED_TIME_NEED_BELL=1  # 1 sec is enough for bell =)
+    fi
     if [[ $timer_result -gt 10 ]]; then
         if [[ $timer_result -ge 600 ]]; then
             ELAPSED_TIME_TOOLONG=1  # 10 min is too long =)
@@ -181,6 +186,11 @@ function __growl_notify_elapsed_time {
         [ $ELAPSED_TIME_TOOLONG ] && sticky='-s'
         echo $__PREVIOUS_COMMAND_LINE | /usr/local/bin/growlnotify $sticky -t "Finished for $ELAPSED_TIME_PLAIN:" -m -
     fi
+}
+
+# visual bell to be catched by iTerm2 and trigger Dock icon bounce
+function __bell_elapsed_time {
+    [ $ELAPSED_TIME_NEED_BELL ] && echo -ne '\a'
 }
 
 # update terminal tab title
@@ -226,6 +236,7 @@ function __prompt_preexec {
 function __prompt_precmd {
     __save_exit_status
     __calc_elapsed_time
+    __bell_elapsed_time
     [ $LONG_CMD_GROWL_NOTIFY_ENABLED ] && __growl_notify_elapsed_time
     __update_title
 }
@@ -312,9 +323,6 @@ function __build_prompt {
 
     # reset colors
     echo -n "%f%b%k%K{$color_bg}"
-
-    # visual bell to be catched by iTerm2 and trigger Dock icon bounce
-    echo -ne '\a'
 
     # username and hostname
     # current working directory
