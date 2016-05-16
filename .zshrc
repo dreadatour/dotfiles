@@ -313,6 +313,9 @@ function __build_prompt {
     # reset colors
     echo -n "%f%b%k%K{$color_bg}"
 
+    # visual bell to be catched by iTerm2 and trigger Dock icon bounce
+    echo -ne '\a'
+
     # username and hostname
     # current working directory
     echo -n "%(!.%F{red}.%F{green})%n%F{$color_fg}@%F{yellow}%m%F{$color_fg}:%F{240}%~%f"
