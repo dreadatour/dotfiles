@@ -220,10 +220,12 @@ function save-previous-command-line {
 # save exit status code
 EXIT_CODE=
 function __save_exit_status {
-    if [ "$?" -eq "0" ]; then
-        EXIT_CODE=
-    else
-        EXIT_CODE="%F{red}$?%f"
+    if [ -n $? ]; then
+        if [ "$?" -eq "0" ]; then
+            EXIT_CODE=
+        else
+            EXIT_CODE="%F{red}$?%f"
+        fi
     fi
 }
 
