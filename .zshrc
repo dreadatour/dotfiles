@@ -273,6 +273,12 @@ bindkey -s '^L' '^qcls\n'
 # Prompt
 ###############################################################################
 
+if [ -f ~/.hostname ]; then
+    LOCAL_HOSTNAME=`cat ~/.hostname`
+else
+    LOCAL_HOSTNAME=$(hostname)
+fi
+
 # print git status for cwd (if we're in git repo)
 function __prompt_git_status {
     local cur_dir git_status git_vars
@@ -328,7 +334,7 @@ function __build_prompt {
 
     # username and hostname
     # current working directory
-    echo -n "%(!.%F{red}.%F{green})%n%F{$color_fg}@%F{yellow}%m%F{$color_fg}:%F{240}%~%f"
+    echo -n "%(!.%F{red}.%F{green})%n%F{$color_fg}@%F{yellow}${LOCAL_HOSTNAME}%F{$color_fg}:%F{240}%~%f"
 
     # git status
     prompt_git=$(__prompt_git_status)
