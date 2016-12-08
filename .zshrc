@@ -103,6 +103,15 @@ export PGHOST=/tmp                      # postgres won't work without this
 [ -d /usr/local/bin ] && PATH=/usr/local/bin:$PATH
 [ -d /usr/local/sbin ] && PATH=/usr/local/sbin:$PATH
 
+# setup Google Cloud SDK
+# On Mac OS X:
+#   brew tap caskroom/cask
+#   brew cask install google-cloud-sdk
+if [[ -d /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk ]]; then
+    source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
+    source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
+fi
+
 # setup python virtualenv
 export PROJECT_HOME=~/work/
 export WORKON_HOME=~/work/.venv/
