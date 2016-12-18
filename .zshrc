@@ -118,15 +118,6 @@ export WORKON_HOME=~/work/.venv/
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 [ -f /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
 
-# pip should only run if there is a virtualenv currently activated
-export PIP_REQUIRE_VIRTUALENV=true
-function syspip {
-    PIP_REQUIRE_VIRTUALENV= sudo -H pip "$@"
-}
-function syspip3 {
-    PIP_REQUIRE_VIRTUALENV= sudo -H pip3 "$@"
-}
-
 export CLICOLOR=1
 export LSCOLORS=gxfxcxdxbxegedabagacad
 
@@ -470,6 +461,14 @@ function delpyc {
 # OS X Quick Look alias
 function show {
     qlmanage -p $1
+}
+
+# global pip commands
+function syspip {
+    PIP_REQUIRE_VIRTUALENV= sudo -H pip "$@"
+}
+function syspip3 {
+    PIP_REQUIRE_VIRTUALENV= sudo -H pip3 "$@"
 }
 
 

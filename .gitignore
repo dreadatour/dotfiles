@@ -23,6 +23,9 @@
 !/.config/fish/functions/bindings.fish
 !/.config/fish/functions/fish_prompt.fish
 
+!/.pip
+/.pip/cache
+
 !/.vimrc
 !/.vim/
 /.vim/.netrwhist
