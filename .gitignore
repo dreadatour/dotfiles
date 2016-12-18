@@ -4,6 +4,7 @@
 !/.bash_profile
 !/.bin/
 !/.gitignore
+!/.gitignore_global
 !/.gitmodules
 !/.gitconfig
 !/.gvimrc

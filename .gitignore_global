@@ -1,0 +1,33 @@
+# Python compiles files
+*.py[co]
+__pycache__
+
+# Text editors
+*~
+._*
+*.swp
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# NPM
+node_modules
+npm-debug.log
+
+# OS X files and direcotries
+.DS_Store
+.AppleDouble
+.LSOverride
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk

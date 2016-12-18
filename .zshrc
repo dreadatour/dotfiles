@@ -343,9 +343,6 @@ function __build_prompt {
     # vitrualenv
     [ ! -z "$VIRTUAL_ENV" ] && echo -n "$divider%F{$color_fg}venv:%f %F{cyan}${VIRTUAL_ENV#$WORKON_HOME}%f"
 
-    # goenv
-    [ ! -z "$GOENV_PATH" ] && echo -n "$divider%F{$color_fg}go:%f %F{cyan}${GOENV_PATH}%f"
-
     # elapsed time
     [ ! -z "$ELAPSED_TIME" ] && echo -n "$divider%F{$color_fg}elapsed time:%f $ELAPSED_TIME"
     ELAPSED_TIME=
