@@ -475,3 +475,12 @@ function syspip3 {
 
 # Load local zsh config
 [ -e ~/.lzshrc ] && source ~/.lzshrc
+
+
+###############################################################################
+# Plugins
+###############################################################################
+
+# https://github.com/zsh-users/zsh-autosuggestions
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=250'
