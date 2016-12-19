@@ -452,7 +452,8 @@ function mkcd {
 
 # delete '*.pyc' files
 function delpyc {
-    find . -name '*.pyc' -delete
+    find . -type d -name '__pycache__' | sed 's#^\./##' | while read d; do echo $d; rm -rf $d; done
+    find . -type f -name '*.pyc' | sed 's#^\./##' | while read f; do echo $f; rm -f $f; done
 }
 
 # OS X Quick Look alias
