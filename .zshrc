@@ -419,24 +419,6 @@ alias :q='exit'
 
 
 ###############################################################################
-# Bind keys
-###############################################################################
-
-autoload -U history-search-end
-
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
-
-# cycling through the history with the Up/Down keys
-bindkey "\e[A" history-beginning-search-backward-end
-bindkey "\e[B" history-beginning-search-forward-end
-
-# move words by keys
-bindkey '[C' forward-word
-bindkey '[D' backward-word
-
-
-###############################################################################
 # Functions
 ###############################################################################
 
@@ -485,3 +467,26 @@ function syspip3 {
 # https://github.com/zsh-users/zsh-autosuggestions
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=250'
+
+# https://github.com/zsh-users/zsh-history-substring-search
+source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
+
+
+###############################################################################
+# Bind keys
+###############################################################################
+
+autoload -U history-search-end
+
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+
+# cycling through the history with the Up/Down keys
+# bindkey "\e[A" history-beginning-search-backward-end
+# bindkey "\e[B" history-beginning-search-forward-end
+bindkey "\e[A" history-substring-search-up
+bindkey "\e[B" history-substring-search-down
+
+# move words by keys
+bindkey '[C' forward-word
+bindkey '[D' backward-word
