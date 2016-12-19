@@ -71,6 +71,9 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 # list of directories to get commands from for sudo
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
 
+# list of directories to complete cd and pushd commands
+zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-directories'
+
 # show menu but don't select first completion
 zstyle ':completion:*' menu select=1
 setopt auto_menu
@@ -475,6 +478,8 @@ source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=0,bold'
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=1,bold'
+
+# TODO: https://github.com/hchbaw/auto-fu.zsh
 
 
 ###############################################################################
