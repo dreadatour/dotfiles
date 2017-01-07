@@ -18,6 +18,8 @@ setopt INTERACTIVE_COMMENTS     # allow comments even in interactive shells
 
 #== Commands cd & pushd =======================================================
 setopt AUTO_PUSHD               # this makes cd=pushd
+setopt PUSHD_IGNORE_DUPS        # don’t push multiple copies of the same directory onto the directory stack
+setopt PUSHD_SILENT             # do not print the directory stack after pushd or popd
 setopt PUSHD_TO_HOME            # blank pushd goes to home
 
 #== Completion ================================================================
@@ -80,7 +82,6 @@ setopt auto_menu
 unsetopt menu_complete
 
 # load additional completions
-[ -f /usr/local/include/php/arcanist/resources/shell/bash-completion ] && source /usr/local/include/php/arcanist/resources/shell/bash-completion
 [ -f /usr/local/share/zsh/site-functions/go ] && source /usr/local/share/zsh/site-functions/go
 
 
