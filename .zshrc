@@ -254,7 +254,7 @@ add-zsh-hook preexec __prompt_preexec
 add-zsh-hook precmd __prompt_precmd
 
 # clear scrollback
-function cls() {
+function __cls() {
     clear
 
     if [[ -n "${TMUX}" ]]; then
@@ -268,9 +268,11 @@ function cls() {
     else
         tput reset
     fi
+    zle reset-prompt
 }
+zle -N cls __cls
 # clear screen and clear scrollback
-bindkey -s '^L' '^qcls\n'
+bindkey '^L' cls
 
 
 ###############################################################################
