@@ -23,7 +23,7 @@ ZSH_COMMAND_LINE_CLEAR_WIDGETS=(
     save-previous-command-line
 )
 function __zsh_command_line_clear {
-    echo $@ '(clear)' > /tmp/zsh-command-line.log
+    # echo $@ '(clear)' > /tmp/zsh-command-line.log
 
     local -i retval
 
@@ -45,7 +45,7 @@ ZSH_COMMAND_LINE_ACCEPT_WIDGETS=(
     end-of-line
 )
 function __zsh_command_line_accept {
-    echo $@ '(accept)' > /tmp/zsh-command-line.log
+    # echo $@ '(accept)' > /tmp/zsh-command-line.log
 
     local -i retval
     __zsh_command_line_highlight_reset
@@ -71,7 +71,7 @@ ZSH_COMMAND_LINE_PARTIAL_ACCEPT_WIDGETS=(
     forward-word
 )
 function __zsh_command_line_partial_accept {
-    echo $@ '(partial accept)' > /tmp/zsh-command-line.log
+    # echo $@ '(partial accept)' > /tmp/zsh-command-line.log
 
     local -i retval
     __zsh_command_line_highlight_reset
@@ -99,7 +99,7 @@ function __zsh_command_line_partial_accept {
 # Accept the entire suggestion and execute it
 ZSH_COMMAND_LINE_EXECUTE_WIDGETS=()
 function __zsh_command_line_execute {
-    echo $@ '(execute)' > /tmp/zsh-command-line.log
+    # echo $@ '(execute)' > /tmp/zsh-command-line.log
 
     local -i retval
     __zsh_command_line_highlight_reset
@@ -118,7 +118,7 @@ zle -N command-line-execute __zsh_command_line_execute
 
 # Modify the buffer
 function __zsh_command_line_modify {
-    echo $@ '(modify)' > /tmp/zsh-command-line.log
+    # echo $@ '(modify)' > /tmp/zsh-command-line.log
 
     local -i retval
     __zsh_command_line_highlight_reset
@@ -162,7 +162,7 @@ function __zsh_command_line_autosuggest {
 
 
 function __zsh_command_line_history_search_backward {
-    echo '__ZSH_COMMAND_LINE_HISTORY_SEARCH_BACKWARD' > /tmp/zsh-command-line.log
+    # echo '__ZSH_COMMAND_LINE_HISTORY_SEARCH_BACKWARD' > /tmp/zsh-command-line.log
 
     local -i retval
     __zsh_command_line_highlight_reset
@@ -183,7 +183,7 @@ zle -N command-line-history-search-backward __zsh_command_line_history_search_ba
 
 
 function __zsh_command_line_history_search_forward {
-    echo '__ZSH_COMMAND_LINE_HISTORY_SEARCH_FORWARD' > /tmp/zsh-command-line.log
+    # echo '__ZSH_COMMAND_LINE_HISTORY_SEARCH_FORWARD' > /tmp/zsh-command-line.log
 
     local -i retval
     __zsh_command_line_highlight_reset
