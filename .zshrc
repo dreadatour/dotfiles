@@ -2,12 +2,11 @@
 # Set zsh options
 ###############################################################################
 
-autoload -U colors && colors    # initialize colors
+# initialize colors
+autoload -U colors && colors
 
-autoload -U select-word-style
-select-word-style bash          # word characters are alphanumeric characters only
-
-autoload -U add-zsh-hook        # we will use zsh hooks in config later
+# word characters are alphanumeric characters only
+autoload -U select-word-style && select-word-style bash
 
 #== Base ======================================================================
 setopt EMACS                    # emacs shortcuts (same as 'bindkey -e')
@@ -42,9 +41,9 @@ setopt EXTENDED_HISTORY         # save the time and how long a command ran
 setopt HIST_IGNORE_SPACE        # lines which begin with a space don't go into the history
 setopt HIST_NO_STORE            # not to store history or fc commands
 
-HISTFILE=~/.histfile    # history file location
-HISTSIZE=1000000        # number of history lines kept internally
-SAVEHIST=1000000        # max number of history lines saved
+HISTFILE=~/.histfile            # history file location
+HISTSIZE=1000000                # number of history lines kept internally
+SAVEHIST=1000000                # max number of history lines saved
 
 
 ###############################################################################
@@ -122,272 +121,13 @@ export WORKON_HOME=~/work/.venv/
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 [ -f /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
 
-export CLICOLOR=1
-export LSCOLORS=gxfxcxdxbxegedabagacad
-
-# Enable color in grep
-export GREP_OPTIONS='--color=auto'
-export GREP_COLOR='3;33'
-
 # Go paths
 export GOPATH=$HOME/work/go
 export PATH=$PATH:$GOBIN:$GOPATH/bin
 
-
-###############################################################################
-# Helpful hooks and functions for prompt
-###############################################################################
-
-[ -e /usr/local/bin/growlnotify ] && export LONG_CMD_GROWL_NOTIFY_ENABLED=1
-
-# check elapsed time after command execution
-ELAPSED_TIME=
-ELAPSED_TIME_PLAIN=
-ELAPSED_TIME_TOOLONG=
-ELAPSED_TIME_NEED_BELL=
-function __calc_elapsed_time {
-    local timer_result
-    ELAPSED_TIME=
-    ELAPSED_TIME_PLAIN=
-    ELAPSED_TIME_TOOLONG=
-    ELAPSED_TIME_NEED_BELL=
-
-    [[ -z $__PREVIOUS_COMMAND_LINE ]] && return
-
-    timer_result=$(($SECONDS-$__CMD_START_TIME))
-    if [[ $timer_result -ge 1 ]]; then
-        ELAPSED_TIME_NEED_BELL=1  # 1 sec is enough for bell =)
-    fi
-    if [[ $timer_result -gt 10 ]]; then
-        if [[ $timer_result -ge 600 ]]; then
-            ELAPSED_TIME_TOOLONG=1  # 10 min is too long =)
-        fi
-        if [[ $timer_result -ge 3600 ]]; then
-            let "timer_hours = $timer_result / 3600"
-            let "remainder = $timer_result % 3600"
-            let "timer_minutes = $remainder / 60"
-            let "timer_seconds = $remainder % 60"
-            ELAPSED_TIME_PLAIN="${timer_hours}h ${timer_minutes}m ${timer_seconds}s"
-            ELAPSED_TIME="%F{red}$ELAPSED_TIME_PLAIN%f"
-        elif [[ $timer_result -ge 60 ]]; then
-            let "timer_minutes = $timer_result / 60"
-            let "timer_seconds = $timer_result % 60"
-            ELAPSED_TIME_PLAIN="${timer_minutes}m ${timer_seconds}s"
-            ELAPSED_TIME="%F{yellow}$ELAPSED_TIME_PLAIN%f"
-        elif [[ $timer_result -ge 10 ]]; then
-            ELAPSED_TIME_PLAIN="${timer_result}s"
-            ELAPSED_TIME="%F{green}$ELAPSED_TIME_PLAIN%f"
-        fi
-    fi
-    __reset_cmd_start_time
-}
-
-# notify user about elapsed time
-function __growl_notify_elapsed_time {
-    local sticky
-
-    if [ $__PREVIOUS_COMMAND_LINE ] && [ $ELAPSED_TIME ]; then
-        [ $ELAPSED_TIME_TOOLONG ] && sticky='-s'
-        echo $__PREVIOUS_COMMAND_LINE | /usr/local/bin/growlnotify $sticky -t "Finished for $ELAPSED_TIME_PLAIN:" -m -
-    fi
-}
-
-# visual bell to be catched by iTerm2 and trigger Dock icon bounce
-function __bell_elapsed_time {
-    [ $ELAPSED_TIME_NEED_BELL ] && echo -ne '\a'
-}
-
-# update terminal tab title
-function __update_title {
-    local title=${PWD/${HOME}/\~}
-    echo -ne "\e]2;${title}\a"
-    if [ $#title -gt 26 ]; then
-        echo -ne "\e]1;…${title: -24}\a"
-    else
-        echo -ne "\e]1;${title}\a"
-    fi
-}
-
-# save start time to variable before command execution
-function __reset_cmd_start_time {
-    __CMD_START_TIME=$SECONDS
-}
-__reset_cmd_start_time  # reset command start time right now
-
-# save previous command line
-__PREVIOUS_COMMAND_LINE=
-function save-previous-command-line {
-    __PREVIOUS_COMMAND_LINE=$BUFFER
-    zle accept-line
-}
-
-# save exit status code
-EXIT_CODE=
-function __save_exit_status {
-    if [ -n $? ]; then
-        if [ "$?" -eq "0" ]; then
-            EXIT_CODE=
-        else
-            EXIT_CODE="%F{red}$?%f"
-        fi
-    fi
-}
-
-# preexec hook
-function __prompt_preexec {
-    __reset_cmd_start_time
-}
-
-# precmd hook
-function __prompt_precmd {
-    __save_exit_status
-    __calc_elapsed_time
-    __bell_elapsed_time
-    [ $LONG_CMD_GROWL_NOTIFY_ENABLED ] && __growl_notify_elapsed_time
-    __update_title
-}
-
-# setup zsh hooks
-zle -N save-previous-command-line
-bindkey '^M' save-previous-command-line
-add-zsh-hook preexec __prompt_preexec
-add-zsh-hook precmd __prompt_precmd
-
-# clear scrollback
-function __cls() {
-    clear
-
-    if [[ -n "${TMUX}" ]]; then
-        if [[ -f /usr/local/bin/tmux ]]; then
-            /usr/local/bin/tmux clearhist
-        elif [[ -f /usr/bin/tmux ]]; then
-            /usr/bin/tmux clearhist
-        fi
-    elif [[ "${TERM_PROGRAM}" == "iTerm.app" ]]; then
-        printf '\e]50;ClearScrollback\a'
-    else
-        tput reset
-    fi
-    zle reset-prompt
-}
-zle -N cls __cls
-# clear screen and clear scrollback
-bindkey '^L' cls
-
-
-###############################################################################
-# Prompt
-###############################################################################
-
-if [ -f ~/.hostname ]; then
-    LOCAL_HOSTNAME=`cat ~/.hostname`
-else
-    LOCAL_HOSTNAME=$(hostname)
-fi
-
-# print git status for cwd (if we're in git repo)
-function __prompt_git_status {
-    local cur_dir git_status git_vars
-    local git_branch git_staged git_conflicts git_changed git_untracked git_ahead git_behind
-
-    local cur_dir=$PWD
-    while [[ ! -d "$cur_dir/.git" ]] && [[ ! "$cur_dir" == "/" ]] && [[ ! "$cur_dir" == "~" ]] && [[ ! "$cur_dir" == "" ]]; do cur_dir=${cur_dir%/*}; done
-    if [[ -d "$cur_dir/.git" ]]; then
-        # 'git repo for dotfiles' fix: show git status only in home dir and other git repos
-        if [[ "$cur_dir" != "${HOME}" ]] || [[ "${PWD}" == "${HOME}" ]]; then
-            git_status=`python ~/.zsh/prompt-git-status.py`
-            git_vars=("${(@f)git_status}")
-
-            if [ -n "$git_vars" ]; then
-                git_branch=$git_vars[1]
-                git_staged=$git_vars[3]
-                git_changed=$git_vars[4]
-                git_untracked=$git_vars[5]
-                git_conflicts=$git_vars[6]
-                git_ahead=$git_vars[7]
-                git_behind=$git_vars[8]
-
-                git_status="%F{cyan}$git_branch%f"
-                if [[ "$git_ahead" -ne "0" ]] || [[ "$git_behind" -ne "0" ]]; then
-                    git_status="$git_status "
-                    [ "$git_behind" -ne "0" ] && git_status="$git_status%f↓$git_behind"
-                    [ "$git_ahead" -ne "0" ]  && git_status="$git_status%f↑$git_ahead"
-                fi
-                if [[ "$git_conflicts" -eq "0" ]] && [ "$git_staged" -eq "0" ] && [ "$git_changed" -eq "0" ] && [ "$git_untracked" -eq "0" ]; then
-                    git_status="$git_status %F{green}✔%f"
-                else
-                    [ "$git_conflicts" -ne "0" ]  && git_status="$git_status %F{red}✖$git_conflicts%f"
-                    [ "$git_staged" -ne "0" ]     && git_status="$git_status %F{green}✚$git_staged%f"
-                    [ "$git_changed" -ne "0" ]    && git_status="$git_status %F{blue}*$git_changed%f"
-                    [ "$git_untracked" -ne "0" ]  && git_status="$git_status %F{yellow}…$git_untracked%f"
-                fi
-                echo -ne $git_status
-            fi
-        fi
-    fi
-}
-
-function __build_prompt {
-    local color_bg color_fg divider
-    local prompt_git prompt_venv
-
-    color_bg='7'
-    color_fg='245'
-    divider=" %F{15}║%f "
-
-    # reset colors
-    echo -n "%f%b%k%K{$color_bg}"
-
-    # username and hostname
-    # current working directory
-    echo -n "%(!.%F{red}.%F{green})%n%F{$color_fg}@%F{yellow}${LOCAL_HOSTNAME}%F{$color_fg}:%F{240}%~%f"
-
-    # git status
-    prompt_git=$(__prompt_git_status)
-    [ ! -z "$prompt_git" ] && echo -n "$divider%F{$color_fg}git:%f $prompt_git"
-
-    # vitrualenv
-    [ ! -z "$VIRTUAL_ENV" ] && echo -n "$divider%F{$color_fg}venv:%f %F{cyan}${VIRTUAL_ENV#$WORKON_HOME}%f"
-
-    # elapsed time
-    [ ! -z "$ELAPSED_TIME" ] && echo -n "$divider%F{$color_fg}elapsed time:%f $ELAPSED_TIME"
-    ELAPSED_TIME=
-
-    # exit status
-    [ ! -z "$EXIT_CODE" ] && echo -n "$divider%F{$color_fg}exit code:%f $EXIT_CODE"
-    EXIT_CODE=
-
-    # newline and command arrow
-    echo -n "%E%f%k\n%F{black}➜%f "
-}
-
-# set prompt
-export PROMPT=$'$(__build_prompt)'
-
-
-###############################################################################
-# Command line
-###############################################################################
-
-# set command line color
-function command-line-colored {
-    region_highlight=("0 $(( $CURSOR + $#RBUFFER )) fg=0")
-}
-
-function self-insert-colored { zle .self-insert; command-line-colored }
-function magic-space-colored { zle .magic-space; command-line-colored }
-function backward-delete-char-colored { zle .backward-delete-char; command-line-colored }
-function accept-line-colored { zle .accept-line; command-line-colored }
-
-zle -N self-insert self-insert-colored
-zle -N magic-space magic-space-colored
-zle -N backward-delete-char backward-delete-char-colored
-zle -N accept-line accept-line-colored
-
-
-###############################################################################
-# Aliases
-###############################################################################
+export CLICOLOR=1
+export LSCOLORS=gxfxcxdxbxegedabagacad
+export GREP_COLOR='3;33'
 
 if [ "$TERM" != "dumb" ]; then
     case $OSTYPE in
@@ -401,6 +141,11 @@ if [ "$TERM" != "dumb" ]; then
         ;;
     esac
 fi
+
+
+###############################################################################
+# Aliases
+###############################################################################
 
 # ls aliases
 alias ls='ls -G $LS_OPTIONS'
@@ -459,47 +204,47 @@ function syspip3 {
 
 
 ###############################################################################
-# Other stuff
-###############################################################################
-
-# Load local zsh config
-[ -e ~/.lzshrc ] && source ~/.lzshrc
-
-
-###############################################################################
 # Plugins
 ###############################################################################
 
-# https://github.com/zsh-users/zsh-autosuggestions
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=250'
+# set prompt
+source ~/.zsh/prompt.zsh
+export PROMPT=$'$(__build_prompt)'
 
-# https://github.com/zsh-users/zsh-syntax-highlighting
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# clear screen and scrollback
+source ~/.zsh/cls.zsh
 
-# https://github.com/zsh-users/zsh-history-substring-search
-source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
-HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=0,bold'
-HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=1,bold'
-
-# TODO: https://github.com/hchbaw/auto-fu.zsh
+# command line helpful tools
+source ~/.zsh/command-line.zsh
+export ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_COMMAND='fg=0'
+export ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_HISTORY_SEARCH='fg=250'
 
 
 ###############################################################################
 # Bind keys
 ###############################################################################
 
-autoload -U history-search-end
+# save previous line on command execute
+bindkey '^M' save-previous-command-line
 
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
+# clear screen and scrollback
+bindkey '^L' cls
 
 # cycling through the history with the Up/Down keys
-# bindkey "\e[A" history-beginning-search-backward-end
-# bindkey "\e[B" history-beginning-search-forward-end
-bindkey "\e[A" history-substring-search-up
-bindkey "\e[B" history-substring-search-down
+bindkey "\e[A" command-line-history-search-backward
+bindkey "\e[B" command-line-history-search-forward
 
 # move words by keys
 bindkey '[C' forward-word
 bindkey '[D' backward-word
+
+
+###############################################################################
+# Other stuff
+###############################################################################
+
+# Load local hostname
+[ -f ~/.hostname ] && LOCAL_HOSTNAME=`cat ~/.hostname`
+
+# Load local zsh config
+[ -e ~/.lzshrc ] && source ~/.lzshrc
