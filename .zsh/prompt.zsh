@@ -4,7 +4,7 @@
 
 autoload -U add-zsh-hook  # use zsh hooks
 
-[ -e /usr/local/bin/growlnotify ] && export LONG_CMD_GROWL_NOTIFY_ENABLED=1
+[ -e /usr/local/bin/growlnotify ] && LONG_CMD_GROWL_NOTIFY_ENABLED=1
 
 # check elapsed time after command execution
 ELAPSED_TIME=

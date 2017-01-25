@@ -2,9 +2,12 @@
 # ZSH Command Line plugin
 #
 # Compilation of few ZSH plugins:
+# - https://github.com/johan/zsh/blob/master/Functions/Zle/history-search-end
 # - https://github.com/zsh-users/zsh-autosuggestions
 #
-# TODO: add these plugins features:
+# TODO: check and add these plugins features:
+# - https://github.com/johan/zsh/blob/master/Functions/Zle/history-beginning-search-menu
+# - https://github.com/johan/zsh/blob/master/Functions/Zle/predict-on
 # - https://github.com/zsh-users/zsh-syntax-highlighting
 # - https://github.com/zsh-users/zsh-history-substring-search
 # - https://github.com/hchbaw/auto-fu.zsh
@@ -12,7 +15,10 @@
 
 # Settings
 ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_COMMAND='fg=0'
-ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_HISTORY_SEARCH='fg=8'
+ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_COMMAND_OK='fg=2'
+ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_COMMAND_BAD='fg=1'
+ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_COMMAND_TAIL='fg=245'
+ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_HISTORY_SEARCH='fg=253'
 
 
 # Clear the suggestion
@@ -23,60 +29,50 @@ ZSH_COMMAND_LINE_CLEAR_WIDGETS=(
     save-previous-command-line
 )
 function __zsh_command_line_clear {
-    # echo $@ '(clear)' > /tmp/zsh-command-line.log
-
     local -i retval
 
     unset POSTDISPLAY  # remove the suggestion
-    __zsh_command_line_highlight_reset
 
     __zsh_command_line_invoke_original_widget $@
     retval=$?
 
-    __zsh_command_line_highlight_apply
+    zle .set-mark-command  # set mark at the cursor position
+    __zsh_command_line_highlight
     return $retval
 }
-zle -N command-line-clear __zsh_command_line_clear
+zle -N command-line-clear-autosuggest __zsh_command_line_clear
 
 
-# Accept the entire suggestion
-ZSH_COMMAND_LINE_ACCEPT_WIDGETS=(
+# Accept suggestion's one char
+ZSH_COMMAND_LINE_ACCEPT_CHAR_WIDGETS=(
     forward-char
-    end-of-line
 )
-function __zsh_command_line_accept {
-    # echo $@ '(accept)' > /tmp/zsh-command-line.log
-
+function __zsh_command_line_accept_char {
     local -i retval
-    __zsh_command_line_highlight_reset
 
     # only accept if the cursor is at the end of the buffer
     if [ $CURSOR -eq $#BUFFER ]; then
-        BUFFER="$BUFFER$POSTDISPLAY"  # add the suggestion to the buffer
-        unset POSTDISPLAY  # remove the suggestion
-        CURSOR=${#BUFFER}  # move the cursor to the end of the buffer
+        BUFFER="$BUFFER${POSTDISPLAY[1]}"  # add the suggestion's first char to the buffer
+        POSTDISPLAY=${POSTDISPLAY:1}  # slice suggestion
     fi
 
     __zsh_command_line_invoke_original_widget $@
     retval=$?
 
-    __zsh_command_line_highlight_apply
+    zle .set-mark-command  # set mark at the cursor position
+    __zsh_command_line_autosuggest  # get a new suggestion
+    __zsh_command_line_highlight
     return $retval
 }
-zle -N command-line-accept __zsh_command_line_accept
 
 
 # Partially accept the suggestion
-ZSH_COMMAND_LINE_PARTIAL_ACCEPT_WIDGETS=(
+ZSH_COMMAND_LINE_ACCEPT_WORD_WIDGETS=(
     forward-word
 )
-function __zsh_command_line_partial_accept {
-    # echo $@ '(partial accept)' > /tmp/zsh-command-line.log
-
+function __zsh_command_line_accept_word {
     local -i retval
-    __zsh_command_line_highlight_reset
-
-    local original_buffer="$BUFFER"  # save the contents of the buffer so we can restore later if needed
+    local buffer_orig="$BUFFER"  # save the contents of the buffer so we can restore later if needed
 
     BUFFER="$BUFFER$POSTDISPLAY"  # temporarily accept the suggestion
 
@@ -84,141 +80,205 @@ function __zsh_command_line_partial_accept {
     retval=$?
 
     # if we've moved past the end of the original buffer
-    if [ $CURSOR -gt $#original_buffer ]; then
+    if [ $CURSOR -gt $#buffer_orig ]; then
         POSTDISPLAY="$RBUFFER"  # ret POSTDISPLAY to text right of the cursor
         BUFFER="$LBUFFER"  # clip the buffer at the cursor
     else
-        BUFFER="$original_buffer"  # restore the original buffer
+        BUFFER="$buffer_orig"  # restore the original buffer
     fi
 
-    __zsh_command_line_highlight_apply
+    zle .set-mark-command  # set mark at the cursor position
+    __zsh_command_line_autosuggest  # get a new suggestion
+    __zsh_command_line_highlight
     return $retval
 }
 
 
-# Accept the entire suggestion and execute it
-ZSH_COMMAND_LINE_EXECUTE_WIDGETS=()
-function __zsh_command_line_execute {
-    # echo $@ '(execute)' > /tmp/zsh-command-line.log
-
+# Accept the entire suggestion
+ZSH_COMMAND_LINE_ACCEPT_ALL_WIDGETS=(
+    end-of-line
+)
+function __zsh_command_line_accept_all {
     local -i retval
-    __zsh_command_line_highlight_reset
 
-    BUFFER="$BUFFER$POSTDISPLAY"  # add the suggestion to the buffer
-    unset POSTDISPLAY  # remove the suggestion
+    # only accept if the cursor is at the end of the buffer
+    if [ $CURSOR -eq $#BUFFER ]; then
+        BUFFER="$BUFFER$POSTDISPLAY"  # add the suggestion to the buffer
+        unset POSTDISPLAY  # remove the suggestion
+    fi
 
     __zsh_command_line_invoke_original_widget $@
     retval=$?
 
-    __zsh_command_line_highlight_apply
+    zle .set-mark-command  # set mark at the cursor position
+    __zsh_command_line_autosuggest  # get a new suggestion
+    __zsh_command_line_highlight
     return $retval
 }
-zle -N command-line-execute __zsh_command_line_execute
 
 
 # Modify the buffer
 function __zsh_command_line_modify {
-    # echo $@ '(modify)' > /tmp/zsh-command-line.log
-
     local -i retval
-    __zsh_command_line_highlight_reset
 
-    local orig_buffer="$BUFFER"  # save the contents of the postdisplay
-    local orig_postdisplay="$POSTDISPLAY"  # save the contents of the postdisplay
+    local buffer_orig="$BUFFER"  # save the contents of the postdisplay
+    local postdisplay_orig="$POSTDISPLAY"  # save the contents of the postdisplay
 
     unset POSTDISPLAY  # clear suggestion while original widget runs
 
     __zsh_command_line_invoke_original_widget $@  # original widget may modify the buffer
     retval=$?
 
+    zle .set-mark-command  # set mark at the cursor position
+
     # don't fetch a new suggestion if the buffer hasn't changed
-    if [ "$BUFFER" = "$orig_buffer" ]; then
-        POSTDISPLAY="$orig_postdisplay"
-
-        __zsh_command_line_highlight_apply
-        return $retval
+    if [ "$BUFFER" = "$buffer_orig" ]; then
+        POSTDISPLAY="$postdisplay_orig"
+    else
+        __zsh_command_line_autosuggest  # get a new suggestion
     fi
 
-    # get a new suggestion if the buffer is not empty after modification
-    local suggestion
-    if [ $#BUFFER -gt 0 ]; then
-        suggestion="$(__zsh_command_line_autosuggest "$BUFFER")"
-    fi
-
-    # add the suggestion to the POSTDISPLAY
-    if [ -n "$suggestion" ]; then
-        POSTDISPLAY="${suggestion#$BUFFER}"
-    fi
-
-    __zsh_command_line_highlight_apply
+    __zsh_command_line_highlight
     return $retval
 }
 
 
-function __zsh_command_line_autosuggest {
+# Accept the entire suggestion and execute it
+function __zsh_command_line_execute {
+    local -i retval
+
+    BUFFER="$BUFFER$POSTDISPLAY"  # add the suggestion to the buffer
+    unset POSTDISPLAY  # remove the suggestion
+
+    zle .end-of-line  # move cursor to the end of line
+    zle .set-mark-command  # set mark at the cursor position
+
+    __zsh_command_line_highlight
+
+    zle .accept-line
+}
+zle -N command-line-execute __zsh_command_line_execute
+
+
+function __zsh_command_line_autosuggest_path {
+    setopt localoptions NULL_GLOB
+    /bin/ls -dap $1* 2>/dev/null | /usr/bin/grep '/$' | /usr/bin/head -n 1 | /usr/bin/cut -c $((${#1} + 1))-
+}
+
+function __zsh_command_line_autosuggest_history {
     setopt localoptions EXTENDED_GLOB
-    fc -lnrm "${1//(#m)[\\()\[\]|*?~]/\\$MATCH}*" 1 2>/dev/null | head -n 1
+    fc -lnrm "${1//(#m)[\\()\[\]|*?~]/\\$MATCH}*" 1 2>/dev/null | /usr/bin/head -n 1
+}
+
+function __zsh_command_line_autosuggest {
+    local suggestion
+
+    if [ $#BUFFER -gt 0 ]; then
+        if [ $CURSOR -eq $#BUFFER ]; then
+            if [ "${BUFFER[1,3]}" = "cd " ]; then  # dirty hack to autosuggest directories for 'cd' command
+                local -a words=(${=BUFFER})
+                local path
+
+                if [ ${#words} -gt 1 ]; then
+                    path=${words[-1]}
+                fi
+
+                suggestion="$(__zsh_command_line_autosuggest_path "${path}")"
+            else
+                suggestion="$(__zsh_command_line_autosuggest_history "$BUFFER")"
+            fi
+        fi
+    fi
+
+    if [ -n "$suggestion" ]; then
+        POSTDISPLAY="${suggestion#$BUFFER}"
+    else
+        unset POSTDISPLAY
+    fi
 }
 
 
 function __zsh_command_line_history_search_backward {
-    # echo '__ZSH_COMMAND_LINE_HISTORY_SEARCH_BACKWARD' > /tmp/zsh-command-line.log
-
+    local -i cursor_prev=$CURSOR
+    local -i mark_prev=$MARK
     local -i retval
-    __zsh_command_line_highlight_reset
 
-    RBUFFER=$POSTDISPLAY
+    if [[ $LASTWIDGET = command-line-history-search-* ]]; then
+        CURSOR=$MARK  # last widget called set $MARK
+    else
+        MARK=$CURSOR
+    fi
+
     unset POSTDISPLAY
 
-    zle history-beginning-search-backward
+    zle .history-beginning-search-backward
     retval=$?
 
-    POSTDISPLAY=$RBUFFER
-    unset RBUFFER
+    if [ $retval -gt 0 ]; then
+        CURSOR=$cursor_prev
+        MARK=$mark_prev
+    else
+        zle .end-of-line
+    fi
 
-    __zsh_command_line_highlight_apply
+    __zsh_command_line_highlight
     return $retval
 }
 zle -N command-line-history-search-backward __zsh_command_line_history_search_backward
 
 
 function __zsh_command_line_history_search_forward {
-    # echo '__ZSH_COMMAND_LINE_HISTORY_SEARCH_FORWARD' > /tmp/zsh-command-line.log
-
+    local -i cursor_prev=$CURSOR
+    local -i mark_prev=$MARK
     local -i retval
-    __zsh_command_line_highlight_reset
 
-    RBUFFER=$POSTDISPLAY
+    if [[ $LASTWIDGET = command-line-history-search-* ]]; then
+        CURSOR=$MARK  # last widget called set $MARK
+    else
+        MARK=$CURSOR
+    fi
+
     unset POSTDISPLAY
 
-    zle history-beginning-search-forward
+    zle .history-beginning-search-forward
     retval=$?
 
-    POSTDISPLAY=$RBUFFER
-    unset RBUFFER
+    if [ $retval -gt 0 ]; then
+        CURSOR=$cursor_prev
+        MARK=$mark_prev
+    else
+        zle .end-of-line
+    fi
 
-    __zsh_command_line_highlight_apply
+    __zsh_command_line_highlight
     return $retval
 }
 zle -N command-line-history-search-forward __zsh_command_line_history_search_forward
 
 
-# If there was a highlight, remove it
-function __zsh_command_line_highlight_reset {
-    region_highlight=("0 $#BUFFER $ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_COMMAND")
-
-    # echo '__zsh_command_line_highlight_reset' $region_highlight > /tmp/zsh-command-line.log
-}
-
-
-# If there's a suggestion, highlight it
-function __zsh_command_line_highlight_apply {
-    region_highlight=("0 $#BUFFER $ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_COMMAND")
-    if [ $#POSTDISPLAY -gt 0 ]; then
-        region_highlight+=("$#BUFFER $(($#BUFFER + $#POSTDISPLAY)) $ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_HISTORY_SEARCH")
+# Highlight command line
+function __zsh_command_line_highlight {
+    if [ ${#BUFFER} -eq 0 ]; then
+        region_highlight=()
+        return
     fi
 
-    # echo '__zsh_command_line_highlight_apply' $region_highlight > /tmp/zsh-command-line.log
+
+    local -a words=(${=BUFFER})
+    local command=${words[1]}
+
+    # TODO: correct highlight (for example, set ENV variables before command does not highlight)
+    which-command $command >/dev/null 2>/dev/null
+    if [ $? -eq 0 ]; then
+        region_highlight=("0 $#command $ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_COMMAND_OK")
+    else
+        region_highlight=("0 $#command $ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_COMMAND_BAD")
+    fi
+
+    region_highlight+=("$#command $#MARK $ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_COMMAND")
+    region_highlight+=("$MARK $#BUFFER $ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_COMMAND_TAIL")
+
+    [ $#POSTDISPLAY -gt 0 ] && region_highlight+=("$#BUFFER $(($#BUFFER + $#POSTDISPLAY)) $ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_HISTORY_SEARCH")
 }
 
 
@@ -226,10 +286,10 @@ function __zsh_command_line_highlight_apply {
 function __zsh_command_line_invoke_original_widget {
     [ $# -gt 0 ] || return  # do nothing unless called with at least one arg
 
-    local original_widget_name="$1"
+    local widget_orig="$1"
     shift
 
-    [ $widgets[$original_widget_name] ] && zle $original_widget_name -- $@
+    [ $widgets[$widget_orig] ] && zle $widget_orig -- $@
 }
 
 
@@ -257,12 +317,12 @@ function __zsh_command_line_bind_widgets {
     for widget in ${${(f)"$(builtin zle -la)"}:#${(j:|:)~ignore_widgets}}; do
         if   [ ${ZSH_COMMAND_LINE_CLEAR_WIDGETS[(r)$widget]} ]; then
             __zsh_command_line_bind_widget $widget clear
-        elif [ ${ZSH_COMMAND_LINE_ACCEPT_WIDGETS[(r)$widget]} ]; then
-            __zsh_command_line_bind_widget $widget accept
-        elif [ ${ZSH_COMMAND_LINE_EXECUTE_WIDGETS[(r)$widget]} ]; then
-            __zsh_command_line_bind_widget $widget execute
-        elif [ ${ZSH_COMMAND_LINE_PARTIAL_ACCEPT_WIDGETS[(r)$widget]} ]; then
-            __zsh_command_line_bind_widget $widget partial_accept
+        elif [ ${ZSH_COMMAND_LINE_ACCEPT_CHAR_WIDGETS[(r)$widget]} ]; then
+            __zsh_command_line_bind_widget $widget accept_char
+        elif [ ${ZSH_COMMAND_LINE_ACCEPT_WORD_WIDGETS[(r)$widget]} ]; then
+            __zsh_command_line_bind_widget $widget accept_word
+        elif [ ${ZSH_COMMAND_LINE_ACCEPT_ALL_WIDGETS[(r)$widget]} ]; then
+            __zsh_command_line_bind_widget $widget accept_all
         else
             # assume any unspecified widget might modify the buffer
             __zsh_command_line_bind_widget $widget modify

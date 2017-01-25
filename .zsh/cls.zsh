@@ -16,6 +16,7 @@ function __cls() {
     else
         tput reset
     fi
+
     zle reset-prompt
 }
 

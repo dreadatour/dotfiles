@@ -216,28 +216,35 @@ source ~/.zsh/cls.zsh
 
 # command line helpful tools
 source ~/.zsh/command-line.zsh
-export ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_COMMAND='fg=0'
-export ZSH_COMMAND_LINE_HIGHLIGHT_COLOR_HISTORY_SEARCH='fg=250'
 
 
 ###############################################################################
 # Bind keys
 ###############################################################################
 
-# save previous line on command execute
-bindkey '^M' save-previous-command-line
+# save previous line on command execute with "Enter" key
+bindkey "^M" save-previous-command-line
 
-# clear screen and scrollback
-bindkey '^L' cls
+# clear screen and scrollback with "Ctrl+L" shortcut
+# needs Key Mapping in iTerm: "Cmd+L" -> "Send Hex Codes: 0xc"
+bindkey "^L" cls
 
-# cycling through the history with the Up/Down keys
+# accept autosuggest and execute it with "Ctrl+Enter" shortcut
+# needs Key Mapping in iTerm: "Cmd+Enter" -> "Send Hex Codes: 0xa"
+bindkey "^J" command-line-execute
+
+# cycling through the history with the "Up" and "Down" keys
 bindkey "\e[A" command-line-history-search-backward
 bindkey "\e[B" command-line-history-search-forward
 
 # move words by keys
-bindkey '[C' forward-word
-bindkey '[D' backward-word
+# needs Key Mapping in iTerm: "Ctrl+Left": "Send Escape Sequence: b"
+# needs Key Mapping in iTerm: "Ctrl+Right": "Send Escape Sequence: f"
+# needs Key Mapping in iTerm: "Alt+Left": "Send Escape Sequence: b"
+# needs Key Mapping in iTerm: "Alt+Right": "Send Escape Sequence: f"
 
+# disable flow control (Ctrl+S, Ctrl+Q)
+stty -ixon -ixoff
 
 ###############################################################################
 # Other stuff
