@@ -157,6 +157,11 @@ alias grep='grep $GREP_OPTIONS'
 alias fgrep='fgrep $GREP_OPTIONS'
 alias egrep='egrep $GREP_OPTIONS'
 
+# ag aliaces
+alias ag='ag -s --color-match="1;33" --color-path=32 --color-line-number=32'
+alias agpy='ag --python'
+alias agjs='ag --js'
+
 # tree alias ('tree' will always colorize output)
 alias tree='tree -AC --dirsfirst'
 
