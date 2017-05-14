@@ -1,0 +1,28 @@
+#!/bin/bash
+# http://josephscott.org/archives/2011/10/timing-details-with-curl/
+
+# namelookup    - The time it took from the start until the name resolving was completed.
+# connect       - The time it took from the start until the TCP connect to the remote host (or proxy) was completed.
+# appconnect    - The time it took from the start until the SSL/SSH/etc connect/handshake to the remote host was completed.
+# pretransfer   - The time it took from the start until the file transfer was just about to begin. This includes all pre-transfer commands and negotiations that are specific to the particular protocol(s) involved.
+# redirect      - The time it took for all redirection steps include name lookup, connect, pretransfer and transfer before the final transaction was started. time_redirect shows the complete execution time for multiple redirections.
+# starttransfer - The time it took from the start until the first byte was just about to be transferred. This includes time_pretransfer and also the time the server needed to calculate the result.
+# total         - The total time that the full operation lasted.
+# num_redirects - Number of redirects that were followed in the request.
+
+# Examples:
+#     curlt http://google.com/
+#     curlt -H 'Cookie: foo=bar' 'http://google.com/'
+set -e
+
+curl_format='   namelookup: %{time_namelookup}
+      connect: %{time_connect}
+   appconnect: %{time_appconnect}
+  pretransfer: %{time_pretransfer}
+     redirect: %{time_redirect} (%{num_redirects})
+starttransfer: %{time_starttransfer}
+               -----
+        total: %{time_total}
+'
+
+exec curl -w "$curl_format" -o /dev/null -s "$@"
