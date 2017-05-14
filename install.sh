@@ -10,8 +10,8 @@ if [ ! -d "$HOME/.git" ]; then
     done
     rm -rf $tmpdir
 
-    echo "Insalling Vim plugins"
-    vim +PluginInstall +qall
+    echo "Insalling Vim plugins:"
+    curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh | sh -s -- ~/.vim/bundles
 else
     echo "Dotfiles are already installed"
 fi
