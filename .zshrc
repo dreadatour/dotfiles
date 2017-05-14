@@ -105,6 +105,7 @@ export PGHOST=/tmp                      # postgres won't work without this
 [ -d $HOME/.bin ] && PATH=$HOME/.bin:$PATH
 [ -d /usr/local/bin ] && PATH=/usr/local/bin:$PATH
 [ -d /usr/local/sbin ] && PATH=/usr/local/sbin:$PATH
+[ -d /usr/local/opt/gettext/bin ] && PATH=/usr/local/opt/gettext/bin:$PATH
 
 # setup Google Cloud SDK
 # On Mac OS X:
