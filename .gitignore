@@ -31,6 +31,7 @@
 !/.vimrc
 !/.vim/
 /.vim/.netrwhist
+/.vim/bundles
 
 !/README.md
 !/LICENSE

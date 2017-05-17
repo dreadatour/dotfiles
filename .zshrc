@@ -96,7 +96,6 @@ export LC_COLLATE=C                     # CTAGS Sorting in VIM/Emacs is better b
 
 umask 0022                              # set permissions for files: 0644, for directories: 0755
 
-export EDITOR="vim"                     # default editor
 export PAGER=less                       # default pager
 
 export PGHOST=/tmp                      # postgres won't work without this
@@ -159,7 +158,7 @@ alias fgrep='fgrep $GREP_OPTIONS'
 alias egrep='egrep $GREP_OPTIONS'
 
 # ag aliaces
-alias ag='ag -s --color-match="1;33" --color-path=32 --color-line-number=32'
+alias ag='/usr/local/bin/ag -s --color-match="1;33" --color-path=32 --color-line-number=32'
 alias agpy='ag --python'
 alias agjs='ag --js'
 
@@ -173,6 +172,17 @@ alias ...='cd ../..'
 
 # exit
 alias :q='exit'
+
+
+###############################################################################
+# Editor
+###############################################################################
+if [ -d /Applications/Emacs.app/ ]; then
+    export EDITOR='~/.bin/emacs'
+else
+    export EDITOR="vim"
+fi
+alias e=$EDITOR
 
 
 ###############################################################################
