@@ -1,5 +1,0 @@
-#!/bin/bash
-local=$1
-remote=$2
-
-watchmedo shell-command --recursive --command='rsync -av ${local}/ ${remote}/' $local

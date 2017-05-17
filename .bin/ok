@@ -1,8 +1,0 @@
-#!/bin/sh
-status=$?
-if [ "$status" == "0" ] ; then
-	result="Success"
-else
-	result="FAIL ($status)"
-fi
-growlnotify -s -t "Script finished" -m "$result"
