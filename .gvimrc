@@ -1,5 +1,5 @@
 """" GUI settings """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" set lines=999 columns=999  " maximize window
+set lines=999 columns=999  " maximize window
 
 set guioptions-=T          " turn off toolbar
 set guioptions-=rL         " turn off scrolls (both right and left)

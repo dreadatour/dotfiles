@@ -57,7 +57,7 @@ set fileencodings=utf8,cp1251   " list of character encodings considered
                                 " when starting to edit an existing file
 set fillchars=vert:\ ,fold:-    " characters for fill statuslines and vertical separators
 set listchars=tab:⇥\ ,trail:·,extends:⋯,precedes:⋯,eol:¬  " invisible symbols representation
-set list                   " display unprintable characters by default
+set nolist                 " do not display unprintable characters by default
 set wildignore+=.git,*.o,*.pyc,.DS_Store  " list of ignored in expanding wildcards files
 set nobackup               " do not create backup files
 set noswapfile             " do not create swap files
