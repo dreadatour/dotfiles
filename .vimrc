@@ -18,6 +18,7 @@ if dein#load_state('/Users/rudnyh/.vim/bundles')
   call dein#add('tpope/vim-fugitive')
   call dein#add('alvan/vim-closetag')
   call dein#add('cohama/lexima.vim')
+  call dein#add('dreadatour/vim-cursorword')
   " end of plugins list
 
   call dein#end()
@@ -76,8 +77,8 @@ set background=light       " Vim will try to use colors that look good on a ligh
 try
     colorscheme solarized  " try to setup colorscheme
 
-    highlight! NonText    term=NONE ctermfg=15 ctermbg=15 gui=NONE guifg=#fdf6e3 guibg=#fdf6e3
-    highlight! SpecialKey term=NONE ctermfg=15 ctermbg=15 gui=NONE guifg=#fdf6e3 guibg=#fdf6e3
+    highlight! NonText     term=NONE cterm=NONE gui=NONE ctermfg=15 ctermbg=15 guifg=#fdf6e3 guibg=#fdf6e3
+    highlight! SpecialKey  term=NONE cterm=NONE gui=NONE ctermfg=15 ctermbg=15 guifg=#fdf6e3 guibg=#fdf6e3
 
     " reload 'mark' plugin after colorscheme changed
     " if filereadable($HOME."/.vim/plugin/mark.vim")
