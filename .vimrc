@@ -18,6 +18,7 @@ if dein#load_state('/Users/rudnyh/.vim/bundles')
   call dein#add('tpope/vim-fugitive')
   call dein#add('alvan/vim-closetag')
   call dein#add('cohama/lexima.vim')
+  call dein#add('itchyny/vim-parenmatch')
   call dein#add('dreadatour/vim-cursorword')
   " end of plugins list
 
