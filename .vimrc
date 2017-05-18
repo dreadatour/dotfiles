@@ -59,7 +59,7 @@ set fileencodings=utf8,cp1251   " list of character encodings considered
                                 " when starting to edit an existing file
 set fillchars=vert:\ ,fold:-    " characters for fill statuslines and vertical separators
 set listchars=tab:⇥\ ,trail:·,extends:⋯,precedes:⋯,eol:¬  " invisible symbols representation
-set nolist                 " do not display unprintable characters by default
+set list                   " display unprintable characters by default
 set wildignore+=.git,*.o,*.pyc,.DS_Store  " list of ignored in expanding wildcards files
 set nobackup               " do not create backup files
 set noswapfile             " do not create swap files
@@ -75,6 +75,10 @@ set helpheight=9999        " current help window to maximum height
 set background=light       " Vim will try to use colors that look good on a light background
 try
     colorscheme solarized  " try to setup colorscheme
+
+    highlight! NonText    term=NONE ctermfg=15 ctermbg=15 gui=NONE guifg=#fdf6e3 guibg=#fdf6e3
+    highlight! SpecialKey term=NONE ctermfg=15 ctermbg=15 gui=NONE guifg=#fdf6e3 guibg=#fdf6e3
+
     " reload 'mark' plugin after colorscheme changed
     " if filereadable($HOME."/.vim/plugin/mark.vim")
     "     source ~/.vim/plugin/mark.vim
