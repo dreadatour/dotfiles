@@ -180,8 +180,12 @@ cnoremap %% <C-R>=expand('%:h').'/'<CR>
 " emacs style jump to end of line
 nmap <C-a> ^
 nmap <C-e> $
+vmap <C-a> ^
+vmap <C-e> $
 imap <C-a> <C-o>I
 imap <C-e> <C-o>A
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
 
 " Ctrl+Tab to search in buffers
 map <C-tab> :CtrlPBuffer<CR>
