@@ -68,7 +68,7 @@ set list                   " display unprintable characters by default
 set wildignore+=.git,*.o,*.pyc,.DS_Store  " list of ignored in expanding wildcards files
 set nobackup               " do not create backup files
 set noswapfile             " do not create swap files
-set splitbelow splitright  " how to split new windows
+set splitright             " how to split new windows
 set equalalways            " makes sure Vim try to make all windows equal
 set winminheight=0         " non-current windows may collapse to a status line and nothing else
 
