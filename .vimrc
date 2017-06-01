@@ -190,6 +190,22 @@ cnoremap <C-e> <End>
 " Ctrl+Tab to search in buffers
 map <C-tab> :CtrlPBuffer<CR>
 
+" go to window upper
+imap <C-k> <Esc><C-W>ka
+nmap <C-k> <C-W>k
+
+" go to window below
+imap <C-j> <Esc><C-W>ja
+nmap <C-j> <C-W>j
+
+" go to left window
+imap <C-h> <Esc><C-W>ha
+nmap <C-h> <C-W>h
+
+" go to right window
+imap <C-l> <Esc><C-W>la
+nmap <C-l> <C-W>l
+
 " lines 'bubbling' (see http://vimcasts.org/episodes/bubbling-text/)
 nmap <C-Up> [e
 vmap <C-Up> [egv
