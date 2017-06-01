@@ -206,6 +206,17 @@ nmap <C-h> <C-W>h
 imap <C-l> <Esc><C-W>la
 nmap <C-l> <C-W>l
 
+" activate visual mode in normal mode
+nmap <S-Up> kV
+nmap <S-Down> V
+nmap <S-Left> vh
+nmap <S-Right> vl
+" select lines/chars in visual mode
+vmap <S-Up> k
+vmap <S-Down> j
+vmap <S-Left> h
+vmap <S-Right> l
+
 " lines 'bubbling' (see http://vimcasts.org/episodes/bubbling-text/)
 nmap <C-Up> [e
 vmap <C-Up> [egv
