@@ -19,6 +19,7 @@ if dein#load_state('/Users/rudnyh/.vim/bundles')
 	call dein#add('ctrlpvim/ctrlp.vim')
 	call dein#add('andviro/flake8-vim')
 	call dein#add('Vimjas/vim-python-pep8-indent')
+	call dein#add('fatih/vim-go')
 	call dein#add('szw/vim-tags')
 	call dein#add('ervandew/supertab')
 	" end of plugins list
