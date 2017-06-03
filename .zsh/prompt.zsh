@@ -183,6 +183,9 @@ function __build_prompt {
     prompt_git=$(__prompt_git_status)
     [ ! -z "$prompt_git" ] && echo -n "$divider%F{$color_fg}git:%f $prompt_git"
 
+    # project
+    [ ! -z "$WORK_PROJECT" ] && echo -n "$divider%F{$color_fg}proj:%f %F{cyan}$WORK_PROJECT%f"
+
     # vitrualenv
     [ ! -z "$VIRTUAL_ENV" ] && echo -n "$divider%F{$color_fg}venv:%f %F{cyan}${VIRTUAL_ENV#$WORKON_HOME}%f"
 

@@ -121,6 +121,9 @@ export WORKON_HOME=~/work/.venv/
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 [ -f /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
 
+# work with projects
+source $HOME/.zsh/proj.zsh
+
 # Go paths
 export GOPATH=$HOME/work/go
 export PATH=$PATH:$GOBIN:$GOPATH/bin
