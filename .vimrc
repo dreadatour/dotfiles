@@ -10,6 +10,7 @@ if dein#load_state('/Users/rudnyh/.vim/bundles')
 	" plugins list start
 	call dein#add('altercation/vim-colors-solarized')
 	call dein#add('blueyed/vim-diminactive')
+	call dein#add('tpope/vim-vinegar')
 	call dein#add('tpope/vim-unimpaired')
 	call dein#add('itchyny/vim-parenmatch')
 	call dein#add('alvan/vim-closetag')
@@ -131,6 +132,11 @@ autocmd BufEnter * call StatusLineSetup(1)
 autocmd BufLeave * call StatusLineSetup(0)
 autocmd WinEnter * call StatusLineSetup(1)
 autocmd WinLeave * call StatusLineSetup(0)
+
+
+" Netrw setup -------------------------------------------------------------------------------------
+let g:netrw_banner=0                       " disable netrw banner
+autocmd FileType netrw nnoremap q :bd<CR>  " press "q" to exit netrw
 
 
 " Ack plugin setup --------------------------------------------------------------------------------
