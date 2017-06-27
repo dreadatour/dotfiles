@@ -1,10 +1,6 @@
 " This settings must be first, because it changes other options as a side effect
 set nocompatible           " use Vim settings, rather then Vi settings
 
-" list of ignored in expanding wildcards files
-" (set it before plugins for vinegar hide list can catch it)
-set wildignore+=.git,*.o,*.pyc,__pycache__,.DS_Store
-
 " Setup plugins
 set runtimepath+=/Users/rudnyh/.vim/bundles/repos/github.com/Shougo/dein.vim
 if dein#load_state('/Users/rudnyh/.vim/bundles')
@@ -75,9 +71,11 @@ set noswapfile             " do not create swap files
 set splitright             " how to split new windows
 set equalalways            " makes sure Vim try to make all windows equal
 set winminheight=0         " non-current windows may collapse to a status line and nothing else
-
 set exrc                   " execute project-specific settings
 set secure                 " disable unsafe commands in your project-specific settings
+
+" list of ignored in expanding wildcards files
+set wildignore+=.git,*.o,*.pyc,__pycache__,.DS_Store
 
 
 " GUI settings ------------------------------------------------------------------------------------
