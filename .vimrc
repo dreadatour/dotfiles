@@ -1,6 +1,10 @@
 " This settings must be first, because it changes other options as a side effect
 set nocompatible           " use Vim settings, rather then Vi settings
 
+" list of ignored in expanding wildcards files
+" (set it before plugins for vinegar hide list can catch it)
+set wildignore+=.git,*.o,*.pyc,__pycache__,.DS_Store
+
 " Setup plugins
 set runtimepath+=/Users/rudnyh/.vim/bundles/repos/github.com/Shougo/dein.vim
 if dein#load_state('/Users/rudnyh/.vim/bundles')
@@ -10,11 +14,10 @@ if dein#load_state('/Users/rudnyh/.vim/bundles')
 	" plugins list start
 	call dein#add('altercation/vim-colors-solarized')
 	call dein#add('blueyed/vim-diminactive')
-	call dein#add('tpope/vim-vinegar')
+	call dein#add('dreadatour/vim-vinegar')
 	call dein#add('tpope/vim-unimpaired')
 	call dein#add('itchyny/vim-parenmatch')
 	call dein#add('alvan/vim-closetag')
-	"call dein#add('cohama/lexima.vim')
 	call dein#add('dreadatour/vim-cursorword')
 	call dein#add('mileszs/ack.vim')
 	call dein#add('ctrlpvim/ctrlp.vim')
@@ -67,7 +70,6 @@ set fileencodings=utf8,cp1251   " list of character encodings considered
 set fillchars=vert:\ ,fold:-    " characters for fill statuslines and vertical separators
 set listchars=tab:⇥\ ,trail:·,extends:⋯,precedes:⋯,eol:¬  " invisible symbols representation
 set list                   " display unprintable characters by default
-set wildignore+=.git,*.o,*.pyc,.DS_Store  " list of ignored in expanding wildcards files
 set nobackup               " do not create backup files
 set noswapfile             " do not create swap files
 set splitright             " how to split new windows
@@ -136,7 +138,6 @@ autocmd WinLeave * call StatusLineSetup(0)
 
 " Netrw setup -------------------------------------------------------------------------------------
 let g:netrw_banner=0                       " disable netrw banner
-autocmd FileType netrw nnoremap q :bd<CR>  " press "q" to exit netrw
 
 
 " Ack plugin setup --------------------------------------------------------------------------------
