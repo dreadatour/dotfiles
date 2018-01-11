@@ -397,11 +397,11 @@ function proj {
 		echo "Project path: $project_path"
 
 		if [[ -d $project_path/scripts ]]; then
-			if [[ -f $project_path/scripts/start ]]; then
-				echo "Start script: $project_path/scripts/start"
+			if [[ -f $project_path/scripts/start.zsh ]]; then
+				echo "Start script: $project_path/scripts/start.zsh"
 			fi
-			if [[ -f $project_path/scripts/stop ]]; then
-				echo "Stop script:  $project_path/scripts/stop"
+			if [[ -f $project_path/scripts/stop.zsh ]]; then
+				echo "Stop script:  $project_path/scripts/stop.zsh"
 			fi
 		fi
 
@@ -424,7 +424,7 @@ function proj {
 
 	# edit project
 	if [[ $command_name == "edit" ]]; then
-		local start_script=$project_path/scripts/start
+		local start_script=$project_path/scripts/start.zsh
 		if [[ -f $start_script ]]; then
 			__proj_confirm "Edit startup script?"
 			if [[ $? -eq 0 ]]; then
@@ -438,21 +438,7 @@ function proj {
 			fi
 		fi
 
-		local start_env_script=$project_path/scripts/start-env
-		if [[ -f $start_env_script ]]; then
-			__proj_confirm "Edit setup environment variables script?"
-			if [[ $? -eq 0 ]]; then
-				$EDITOR $start_env_script
-			fi
-		else
-			__proj_confirm "Create and edit setup environment variables script?"
-			if [[ $? -eq 0 ]]; then
-				echo "#!/bin/bash" > $start_env_script
-				$EDITOR $start_env_script
-			fi
-		fi
-
-		local stop_script=$project_path/scripts/stop
+		local stop_script=$project_path/scripts/stop.zsh
 		if [[ -f $stop_script ]]; then
 			__proj_confirm "Edit stop script?"
 			if [[ $? -eq 0 ]]; then
@@ -463,20 +449,6 @@ function proj {
 			if [[ $? -eq 0 ]]; then
 				echo "#!/bin/bash" > $stop_script
 				$EDITOR $stop_script
-			fi
-		fi
-
-		local stop_env_script=$project_path/scripts/stop-env
-		if [[ -f $stop_env_script ]]; then
-			__proj_confirm "Edit cleanup environment variables script?"
-			if [[ $? -eq 0 ]]; then
-				$EDITOR $stop_env_script
-			fi
-		else
-			__proj_confirm "Create and edit cleanup environment variables script?"
-			if [[ $? -eq 0 ]]; then
-				echo "#!/bin/bash" > $stop_env_script
-				$EDITOR $stop_env_script
 			fi
 		fi
 
@@ -508,12 +480,7 @@ function proj {
 			cd `cat $label_file`
 		fi
 
-		local start_env_script=$project_path/scripts/start-env
-		if [[ -f $start_env_script ]]; then
-			. $start_env_script
-		fi
-
-		local start_script=$project_path/scripts/start
+		local start_script=$project_path/scripts/start.zsh
 		if [[ -f $start_script ]]; then
 			source $start_script
 		fi
@@ -535,12 +502,9 @@ function proj {
 
 	# stop work on current project
 	if [[ $command_name == "stop" ]]; then
-		if [[ -f $project_path/scripts/stop-env ]]; then
-			. $project_path/scripts/stop-env
-		fi
-
-		if [[ -f $project_path/scripts/stop ]]; then
-			source $project_path/scripts/stop
+		local stop_script=$project_path/scripts/stop.zsh
+		if [[ -f $stop_script ]]; then
+			source $stop_script
 		fi
 
 		unset WORK_PROJECT

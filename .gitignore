@@ -22,8 +22,18 @@
 /.config/fish/fish_history
 /.config/fish/fishd.*
 !/.config/fish/config.fish
-!/.config/fish/functions/bindings.fish
+!/.config/fish/functions
 !/.config/fish/functions/fish_prompt.fish
+!/.config/fish/functions/fish_prompt_git.fish
+!/.config/fish/functions/fish_right_prompt.fish
+!/.config/fish/functions/fish_user_key_bindings.fish
+!/.config/fish/functions/git_branch_name.fish
+!/.config/fish/functions/git_diverged.fish
+!/.config/fish/functions/git_stashed.fish
+!/.config/fish/functions/git_status.fish
+!/.config/fish/functions/proj.fish
+!/.config/fish/functions/prompt_face.fish
+!/.config/fish/functions/prompt_pwd.fish
 
 !/.pip
 /.pip/cache

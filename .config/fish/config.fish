@@ -1,8 +1,12 @@
 # Setup locale
-set -gx  LC_ALL ru_RU.UTF-8
+set -gx  LC_ALL en_US.UTF-8
 
 # Path settings
 set -gx PATH ~/.bin $PATH
+
+# Go settings
+set -gx GOPATH ~/work/go
+set -gx PATH ~/work/go/bin $PATH
 
 # Setup greeting
 set fish_greeting ''  # turn it off
@@ -31,23 +35,6 @@ set fish_pager_color_completion      normal              # completion itself
 set fish_pager_color_description     93a1a1              # completion description
 set fish_pager_color_progress        cyan --bold         # progress bar at the bottom left corner
 set fish_pager_color_secondary       cyan                # every second completion
-# Prompt colors
-set fish_color_prompt_virtualenv_fg  005faf              # virtualenv font color
-set fish_color_prompt_virtualenv_bg  bcbcbc              # virtualenv background color
-set fish_color_prompt_user_fg        008700              # regular user font color
-set fish_color_prompt_root_fg        ff0000              # root user font color
-set fish_color_prompt_host_fg        af5f00              # hostname font color
-set fish_color_prompt_user_host_bg   d0d0d0              # username & hostname background color
-set fish_color_prompt_path_fg        3a3a3a              # path font color
-set fish_color_prompt_path_bg        e4e4e4              # path background color
-
-# Vitrualenv wrapper (https://github.com/adambrenecki/virtualfish/)
-set VIRTUALFISH_HOME ~/work/.venv
-eval (python2.7 -m virtualfish compat_aliases projects)
-
-# Go settings
-set -gx GOPATH ~/work/go
-set -gx PATH ~/work/go/bin $PATH
 
 # Run local rc if file is exists
 if test -e ~/.fishrc
