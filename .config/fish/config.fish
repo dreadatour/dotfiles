@@ -2,6 +2,7 @@
 set -gx  LC_ALL en_US.UTF-8
 
 # Path settings
+set -gx PATH /usr/local/sbin $PATH
 set -gx PATH ~/.bin $PATH
 
 # Go settings
