@@ -119,6 +119,7 @@ fi
 export PROJECT_HOME=~/work/
 export WORKON_HOME=~/work/.venv/
 export VIRTUAL_ENV_DISABLE_PROMPT=1
+export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 [ -f /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
 
 # work with projects
