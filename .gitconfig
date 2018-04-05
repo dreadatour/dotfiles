@@ -8,7 +8,7 @@
 [color]
 	ui = true
 [push]
-	default = tracking
+	default = simple
 [diff]
 	tool = Kaleidoscope
 [difftool]
