@@ -4,8 +4,6 @@
 
 autoload -U add-zsh-hook  # use zsh hooks
 
-[ -e /usr/local/bin/growlnotify ] && LONG_CMD_GROWL_NOTIFY_ENABLED=1
-
 # check elapsed time after command execution
 ELAPSED_TIME=
 ELAPSED_TIME_PLAIN=
@@ -46,16 +44,6 @@ function __calc_elapsed_time {
         fi
     fi
     __reset_cmd_start_time
-}
-
-# notify user about elapsed time
-function __growl_notify_elapsed_time {
-    local sticky
-
-    if [ $__PREVIOUS_COMMAND_LINE ] && [ $ELAPSED_TIME ]; then
-        [ $ELAPSED_TIME_TOOLONG ] && sticky='-s'
-        echo $__PREVIOUS_COMMAND_LINE | /usr/local/bin/growlnotify $sticky -t "Finished for $ELAPSED_TIME_PLAIN:" -m -
-    fi
 }
 
 # visual bell to be catched by iTerm2 and trigger Dock icon bounce
@@ -111,7 +99,6 @@ function __prompt_precmd {
     __save_exit_status
     __calc_elapsed_time
     __bell_elapsed_time
-    [ $LONG_CMD_GROWL_NOTIFY_ENABLED ] && __growl_notify_elapsed_time
     __update_title
 }
 
