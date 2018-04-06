@@ -224,6 +224,7 @@ function syspip3 {
 # set prompt
 source ~/.zsh/prompt.zsh
 export PROMPT=$'$(__build_prompt)'
+export RPROMPT=$'$(__build_rprompt)'
 
 # clear screen and scrollback
 source ~/.zsh/cls.zsh

@@ -3,46 +3,18 @@
 ###############################################################################
 
 autoload -U add-zsh-hook  # use zsh hooks
+# autoload -U regexp-replace  # use zsh regexp-replace
 
 # check elapsed time after command execution
-ELAPSED_TIME=
-ELAPSED_TIME_PLAIN=
-ELAPSED_TIME_TOOLONG=
-ELAPSED_TIME_NEED_BELL=
+__ELAPSED_TIME_NEED_BELL=
 function __calc_elapsed_time {
-    local timer_result
-    ELAPSED_TIME=
-    ELAPSED_TIME_PLAIN=
-    ELAPSED_TIME_TOOLONG=
-    ELAPSED_TIME_NEED_BELL=
+    __ELAPSED_TIME_NEED_BELL=
 
-    [[ -z $__PREVIOUS_COMMAND_LINE ]] && return
+    [ -z $__PREVIOUS_COMMAND_LINE ] && return
 
-    timer_result=$(($SECONDS-$__CMD_START_TIME))
-    if [[ $timer_result -ge 1 ]]; then
-        ELAPSED_TIME_NEED_BELL=1  # 1 sec is enough for bell =)
-    fi
-    if [[ $timer_result -gt 10 ]]; then
-        if [[ $timer_result -ge 600 ]]; then
-            ELAPSED_TIME_TOOLONG=1  # 10 min is too long =)
-        fi
-        if [[ $timer_result -ge 3600 ]]; then
-            let "timer_hours = $timer_result / 3600"
-            let "remainder = $timer_result % 3600"
-            let "timer_minutes = $remainder / 60"
-            let "timer_seconds = $remainder % 60"
-            ELAPSED_TIME_PLAIN="${timer_hours}h ${timer_minutes}m ${timer_seconds}s"
-            ELAPSED_TIME="%F{red}$ELAPSED_TIME_PLAIN%f"
-        elif [[ $timer_result -ge 60 ]]; then
-            let "timer_minutes = $timer_result / 60"
-            let "timer_seconds = $timer_result % 60"
-            ELAPSED_TIME_PLAIN="${timer_minutes}m ${timer_seconds}s"
-            ELAPSED_TIME="%F{yellow}$ELAPSED_TIME_PLAIN%f"
-        elif [[ $timer_result -ge 10 ]]; then
-            ELAPSED_TIME_PLAIN="${timer_result}s"
-            ELAPSED_TIME="%F{green}$ELAPSED_TIME_PLAIN%f"
-        fi
-    fi
+    # 1 sec is enough for bell since it will bell only on inactive terminal
+    [ $(($SECONDS-$__CMD_START_TIME)) -ge 1 ] && __ELAPSED_TIME_NEED_BELL=1
+
     __reset_cmd_start_time
 }
 
@@ -50,7 +22,7 @@ function __calc_elapsed_time {
 # TODO: check https://gist.github.com/jpouellet/5278239
 # TODO: check https://github.com/dotphiles/dotzsh/tree/master/modules/notify
 function __bell_elapsed_time {
-    [ $ELAPSED_TIME_NEED_BELL ] && echo -ne '\a'
+    [ $__ELAPSED_TIME_NEED_BELL ] && echo -ne '\a'
 }
 
 # update terminal tab title
@@ -78,14 +50,12 @@ function __save_previous_command_line {
 }
 
 # save exit status code
-EXIT_CODE=
+__EXIT_CODE=
 function __save_exit_status {
-    if [ -n $? ]; then
-        if [ "$?" -eq "0" ]; then
-            EXIT_CODE=
-        else
-            EXIT_CODE="%F{red}$?%f"
-        fi
+    __EXIT_CODE=$?
+
+    if [[ -z $__PREVIOUS_COMMAND_LINE ]] || [[ "$__EXIT_CODE" == "0" ]]; then
+        __EXIT_CODE=
     fi
 }
 
@@ -107,9 +77,7 @@ zle -N save-previous-command-line __save_previous_command_line
 add-zsh-hook preexec __prompt_preexec
 add-zsh-hook precmd __prompt_precmd
 
-
 # print git status for cwd (if we're in git repo)
-LOCAL_HOSTNAME=$(hostname)
 function __prompt_git_status {
     local cur_dir git_status git_vars
     local git_branch git_staged git_conflicts git_changed git_untracked git_ahead git_behind
@@ -151,39 +119,78 @@ function __prompt_git_status {
     fi
 }
 
+function __prompt_cwd {
+    local color_fg='245'
+    local color_git_root='black'
+
+    local pwd_short=${PWD//#$HOME/\~}
+    local git_root=$(git rev-parse --show-toplevel 2>/dev/null)
+    local git_root_short=${git_root//#$HOME/\~}
+
+    # shorten cwd if git repo is active and git repo is not dotfiles repo and we are inside git repo
+    if [[ -n $git_root ]] && [[ "$git_root" != "$HOME" ]] && [[ "$PWD" == "$git_root"* ]]; then
+        local cwd_tail=${pwd_short//#$git_root_short/}  # this is path inside git repo
+        local git_root_parts=(${(s:/:)git_root_short})  # this is list of directories for git root path
+        local cwd_basename=$git_root_parts[-1]          # this is name of git root directory
+        local git_root_parts_letters=()                 # leave only first letter for all directories before git root
+        for directory in $git_root_parts[1,-2]; do
+            git_root_parts_letters+=$directory[1]
+        done
+        local cwd_head=${(j:/:)git_root_parts_letters}  # this is shorten path to get root directory
+
+        echo -n "%F{${color_fg}}${cwd_head}/%F{${color_git_root}}${cwd_basename}%F{${color_fg}}${cwd_tail}%f"
+    else
+        echo -n "%F{${color_fg}}${pwd_short}%f"
+    fi
+}
+
 function __build_prompt {
-    local color_bg color_fg divider
-    local prompt_git prompt_venv
+    local color_bg='255'
+    local color_fg='245'
+    local prompt_cwd=$(__prompt_cwd)
 
-    color_bg='7'
-    color_fg='245'
-    divider=" %F{15}║%f "
+    echo -n "%f%b%k"  # reset colors
 
-    # reset colors
-    echo -n "%f%b%k%K{$color_bg}"
-
-    # username and hostname
     # current working directory
-    echo -n "%(!.%F{red}.%F{green})%n%F{$color_fg}@%F{yellow}${LOCAL_HOSTNAME}%F{$color_fg}:%F{240}%~%f"
+    echo -n "%F{${color_fg}}%K{${color_bg}}${prompt_cwd}%f%k "
 
-    # git status
-    prompt_git=$(__prompt_git_status)
-    [ ! -z "$prompt_git" ] && echo -n "$divider%F{$color_fg}git:%f $prompt_git"
+    echo -n "%f%b%k"  # reset colors
+}
 
-    # project
-    [ ! -z "$WORK_PROJECT" ] && echo -n "$divider%F{$color_fg}proj:%f %F{cyan}$WORK_PROJECT%f"
+function __build_rprompt {
+    local printed
+    local prompt_git=$(__prompt_git_status)
 
-    # vitrualenv
-    [ ! -z "$VIRTUAL_ENV" ] && echo -n "$divider%F{$color_fg}venv:%f %F{cyan}${VIRTUAL_ENV#$WORKON_HOME}%f"
-
-    # elapsed time
-    [ ! -z "$ELAPSED_TIME" ] && echo -n "$divider%F{$color_fg}elapsed time:%f $ELAPSED_TIME"
-    ELAPSED_TIME=
+    echo -n "%f%b%k"  # reset colors
 
     # exit status
-    [ ! -z "$EXIT_CODE" ] && echo -n "$divider%F{$color_fg}exit code:%f $EXIT_CODE"
-    EXIT_CODE=
+    if [[ -n "$__EXIT_CODE" ]]; then
+        [ -n "$printed" ] && echo -n " "
+        echo -n "%F{red}${__EXIT_CODE}%f"
+        printed=1
+    fi
 
-    # newline and command arrow
-    echo -n "%E%f%k\n%F{black}➜%f "
+    # vitrualenv
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        [ -n "$printed" ] && echo -n " "
+        echo -n "(${VIRTUAL_ENV#$WORKON_HOME})"
+        printed=1
+    fi
+
+    # project
+    if [[ -n "$WORK_PROJECT" ]]; then
+        [ -n "$printed" ] && echo -n " "
+        echo -n "%F{black}${WORK_PROJECT}%f"
+        [ -n "$prompt_git" ] && echo -n ":"
+        printed=1
+    fi
+
+    # git status
+    if [[ -n "$prompt_git" ]]; then
+        [ -n "$printed" ] && echo -n " "
+        echo -n $prompt_git
+        printed=1
+    fi
+
+    echo -n "%f%b%k"  # reset colors
 }
