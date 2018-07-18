@@ -119,7 +119,7 @@ fi
 source $HOME/.zsh/proj.zsh
 
 # Go paths
-export GOPATH=$HOME/work/go
+export GOPATH=$HOME/go
 export PATH=$PATH:$GOBIN:$GOPATH/bin
 
 export CLICOLOR=1
