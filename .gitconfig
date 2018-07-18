@@ -31,3 +31,8 @@
 [alias]
 	branches = branch -avv
 	graph = log --graph --full-history --date=short --color --date-order --pretty=tformat:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s%x20%x1b[33m(%an)%x1b[0m%x20%x1b[31m(%aD)"
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
