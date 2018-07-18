@@ -201,14 +201,6 @@ function show {
     qlmanage -p $1
 }
 
-# global pip commands
-function syspip {
-    PIP_REQUIRE_VIRTUALENV= sudo -H pip "$@"
-}
-function syspip3 {
-    PIP_REQUIRE_VIRTUALENV= sudo -H pip3 "$@"
-}
-
 
 ###############################################################################
 # Plugins
