@@ -170,13 +170,6 @@ function __build_rprompt {
         printed=1
     fi
 
-    # vitrualenv
-    if [[ -n "$VIRTUAL_ENV" ]]; then
-        [ -n "$printed" ] && echo -n " "
-        echo -n "(${VIRTUAL_ENV#$WORKON_HOME})"
-        printed=1
-    fi
-
     # project
     if [[ -n "$WORK_PROJECT" ]]; then
         [ -n "$printed" ] && echo -n " "

@@ -55,13 +55,13 @@ zstyle :compinstall filename "${ZDOTDIR:-~}/.zshrc"
 autoload -Uz compinit && compinit
 
 # insert next character of first match automatically
-setopt menu_complete  # TODO: check this is usable
+setopt menu_complete
 
 # The zsh/complist module offers three extensions to completion
 # listings: the ability to highlight matches in such a list, the ability
 # to scroll through long lists and a different style of menu completion.
 # http://www.cims.nyu.edu/cgi-systems/info2html?(zsh)The%2520zsh%2Fcomplist%2520Module
-zmodload zsh/complist  # TODO: is this important?
+zmodload zsh/complist
 
 # graphical menu for completion list (autoselect first completion on open)
 zstyle ':completion:*' menu yes select
@@ -114,13 +114,6 @@ if [[ -d /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk ]]; then
     source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
     source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
 fi
-
-# setup python virtualenv
-export PROJECT_HOME=~/work/
-export WORKON_HOME=~/work/.venv/
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
-[ -f /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
 
 # work with projects
 source $HOME/.zsh/proj.zsh
