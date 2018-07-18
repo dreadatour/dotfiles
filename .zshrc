@@ -90,8 +90,8 @@ unsetopt menu_complete
 
 set TERM xterm-256color; export TERM    # let the system know how cool we are
 
-export LC_ALL=ru_RU.UTF-8               # utf-8 only
-export LANG=ru_RU.UTF-8                 # it's 21st century now
+export LC_ALL=en_US.UTF-8               # utf-8 only
+export LANG=en_US.UTF-8                 # it's 21st century now
 export LC_COLLATE=C                     # CTAGS Sorting in VIM/Emacs is better behaved with this in place
 
 umask 0022                              # set permissions for files: 0644, for directories: 0755
