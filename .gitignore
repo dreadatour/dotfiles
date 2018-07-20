@@ -38,6 +38,7 @@
 !/.config/fish/functions/prompt_pwd.fish
 
 !/.config/nvim/init.vim
+!/.config/nvim/autoload/plug.vim
 !/.vimrc
 
 !/README.md
