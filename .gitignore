@@ -34,6 +34,8 @@
 !/.config/fish/functions/proj.fish
 !/.config/fish/functions/prompt_face.fish
 !/.config/fish/functions/prompt_pwd.fish
+!/.config/fish/functions/prompt_pwd.fish
+!/.config/nvim/init.vim
 
 !/.pip
 /.pip/cache
