@@ -19,6 +19,7 @@
 !/.zsh/
 
 /.config/
+
 /.config/fish/fish_history
 /.config/fish/fishd.*
 !/.config/fish/config.fish
@@ -35,15 +36,9 @@
 !/.config/fish/functions/prompt_face.fish
 !/.config/fish/functions/prompt_pwd.fish
 !/.config/fish/functions/prompt_pwd.fish
+
 !/.config/nvim/init.vim
-
-!/.pip
-/.pip/cache
-
 !/.vimrc
-!/.vim/
-/.vim/.netrwhist
-/.vim/bundles
 
 !/README.md
 !/LICENSE
