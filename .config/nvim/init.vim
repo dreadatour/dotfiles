@@ -124,15 +124,19 @@ let g:netrw_banner=0
 
 
 " Solarized color scheme --------------------------------------------------------------------------
-" set colorsheme
-colorscheme NeoSolarized
+try
+	" set colorsheme
+	colorscheme NeoSolarized
 
-" show vertical split column
-let g:neosolarized_vertSplitBgTrans = 0
+	" show vertical split column
+	let g:neosolarized_vertSplitBgTrans = 0
 
-" non-visible characters colors
-highlight NonText    term=NONE cterm=NONE gui=NONE ctermfg=15 ctermbg=15 guifg=#e7e7cf guibg=#fdf6e3
-highlight SpecialKey term=NONE cterm=NONE gui=NONE ctermfg=15 ctermbg=15 guifg=#e7e7cf guibg=#fdf6e3
+	" non-visible characters colors
+	highlight NonText    term=NONE cterm=NONE gui=NONE ctermfg=15 ctermbg=15 guifg=#e7e7cf guibg=#fdf6e3
+	highlight SpecialKey term=NONE cterm=NONE gui=NONE ctermfg=15 ctermbg=15 guifg=#e7e7cf guibg=#fdf6e3
+catch /^Vim\%((\a\+)\)\=:E185/
+	" cannot find color scheme
+endtry
 
 
 " GitGutter plugin --------------------------------------------------------------------------------
@@ -188,10 +192,10 @@ let g:deoplete#enable_at_startup = 1
 
 " disable deoplete when in multi cursor mode
 function! Multiple_cursors_before()
-    let b:deoplete_disable_auto_complete = 1
+	let b:deoplete_disable_auto_complete = 1
 endfunction
 function! Multiple_cursors_after()
-    let b:deoplete_disable_auto_complete = 0
+	let b:deoplete_disable_auto_complete = 0
 endfunction
 
 
