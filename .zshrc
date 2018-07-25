@@ -130,11 +130,9 @@ if [ "$TERM" != "dumb" ]; then
     case $OSTYPE in
         linux*)
             export LS_OPTIONS='--color=auto'
-            export GREP_OPTIONS='--color=auto'
         ;;
         darwin*)
             export LS_OPTIONS='-G'
-            export GREP_OPTIONS='--color=auto'
         ;;
     esac
 fi
@@ -150,9 +148,9 @@ alias ll='ls -l $LS_OPTIONS'
 alias la='ls -lA $LS_OPTIONS'
 
 # grep aliases
-alias grep='grep $GREP_OPTIONS'
-alias fgrep='fgrep $GREP_OPTIONS'
-alias egrep='egrep $GREP_OPTIONS'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
 
 # ag aliaces
 alias ag='/usr/local/bin/ag -s --color-match="1;33" --color-path=32 --color-line-number=32'
