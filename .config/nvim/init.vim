@@ -19,8 +19,8 @@ Plug 'tpope/vim-vinegar'
 " pairs of handy bracket mappings
 Plug 'tpope/vim-unimpaired'
 
-" auto close (X)HTML tags
-Plug 'alvan/vim-closetag'
+" " auto close (X)HTML tags
+" Plug 'alvan/vim-closetag'
 
 " Sublime Text style multiple selections
 Plug 'terryma/vim-multiple-cursors'
@@ -40,8 +40,8 @@ Plug 'ctrlpvim/ctrlp.vim'
 " plugin to show git diff in the gutter (sign column) and stages/undoes hunks
 Plug 'airblade/vim-gitgutter'
 
-" plugin to toggle, display and navigate marks
-Plug 'kshenoy/vim-signature'
+" " plugin to toggle, display and navigate marks
+" Plug 'kshenoy/vim-signature'
 
 " lean & mean status/tabline
 Plug 'vim-airline/vim-airline'
@@ -58,6 +58,10 @@ Plug 'zchee/deoplete-go', { 'do': 'make'}
 " Go development plugin
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
+" TypeScript development plugin
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'mhartington/nvim-typescript', { 'do': './install.sh' }
+
 " Plug 'itchyny/vim-parenmatch'
 " Plug 'mileszs/ack.vim'
 " Plug 'ervandew/supertab'
@@ -69,6 +73,8 @@ call plug#end()
 " Base settings -----------------------------------------------------------------------------------
 source ~/.vimrc            " load base vim config
 set termguicolors          " use 24-bit colors
+
+set completeopt-=preview   " do not preview complete options in Scratch buffer
 
 
 " Statusline setup --------------------------------------------------------------------------------
@@ -118,6 +124,11 @@ cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
 
+" Useful hooks ------------------------------------------------------------------------------------
+" remove trailing whitespaces on save
+autocmd FileType css,javascript,go,html,python,typescript autocmd BufWritePre <buffer> :%s/\s\+$//e
+
+
 " Netrw setup -------------------------------------------------------------------------------------
 " disable banner
 let g:netrw_banner=0
@@ -144,8 +155,8 @@ endtry
 let g:gitgutter_override_sign_column_highlight = 0
 
 
-" CloseTag plugin setup ---------------------------------------------------------------------------
-let g:closetag_filenames = "*.html"
+" " CloseTag plugin setup ---------------------------------------------------------------------------
+" let g:closetag_filenames = "*.html"
 
 
 " Lexima plugin setup -----------------------------------------------------------------------------
@@ -181,6 +192,12 @@ map <C-tab> :CtrlPBuffer<CR>
 let g:ale_sign_error = '⤫'
 let g:ale_sign_warning = '⚠'
 
+" do not lint on file changing
+let g:ale_lint_on_text_changed = 'never'
+" do not lint on file opening
+let g:ale_lint_on_enter = 0
+
+
 " Airline plugin ----------------------------------------------------------------------------------
 " enable integration with airline
 let g:airline#extensions#ale#enabled = 1
@@ -190,13 +207,18 @@ let g:airline#extensions#ale#enabled = 1
 " enable deoplete on startup
 let g:deoplete#enable_at_startup = 1
 
-" disable deoplete when in multi cursor mode
-function! Multiple_cursors_before()
-	let b:deoplete_disable_auto_complete = 1
-endfunction
-function! Multiple_cursors_after()
-	let b:deoplete_disable_auto_complete = 0
-endfunction
+" disable autocomplete
+let g:deoplete#disable_auto_complete = 1
+" autocomplete on Ctrl-N
+inoremap <expr> <C-n> deoplete#mappings#manual_complete()
+
+" " disable deoplete when in multi cursor mode
+" function! Multiple_cursors_before()
+" 	let b:deoplete_disable_auto_complete = 1
+" endfunction
+" function! Multiple_cursors_after()
+" 	let b:deoplete_disable_auto_complete = 0
+" endfunction
 
 
 " Go lang plugin ----------------------------------------------------------------------------------
@@ -210,8 +232,8 @@ let g:go_highlight_operators = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_types = 1
 
-" highlight same variables
-let g:go_auto_sameids = 1
+" do not highlight same variables
+let g:go_auto_sameids = 0
 
 " autoimport dependencies
 let g:go_fmt_command = "goimports"
