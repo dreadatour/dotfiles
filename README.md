@@ -11,8 +11,14 @@ sh -c "`curl -fsSL https://raw.githubusercontent.com/dreadatour/dotfiles/install
 Homebrew
 --------
 
-[Homebrew](https://brew.sh/) packages lives in `Brewfile`. To install all of them simply run:
+[Homebrew](https://brew.sh/) is package manager for Mac OS X.
 
+Install Homebrew:
+```
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+Homebrew packages lives in `Brewfile`. To install them all simply run:
 ```
 brew bundle --verbose
 ```
