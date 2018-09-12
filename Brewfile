@@ -1,3 +1,5 @@
+tap 'caskroom/fonts'
+
 cask 'font-source-code-pro'
 cask 'google-cloud-sdk'
 cask 'java'
