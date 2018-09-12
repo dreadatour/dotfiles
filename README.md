@@ -4,7 +4,18 @@ My Dotfiles
 Install
 -------
 
-    sh -c "`curl -fsSL https://raw.githubusercontent.com/dreadatour/dotfiles/install/install.sh`"
+```
+sh -c "`curl -fsSL https://raw.githubusercontent.com/dreadatour/dotfiles/install/install.sh`"
+```
+
+Homebrew
+--------
+
+[Homebrew](https://brew.sh/) packages lives in `Brewfile`. To install all of them simply run:
+
+```
+brew bundle --verbose
+```
 
 ZSH
 ---
