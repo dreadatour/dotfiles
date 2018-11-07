@@ -103,8 +103,6 @@ export PGHOST=/tmp                      # postgres won't work without this
 # add some directories to my PATH
 [ -d $HOME/.bin ] && PATH=$HOME/.bin:$PATH
 [ -d /usr/local/bin ] && PATH=/usr/local/bin:$PATH
-[ -d /usr/local/sbin ] && PATH=/usr/local/sbin:$PATH
-[ -d /usr/local/opt/gettext/bin ] && PATH=/usr/local/opt/gettext/bin:$PATH
 
 # setup Google Cloud SDK
 # On Mac OS X:
@@ -119,8 +117,8 @@ fi
 source $HOME/.zsh/proj.zsh
 
 # Go paths
-export GOPATH=$HOME
-export PATH=$PATH:$GOBIN:$GOPATH/bin
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$PATH
 
 export CLICOLOR=1
 export LSCOLORS=gxfxcxdxbxegedabagacad
@@ -172,35 +170,10 @@ alias :q='exit'
 ###############################################################################
 # Editor
 ###############################################################################
-if [ -d /Applications/Emacs.app/ ]; then
-    export EDITOR='~/.bin/emacs'
-else
-    export EDITOR="vim"
-fi
+export EDITOR="vim"
 alias e=$EDITOR
 
 
-###############################################################################
-# Functions
-###############################################################################
-
-# cd & ls
-function cdl {
-    cd $1 && ls -lA
-}
-
-# mkdir & cd
-function mkcd {
-    mkdir -p "$@" && cd $_
-}
-
-# OS X Quick Look alias
-function show {
-    qlmanage -p $1
-}
-
-
-###############################################################################
 # Plugins
 ###############################################################################
 
