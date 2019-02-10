@@ -166,6 +166,9 @@ alias ...='cd ../..'
 # exit
 alias :q='exit'
 
+# brew update, upgrade and cleanup
+alias bubu='brew update && brew upgrade && brew cleanup'
+
 
 ###############################################################################
 # Editor
