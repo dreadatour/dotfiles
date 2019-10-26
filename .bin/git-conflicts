@@ -5,4 +5,4 @@ if [[ -z $dir ]]; then
 	dir='*'
 fi
 
-grep -Elr '^(<<<<<<< |=======$|>>>>>>> )' $dir
+grep -Elr '^(<<<<<<< |=======$|>>>>>>> )' $dir | grep -v '^(vendor/)' | grep -v 'node_modules/'
