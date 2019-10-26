@@ -1,7 +1,6 @@
-tap 'caskroom/fonts'
+tap 'homebrew/cask-fonts'
 
 cask 'font-source-code-pro'
-cask 'google-cloud-sdk'
 
 brew 'git'
 brew 'go'
@@ -9,7 +8,6 @@ brew 'jq'
 brew 'node'
 brew 'pygitup'
 brew 'python'
-brew 'python@2'
 brew 'ripgrep'
 brew 'telnet'
 brew 'tree'
