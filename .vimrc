@@ -6,10 +6,12 @@ set hidden                 " the current buffer can be put to the background wit
 set nobackup               " do not create backup files
 set noswapfile             " do not create swap files
 set autowrite              " write the contents of the file on next, previous, make, etc commands
+set exrc                   " allows loading local executing rc files
+set secure                 " disallows the use of :autocmd, shell and write commands in local rc files
 
 " text and indentaion
 set nowrap                 " do not wrap long lines
-set textwidth=0            " disable break lonk lines while editing
+set textwidth=0            " disable break long lines while editing
 set fo-=t                  " disable automatic text wrapping
 set autoindent             " copy indent from current line when starting a new line
 set tabstop=4              " number of spaces that a <Tab> in the file counts for
@@ -19,8 +21,8 @@ set smarttab               " use different amount of spaces in a front of line o
                            " according to 'tabstop', 'softtabstop' and 'shiftwidth' settings
 set backspace=indent,eol,start  " allow backspacing over everything in insert mode
 set encoding=utf-8              " sets the character encoding used inside Vim
-set fileencodings=utf8,cp1251   " list of character encodings considered
-                                " when starting to edit an existing file
+set fileencodings=utf8     " list of character encodings considered
+                           " when starting to edit an existing file
 
 " UI
 set showcmd                " show (partial) command in the last line of the screen
@@ -28,7 +30,6 @@ set wildmenu               " turn on wildmenu (enhanced mode of command-line com
 set wcm=<Tab>              " wildmenu navigation key
 set laststatus=2           " always show the status line
 set incsearch              " jump to search results while typing a search command
-set ttyfast                " send more characters at a given time
 set lazyredraw             " redraw only when we need to
 set nonumber               " do not show line numbers
 set nocursorline           " do not highlight the screen line of the cursor
@@ -47,9 +48,9 @@ set listchars=tab:⇥\ ,trail:·,extends:⋯,precedes:⋯,eol:¬  " invisible sy
 " list of ignored in expanding wildcards files
 set wildignore+=.git,*.o,*.pyc,__pycache__,.DS_Store
 
-if &term =~ '256color'
-	" disable Background Color Erase (BCE) so that color schemes
-	" render properly when inside 256-color tmux and GNU screen.
-	" see also http://snk.tuxfamily.org/log/vim-256color-bce.html
-	set t_ut=
-endif
+"if &term =~ '256color'
+"	" disable Background Color Erase (BCE) so that color schemes
+"	" render properly when inside 256-color tmux and GNU screen.
+"	" see also http://snk.tuxfamily.org/log/vim-256color-bce.html
+"	set t_ut=
+"endif

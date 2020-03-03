@@ -10,23 +10,14 @@ call plug#begin('~/.config/nvim/plugged')
 " a fixed solarized colorscheme for better truecolor support
 Plug 'icymind/NeoSolarized'
 
-" plugin to dim inactive windows
-Plug 'blueyed/vim-diminactive'
-
 " enhanced netrw
 Plug 'tpope/vim-vinegar'
 
 " pairs of handy bracket mappings
 Plug 'tpope/vim-unimpaired'
 
-" " auto close (X)HTML tags
-" Plug 'alvan/vim-closetag'
-
-" Sublime Text style multiple selections
-Plug 'terryma/vim-multiple-cursors'
-
 " highlights the word under the cursor
-Plug 'dreadatour/vim-cursorword'
+" Plug 'dreadatour/vim-cursorword'
 
 " auto close parentheses
 Plug 'cohama/lexima.vim'
@@ -38,22 +29,10 @@ Plug 'jremmen/vim-ripgrep'
 Plug 'ctrlpvim/ctrlp.vim'
 
 " plugin to show git diff in the gutter (sign column) and stages/undoes hunks
-Plug 'airblade/vim-gitgutter'
-
-" " plugin to toggle, display and navigate marks
-" Plug 'kshenoy/vim-signature'
+" Plug 'airblade/vim-gitgutter'
 
 " lean & mean status/tabline
 Plug 'vim-airline/vim-airline'
-
-" asynchronous lint engine
-Plug 'w0rp/ale'
-
-" asynchronous completion framework
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-
-" deoplete source for Go
-Plug 'zchee/deoplete-go', { 'do': 'make'}
 
 " Go development plugin
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
@@ -62,9 +41,11 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'mhartington/nvim-typescript', { 'do': './install.sh' }
 
-" Plug 'itchyny/vim-parenmatch'
-" Plug 'mileszs/ack.vim'
-" Plug 'ervandew/supertab'
+" Install completion engine
+Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'yarn install --frozen-lockfile'}
+
+" asynchronous lint engine
+Plug 'w0rp/ale'
 
 " initialize plugin system
 call plug#end()
@@ -126,7 +107,7 @@ cnoremap <C-e> <End>
 
 " Useful hooks ------------------------------------------------------------------------------------
 " remove trailing whitespaces on save
-autocmd FileType css,javascript,go,html,python,typescript autocmd BufWritePre <buffer> :%s/\s\+$//e
+"autocmd FileType css,javascript,go,html,python,typescript autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 
 " Netrw setup -------------------------------------------------------------------------------------
@@ -151,12 +132,10 @@ endtry
 
 
 " GitGutter plugin --------------------------------------------------------------------------------
+" disable gitgutter by default
+"let g:gitgutter_enabled = 0
 " sign column shouldn't look like the line number column, use default background color instead
-let g:gitgutter_override_sign_column_highlight = 0
-
-
-" " CloseTag plugin setup ---------------------------------------------------------------------------
-" let g:closetag_filenames = "*.html"
+"let g:gitgutter_override_sign_column_highlight = 0
 
 
 " Lexima plugin setup -----------------------------------------------------------------------------
@@ -187,38 +166,9 @@ endif
 map <C-tab> :CtrlPBuffer<CR>
 
 
-" Ale plugin --------------------------------------------------------------------------------------
-" error and warning signs
-let g:ale_sign_error = '⤫'
-let g:ale_sign_warning = '⚠'
-
-" do not lint on file changing
-let g:ale_lint_on_text_changed = 'never'
-" do not lint on file opening
-let g:ale_lint_on_enter = 0
-
-
 " Airline plugin ----------------------------------------------------------------------------------
 " enable integration with airline
 let g:airline#extensions#ale#enabled = 1
-
-
-" Deoplete plugin ---------------------------------------------------------------------------------
-" enable deoplete on startup
-let g:deoplete#enable_at_startup = 1
-
-" disable autocomplete
-let g:deoplete#disable_auto_complete = 1
-" autocomplete on Ctrl-N
-inoremap <expr> <C-n> deoplete#mappings#manual_complete()
-
-" " disable deoplete when in multi cursor mode
-" function! Multiple_cursors_before()
-" 	let b:deoplete_disable_auto_complete = 1
-" endfunction
-" function! Multiple_cursors_after()
-" 	let b:deoplete_disable_auto_complete = 0
-" endfunction
 
 
 " Go lang plugin ----------------------------------------------------------------------------------
@@ -243,3 +193,155 @@ let g:go_auto_type_info = 1
 
 " JSON tags to structs use camel case
 let g:go_addtags_transform = "camelcase"
+
+" disable vim-go :GoDef short cut (gd)
+" this is handled by LanguageClient [LC]
+let g:go_def_mapping_enabled = 0
+
+
+" Coc plugin --------------------------------------------------------------------------------------
+set hidden         " if hidden is not set, TextEdit might fail
+set nobackup       " some servers have issues with backup files, see #649
+set nowritebackup
+set cmdheight=2    " better display for messages
+set updatetime=300 " will have bad experience for diagnostic messages when it's default 4000
+set shortmess+=c   " don't give |ins-completion-menu| messages.
+set signcolumn=yes " always show signcolumns
+
+" Use tab for trigger completion with characters ahead and navigate.
+inoremap <silent><expr> <TAB>
+    \ pumvisible() ? "\<C-n>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
+    \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" use <c-space> to trigger completion
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" use <cr> to confirm completion, `<C-g>u` means break undo chain at current position
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" remap for format selected region
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" create mappings for function text object, requires document symbols feature of languageserver
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
+" use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+nmap <silent> <C-d> <Plug>(coc-range-select)
+xmap <silent> <C-d> <Plug>(coc-range-select)
+
+" use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" use `:OR` for organize import of current buffer
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" add status line support, for integration with other plugin, checkout `:h coc-status`
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" using CocList
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>  " show all diagnostics
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>   " manage extensions
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>     " show commands
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>      " find symbol of current document
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>   " search workspace symbols
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>              " do default action for next item
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>              " do default action for previous item
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>        " resume latest coc list
+
+
+" Ale plugin --------------------------------------------------------------------------------------
+let g:ale_shell = '/bin/sh'    " use sh shell
+let g:ale_open_list = 0        " do not show window on errors
+
+" error, warning and info signs
+let g:ale_sign_error = '⤫'
+let g:ale_sign_warning = '⚠'
+let g:ale_sign_info = '⚠'
+
+" lint on save only
+let g:ale_lint_on_enter = 0                 " do not lint on enter the buffer
+let g:ale_lint_on_filetype_changed = 0      " do not lint on filetype change
+let g:ale_lint_on_insert_leave = 0          " do not lint on leave insert mode
+let g:ale_lint_on_text_changed = 'never'    " do not lint on text change
+let g:ale_lint_on_save = 1                  " lint on save
+let g:ale_fix_on_save = 1                   " fix issues on save
+
+" golangci-lint linter options
+let g:ale_go_golangci_lint_options = ''
+
+" typescript tslint linter options
+let g:ale_typescript_tslint_use_global = 0
+let g:ale_typescript_tslint_config_path = 'tslint.json'
+
+" list of linters
+let g:ale_linters = {
+\	'go': ['golangci-lint'],
+\	'typescriptreact': ['tslint'],
+\}
+
+" list of fixers
+let g:ale_fixers = {
+\	'*': ['remove_trailing_lines', 'trim_whitespace'],
+\	'typescriptreact': ['tslint', 'remove_trailing_lines', 'trim_whitespace'],
+\}
+"\	'javascript': ['prettier', 'eslint'],
+"\	'javascriptreact': ['prettier', 'eslint'],
+"\	'typescript': ['prettier', 'eslint', 'tslint'],
