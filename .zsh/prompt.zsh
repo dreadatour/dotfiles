@@ -87,7 +87,7 @@ function __prompt_git_status {
     if [[ -d "$cur_dir/.git" ]]; then
         # 'git repo for dotfiles' fix: show git status only in home dir and other git repos
         if [[ "$cur_dir" != "${HOME}" ]] || [[ "${PWD}" == "${HOME}" ]]; then
-            git_status=`python ~/.zsh/prompt-git-status.py`
+            git_status=`python3 ~/.zsh/prompt-git-status.py`
             git_vars=("${(@f)git_status}")
 
             if [ -n "$git_vars" ]; then

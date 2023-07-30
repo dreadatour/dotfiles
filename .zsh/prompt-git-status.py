@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # coding: utf-8
 """
 Copy-pasted from 'Informative git prompt for zsh' with small changes

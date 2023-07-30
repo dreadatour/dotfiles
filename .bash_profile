@@ -196,3 +196,5 @@ fi
 # this is for delete words by ^W
 tty -s && stty werase ^- 2>/dev/null
 
+source "$HOME/.cargo/env"
+

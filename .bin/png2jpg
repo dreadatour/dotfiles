@@ -1,0 +1,11 @@
+#!/bin/bash
+IN=$1
+OUT="${IN%.png}.jpg"
+
+sips -s format jpeg "${IN}" --out "${OUT}" >/dev/null
+mogrify -quality 80% "${OUT}"
+
+IN_SIZE=$(stat -f%z "${IN}")
+OUT_SIZE=$(stat -f%z "${OUT}")
+
+echo "${IN} -> ${OUT} (${IN_SIZE} -> ${OUT_SIZE}, $(( ${OUT_SIZE} * 100 / ${IN_SIZE} ))%)"
