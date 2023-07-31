@@ -198,3 +198,5 @@ tty -s && stty werase ^- 2>/dev/null
 
 source "$HOME/.cargo/env"
 
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+

@@ -254,3 +254,6 @@ unset __conda_setup
 
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/usr/local/opt/node@18/bin:$PATH"
+
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
