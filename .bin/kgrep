@@ -1,0 +1,6 @@
+#!/bin/bash
+kubectl get pods | grep "$1" | awk '{print $1}' | while read w
+do
+	#echo $w
+	kubectl logs $w | grep ${@:2}
+done

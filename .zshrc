@@ -230,7 +230,7 @@ stty -ixon -ixoff
 # Load local zsh config
 [ -e ~/.lzshrc ] && source ~/.lzshrc
 
-export PATH="/usr/local/opt/node@16/bin:$HOME/Library/Python/3.9/bin:$PATH"
+export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
 # Setup virtualenvwrapper
@@ -253,7 +253,9 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 export PATH="/usr/local/sbin:$PATH"
-export PATH="/usr/local/opt/node@18/bin:$PATH"
+export PATH="/usr/local/opt/node@20/bin:$PATH"
 
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
+source ~/.nvm/nvm.sh
 
