@@ -230,6 +230,9 @@ stty -ixon -ixoff
 # Load local zsh config
 [ -e ~/.lzshrc ] && source ~/.lzshrc
 
+# Local nvm
+[ -e ~/.nvm/nvm.sh ] && source ~/.nvm/nvm.sh
+
 export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
@@ -256,6 +259,4 @@ export PATH="/usr/local/sbin:$PATH"
 export PATH="/usr/local/opt/node@20/bin:$PATH"
 
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
-
-source ~/.nvm/nvm.sh
 
