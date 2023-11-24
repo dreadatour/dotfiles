@@ -1,7 +1,3 @@
-tap 'homebrew/cask-fonts'
-
-cask 'font-source-code-pro'
-
 brew 'git'
 brew 'go'
 brew 'jq'
