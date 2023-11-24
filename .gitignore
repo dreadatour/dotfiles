@@ -8,7 +8,7 @@
 !/.gitignore_global
 !/.gitmodules
 !/.gitconfig
-!/.gvimrc
+!/.ideavimrc
 !/.inputrc
 !/.hushlogin
 !/.mostrc
@@ -38,8 +38,6 @@
 !/.config/fish/functions/prompt_pwd.fish
 !/.config/fish/functions/prompt_pwd.fish
 
-!/.config/nvim/init.vim
-!/.config/nvim/autoload/plug.vim
 !/.vimrc
 
 !/.config/iterm/com.googlecode.iterm2.plist

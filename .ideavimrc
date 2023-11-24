@@ -1,0 +1,32 @@
+" .ideavimrc is a configuration file for IdeaVim plugin.
+" It uses the same commands as the original .vimrc configuration.
+" You can find a list of commands here: https://jb.gg/h38q75
+" Find more examples here: https://jb.gg/share-ideavimrc
+
+" Source your .vimrc
+source ~/.vimrc
+
+" Use system clipboard
+set clipboard+=unnamed
+
+" GoTo keybindings
+map gd <Action>(GotoDeclaration)
+map ge <Action>(GotoNextError)
+map gi <Action>(GotoImplementation)
+map gt <Action>(GotoTypeDeclaration)
+map gT <Action>(GotoTest)
+map gu <Action>(GotoDeclaration)  " Go to usage and declaration are the same action in IntelliJ
+
+" Navigate history
+map gb <Action>(JumpToLastChange)
+map gf <Action>(JumpToNextChange)
+
+" Comment code
+map <D-/> <Action>(CommentByLineComment)
+map <D-/> <Action>(CommentByLineComment)
+
+" Indentation
+nnoremap <D-]> >>_
+nnoremap <D-[> <<_
+vnoremap <D-]> >gv
+vnoremap <D-[> <gv
