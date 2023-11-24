@@ -238,7 +238,7 @@ export PATH="$PATH":"$HOME/.pub-cache/bin"
 
 # Setup virtualenvwrapper
 # export VIRTUAL_ENV_DISABLE_PROMPT=1
-[ -e /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
+[ -e /opt/homebrew/bin/virtualenvwrapper.sh ] && source /opt/homebrew/bin/virtualenvwrapper.sh
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -256,7 +256,7 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 export PATH="/usr/local/sbin:$PATH"
-export PATH="/usr/local/opt/node@20/bin:$PATH"
+export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
 
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 
