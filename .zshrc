@@ -257,6 +257,7 @@ unset __conda_setup
 
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
+export PATH="$PATH:/Users/vlad/.local/bin"
 
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 
