@@ -6,6 +6,10 @@
 " Source your .vimrc
 source ~/.vimrc
 
+" Override settings from .vimrc
+set number               " show line numbers
+set cursorline           " highlight the screen line of the cursor
+
 " Use system clipboard
 set clipboard+=unnamed
 
