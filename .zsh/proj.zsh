@@ -249,6 +249,15 @@ function proj {
 			esac
 		fi
 
+		if [[ -z $command_name ]]; then
+			if [[ -z $project_name ]]; then
+				command_name=start
+				project_name=$1
+				shift
+				continue
+			fi
+		fi
+
 		__proj_error "Unknown argument '$1'"
 		echo
 		__proj_usage

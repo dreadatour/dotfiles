@@ -241,24 +241,10 @@ export PATH="$PATH":"$HOME/.pub-cache/bin"
 # export VIRTUAL_ENV_DISABLE_PROMPT=1
 [ -e /opt/homebrew/bin/virtualenvwrapper.sh ] && source /opt/homebrew/bin/virtualenvwrapper.sh
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/usr/local/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-        . "/usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-    else
-        export PATH="/usr/local/Caskroom/miniconda/base/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
 export PATH="$PATH:/Users/vlad/.local/bin"
 
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+export ITERATIVE_DO_NOT_TRACK=1
 
