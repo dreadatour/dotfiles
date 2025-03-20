@@ -151,11 +151,6 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-# ag aliaces
-alias ag='/usr/local/bin/ag -s --color-match="1;33" --color-path=32 --color-line-number=32'
-alias agpy='ag --python'
-alias agjs='ag --js'
-
 # tree alias ('tree' will always colorize output)
 alias tree='tree -AC --dirsfirst'
 
@@ -163,6 +158,9 @@ alias tree='tree -AC --dirsfirst'
 alias .='pwd'
 alias ..='cd ..'
 alias ...='cd ../..'
+
+# git aliases
+alias main='git checkout main'
 
 # exit
 alias :q='exit'
